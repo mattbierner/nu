@@ -18,11 +18,11 @@
             }
         });
         require(
-            ['stream', 'testReduce', 'testReduceRight', 'testMap', 'testFilter',
+            ['stream', 'testConcat', 'testReduce', 'testReduceRight', 'testMap', 'testFilter',
                 'testForEach'],
-            function(gen, testReduce, testReduceRight, testMap, testFilter, testForEach)
+            function(stream, testConcat, testReduce, testReduceRight, testMap, testFilter, testForEach)
             {
-                [testReduce, testReduceRight, testMap, testFilter,
+                [testConcat, testReduce, testReduceRight, testMap, testFilter,
                   testForEach].forEach(function(m){
                     m.module && module(m.module);
                     m.tests && m.tests.forEach(function(e){ test.apply(this, e); });

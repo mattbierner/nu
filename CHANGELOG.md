@@ -1,5 +1,9 @@
 # ChangeLog #
 
+## 0.4.0 - Jan 27, 2012 ##
+* Added 'memoStream' to automatically memoize result of rest.
+* Made concat lazy.
+
 ## 0.3.0 - Jan 13, 2012 ##
 * Fixed issues with reduce.
 
