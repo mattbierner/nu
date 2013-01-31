@@ -1,6 +1,6 @@
 # ChangeLog #
 
-## 0.5.0 - Jan 31, 2012 ##
+## 0.5.1 - Jan 31, 2012 ##
 * Fixed 'concata' called with zero arguments throwing exception.
 
 ## 0.5.0 - Jan 31, 2012 ##
