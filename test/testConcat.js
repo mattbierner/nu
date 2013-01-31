@@ -80,7 +80,11 @@ define(['stream'], function(stream){
                 assert.deepEqual(stream.first(r1), 0);
                 assert.deepEqual(stream.first(stream.rest(r1)), 0);
                 assert.deepEqual(stream.first(stream.rest(stream.rest(r1))), 0);
-                
+            }],
+             ["Empty Concata",
+            function(){
+                var g = stream.concata();
+                assert.ok(stream.isEmpty(g));
             }],
         ],
     };
