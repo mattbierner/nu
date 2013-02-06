@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 0.6.0 - Feb 6, 2012 ##
+* Added 'concatz' for joining two streams where the second stream is created lazily.
+
 ## 0.5.1 - Jan 31, 2012 ##
 * Fixed 'concata' called with zero arguments throwing exception.
 
