@@ -1,4 +1,4 @@
-define(['stream'], function(stream){
+define(['stream/stream'], function(stream){
     
     function r(p, c) {
         return [c, p] ;

@@ -14,16 +14,20 @@
     <script type="application/javascript">
         requirejs.config({
             paths: {
-                stream: '../lib/stream'
+                stream: '../lib'
             }
         });
         require(
-            ['stream', 'testConcat', 'testReduce', 'testReduceRight', 'testMap', 'testFilter',
-                'testForEach'],
-            function(stream, testConcat, testReduce, testReduceRight, testMap, testFilter, testForEach)
+            ['stream/stream', 'testConcat', 'testReduce', 'testReduceRight', 'testMap', 'testFilter',
+                'testForEach', 'testRepeat', 'testRange', 'testAny', 'testEvery', 'testSkip',
+                'testSkipWhile', 'testTake', 'testTakeWhile'],
+            function(stream, testConcat, testReduce, testReduceRight, testMap,
+                testFilter, testForEach, testRepeat, testRange, testAny, testEvery,
+                testSkip, testSkipWhile, testTake, testTakeWhile)
             {
                 [testConcat, testReduce, testReduceRight, testMap, testFilter,
-                  testForEach].forEach(function(m){
+                  testForEach, testRepeat, testRange, testAny, testEvery,
+                  testSkip, testSkipWhile, testTake, testTakeWhile].forEach(function(m){
                     m.module && module(m.module);
                     m.tests && m.tests.forEach(function(e){ test.apply(this, e); });
                     m.asyncTests && m.asyncTests.forEach(function(e){ asyncTest.apply(this, e); });

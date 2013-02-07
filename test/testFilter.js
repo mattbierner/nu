@@ -1,4 +1,4 @@
-define(['stream'], function(stream){
+define(['stream/stream'], function(stream){
     
     var isOdd = function(v) {
         return v % 2;
