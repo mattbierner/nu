@@ -1,7 +1,12 @@
 # ChangeLog #
 
+## 1.1.0 - Feb 21, 2013
+* Added 'isStream' predicate function to check if a given object is a valid stream.
+
 ## 1.0.0 - Feb 7, 2013
 * Added 'quantifier', 'select', and 'gen' modules.
+* AMD imports now require module type paths, such as 'stream/stream'.
+* Removed support for non AMD import.
 
 ## 0.6.0 - Feb 6, 2013 ##
 * Added 'concatz' for joining two streams where the second stream is created lazily.
