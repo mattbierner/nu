@@ -1,11 +1,11 @@
-# stream.js - Small Lazy Stream Javascript Library #
+# Nu - Small Lazy Stream Javascript Library #
 
 ## About ##
 A small library for working with lazy streams in Javascript.
 
 Supports working with lazy infinite streams.
 
-# Using stream.js #
+# Using Nu #
 
 ## With AMD ##
 Include any AMD style module loader and load stream:
@@ -18,10 +18,10 @@ Include any AMD style module loader and load stream:
         <script type="application/javascript">
             requirejs.config({
                 paths: {
-                    'stream': './lib',
+                    'nu': './lib',
                 }
             });
-            require(['stream/stream'], function(stream) {
+            require(['nu/stream'], function(stream) {
                 ...
             });
         </script>
@@ -29,17 +29,17 @@ Include any AMD style module loader and load stream:
 
 
 ## Modules ##
-All files live in the top level 'parse' module.
+All files live in the top level 'nu' module.
 
-### lib/stream - 'stream/stream' ###
+### lib/stream - 'nu/stream' ###
 Core functionality. Defines stream creation functions and basic iteration and
 manipulation tools.
 
-### lib/quantifier - 'stream/quantifier' ###
+### lib/quantifier - 'nu/quantifier' ###
 Utilities for using quantifiers on streams.
 
-### lib/gen - 'stream/gen' ###
+### lib/gen - 'nu/gen' ###
 Utilities for generating streams.
 
-### lib/select - 'parse/select' ###
+### lib/select - 'nu/select' ###
 Utilities for selecting sections of streams.

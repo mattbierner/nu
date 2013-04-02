@@ -1,4 +1,4 @@
-define(['stream/stream', 'stream/gen'], function(stream, gen){
+define(['nu/stream', 'nu/gen'], function(stream, gen){
     return {
         'module': "Repeat Tests",
         'tests': [

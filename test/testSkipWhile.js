@@ -1,4 +1,4 @@
-define(['stream/stream', 'stream/gen', 'stream/select'], function(stream, gen, select){
+define(['nu/stream', 'nu/gen', 'nu/select'], function(stream, gen, select){
     return {
         'module': "Skip While Tests",
         'tests': [

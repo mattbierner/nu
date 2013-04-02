@@ -1,4 +1,4 @@
-define(['stream/stream'], function(stream){
+define(['nu/stream'], function(stream){
    
     return {
         'module': "Concat Tests",

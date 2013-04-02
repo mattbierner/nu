@@ -1,4 +1,4 @@
-define(['stream/stream', 'stream/gen', 'stream/quantifier'], function(stream, gen, quantifier){
+define(['nu/stream', 'nu/gen', 'nu/quantifier'], function(stream, gen, quantifier){
     return {
         'module': "Any Tests",
         'tests': [
