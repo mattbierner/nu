@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 1.1.1 - Feb 21, 2013
+* Fixed callback not using 'this' object value.
+
 ## 1.1.0 - Feb 21, 2013
 * Added 'isStream' predicate function to check if a given object is a valid stream.
 
