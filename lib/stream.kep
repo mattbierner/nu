@@ -215,7 +215,14 @@ var foldr = curry(function STREAM_FOLDR(i, f, z, s) {
  *
  * @return Array created from stream..
  */
-var toArray = curry(foldl, (p, c) -> p.concat(c), []);
+var toArray = (function(){
+    var builder = (p, c) -> {
+        p.push(c);
+        return p;
+    };
+    return s ->
+        foldl(builder, [], s);
+}());
 
 /* 
  ******************************************************************************/

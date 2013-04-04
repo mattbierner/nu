@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 2.0.1 - April 4, 2013
+* Changed back to old 'toArray' logic which is more ugly but much faster.
+
 ## 2.0.0 - April 4, 2013
 * Changed all functions to support currying. Stream is now usually the last parameter.
 * Removed support for using 'this' values for callbacks.
