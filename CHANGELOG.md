@@ -1,5 +1,17 @@
 # ChangeLog #
 
+## 2.0.0 - April 4, 2013
+* Changed all functions to support currying. Stream is now usually the last parameter.
+* Removed support for using 'this' values for callbacks.
+* 'reduce' and 'reduceRight' are now 'foldl' and 'foldr' because their behavior
+  is more similar to the scheme versions of these functions that the javascript one.
+** 'foldl' and 'foldr' require an initial value.
+* Renamed 'concat' to 'append'
+* Removed 'concata' and 'append' that replaced it now supports variable arguments instead.
+* Added 'concat' function that creates a new stream from a list of streams.
+* Added 'bind' function that creates a new stream by mapping a stream with a
+  function and then joining results into a new stream.
+
 ## 1.1.1 - Feb 21, 2013
 * Fixed callback not using 'this' object value.
 

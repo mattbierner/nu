@@ -9,7 +9,7 @@ define(['nu/stream'], function(stream){
         'tests': [
             ["Simple Filter",
             function(){
-                var g = stream.filter(stream.from([0, 1, 2, 3]), isOdd);
+                var g = stream.filter(isOdd, stream.from([0, 1, 2, 3]));
                 assert.equal(stream.first(g), 1);
                 assert.equal(stream.first(stream.rest(g)), 3);
             }],
@@ -20,7 +20,7 @@ define(['nu/stream'], function(stream){
                 while (i >= 0) {
                     s = stream.cons(i--, s);
                 }
-                var g = stream.filter(s, isOdd);
+                var g = stream.filter(isOdd, s);
                 assert.equal(stream.first(g), 1);
                 assert.equal(stream.first(stream.rest(g)), 3);
             }]

@@ -1,6 +1,6 @@
 {
   "name": "Nu",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Small Lazy Stream Javascript Library",
   "main": "stream",
   "scripts": {

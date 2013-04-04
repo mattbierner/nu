@@ -4,20 +4,20 @@ define(['nu/stream', 'nu/gen', 'nu/quantifier'], function(stream, gen, quantifie
         'tests': [
             ["Simple every",
             function(){
-                assert.ok(quantifier.every(gen.range(4), function(v, i){ return v < 10; }));
-                assert.ok(!quantifier.every(gen.range(4), function(v, i){ return v < 2; }));
+                assert.ok(quantifier.every(function(v, i){ return v < 10; }, gen.range(4)));
+                assert.ok(!quantifier.every(function(v, i){ return v < 2; }, gen.range(4)));
             }],
             ["None every",
             function(){
-                assert.ok(!quantifier.every(gen.range(4), function(v, i){ return false; }));
+                assert.ok(!quantifier.every(function(v, i){ return false; }, gen.range(4)));
             }],
             ["Empty every",
             function(){
-                assert.ok(quantifier.every(stream.end, function(v, i){ return false; }));
+                assert.ok(quantifier.every(function(v, i){ return false; }, stream.end));
             }],
             ["Lazy every",
             function(){
-                assert.ok(!quantifier.every(gen.range(Infinity), function(v, i){ return false; }));
+                assert.ok(!quantifier.every(function(v, i){ return false; }, gen.range(Infinity)));
             }],
         ],
     };

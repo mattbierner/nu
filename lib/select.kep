@@ -18,27 +18,25 @@ var bind = (f /*, ...*/) ->
  * Create a stream of elements yielded from 's' while a predicate is
  * satisfied. Stops yielding elements once the predicate is not satisfied.
  * 
- * @param s Stream to take elements from.
  * @param {function(value): boolean} pred Predicate function that determines when
  *     to take elements.
- * @param [t] 'this' object used for predicate function.
+ * @param s Stream to take elements from.
  * 
  * @returns Lazy stream of elements taken from 's'.
  */
 var takeWhile = (function(){
-    var takeWhileImpl = function(i, s, pred, t) {
+    var takeWhileImpl = function(i, pred, s) {
         if (stream.isEmpty(s)) {
             return s;
         }
         var first = stream.first(s);
-        return (pred.call(t, first, i) ?
-            stream.stream(first, bind(takeWhileImpl, i + 1, stream.rest(s), pred, t)) :
+        return (pred(first, i) ?
+            stream.stream(first, bind(takeWhileImpl, i + 1, pred, stream.rest(s))) :
             stream.end);
     };
     
-    return function(s, pred, t) {
-        return takeWhileImpl(0, s, pred, t);
-    };
+    return (pred, s) ->
+        takeWhileImpl(0, pred, s);
 }());
 
 /**
@@ -46,16 +44,16 @@ var takeWhile = (function(){
  * 
  * May yield fewer than 'count' elements if 's' ends.
  * 
- * @param s Stream to take elements from.
  * @param {Number} count Number of elements to take. Must be greater than or 
  *     equal to zero. Defaults to 'Infinity'.
+ *  @param s Stream to take elements from.
  * 
  * @returns Lazy stream of at most 'count' elements from 's'.
  */
-var take = (s, count) ->
+var take = (count, s) ->
     (isNaN(count) || count < 0 ?
         s : 
-        takeWhile(s, (v, i) -> (i < count)));
+        takeWhile((v, i) -> (i < count), s));
 
 /**
  * Create a stream that skips leading elements from 's' while a predicate is
@@ -63,17 +61,16 @@ var take = (s, count) ->
  * 
  * May result in an empty stream if 's' ends before the predicate is satisfied.
  * 
- * @param s Stream to yield elements from.
  * @param {function(value, index): boolean} pred Predicate that determines 
- *     elements to skip. 
- * @param [t] 'this' object used for the predicate function.
+ *     elements to skip.
+ * * @param s Stream to yield elements from.
  * 
  * @returns Stream of elements from 's' after predicate was not satisfied.
  */
-var skipWhile = function(s, pred, t) {
+var skipWhile = function(pred, s) {
     var i = 0;
     while (!stream.isEmpty(s)) {
-        if (!pred.call(t, stream.first(s), i)) {
+        if (!pred(stream.first(s), i)) {
             return s;
         }
         ++i;
@@ -90,10 +87,10 @@ var skipWhile = function(s, pred, t) {
  * 
  * @returns Stream of elements from 's' after 'count' elements.
  */
-var skip = (source, count) ->
+var skip = (count, s) ->
     (isNaN(count) || count <= 0 ?
-        source :
-        skipWhile(source, (v, i) -> (i < count)));
+        s :
+        skipWhile((v, i) -> (i < count), s));
 
 
 /* Export

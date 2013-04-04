@@ -4,16 +4,16 @@ define(['nu/stream', 'nu/gen', 'nu/quantifier'], function(stream, gen, quantifie
         'tests': [
             ["Simple Any",
             function(){
-                assert.ok(quantifier.any(gen.range(4), function(v, i){ return v == 2; }));
+                assert.ok(quantifier.any(function(v, i){ return v == 2; }, gen.range(4)));
             }],
             ["None Any",
             function(){
-                assert.ok(!quantifier.any(gen.range(4), function(v, i){ return false; }));
-                assert.ok(!quantifier.any(stream.end, function(v, i){ return true; }));
+                assert.ok(!quantifier.any(function(v, i){ return false; }, gen.range(4)));
+                assert.ok(!quantifier.any(function(v, i){ return true; }, stream.end));
             }],
             ["Lazy Any",
             function(){
-                assert.ok(quantifier.any(gen.range(Infinity), function(v, i){ return v == 2 }));
+                assert.ok(quantifier.any(function(v, i){ return v == 2 }, gen.range(Infinity)));
             }]
         ],
     };
