@@ -2,7 +2,7 @@
 
 A small library for working with lazy streams in Javascript.
 
-See http://mattbierner.github.io/nu/
+See http://mattbierner.github.io/nu/ for more info and API.
 
 
 # Code #
