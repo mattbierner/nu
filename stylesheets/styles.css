@@ -32,6 +32,10 @@ h3, h4, h5, h6 {
   color:#494949;
 }
 
+h3 {
+    margin-bottom: 6px;
+}
+
 a {
   color:#39c;
   font-weight:400;
@@ -100,34 +104,36 @@ header {
   float:left;
   position:fixed;
 }
+
 header h1 {
     margin-bottom: 0;
 }
 
-
 header ul {
   list-style:none;
-  height:40px;
-  
   padding:0;
-  
+  width: 100%;
+}
+
+header ul#links {
+  height:40px;
   width:270px;
 }
 
-header li {
+header #links li {
   width:89px;
   float:left;
   border-right:1px solid #d2d2d2;
   height:40px;
 }
 
-header ul a {
+header ul#links a {
   line-height:1;
   font-size:11px;
   color:#999;
   display:block;
   text-align:center;
-  margin: 6px 0;
+  margin: 6px 4px;
   height:28px;
 }
 
@@ -140,7 +146,7 @@ strong {
   font-weight:700;
 }
 
-header ul li + li + li {
+header ul#links li + li + li {
   border-right:none;
   width:89px;
 }
@@ -190,6 +196,10 @@ footer {
   
   header {
     padding-right:320px;
+  }
+  
+  header nav {
+    display: none;
   }
   
   section {
