@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 2.0.2 - April 10, 2013
+* 'forEach' also update to use correct argument order.
+
 ## 2.0.1 - April 4, 2013
 * Changed back to old 'toArray' logic which is more ugly but much faster.
 

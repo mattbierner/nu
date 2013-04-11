@@ -6,9 +6,9 @@ define(['nu/stream'], function(stream){
             ["Simple ForEach",
             function(){
                 var sum = 0;
-                var g = stream.forEach(stream.from([1,2,3,4]), function(v) {
+                var g = stream.forEach(function(v) {
                     sum += v;
-                });
+                }, stream.from([1,2,3,4]));
                 assert.equal(sum, 10);
             }],
              ["Large ForEach",
@@ -20,9 +20,9 @@ define(['nu/stream'], function(stream){
                 }
                 
                 var sum = 0;
-                var g = stream.forEach(s, function(v) {
+                var g = stream.forEach(function(v) {
                     sum += v;
-                });
+                }, s);
                 
                 assert.equal(sum, 500500);
             }]

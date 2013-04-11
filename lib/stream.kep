@@ -50,10 +50,8 @@ var stream = (val, f) -> ({
 /**
  * Create a new stream that memoizes rest results.
  */
-var memoStream = (val, f) -> ({
-    'first': val,
-    'rest': memo(f)
-});
+var memoStream = (val, f) ->
+    stream(val, memo(f));
 
 /**
  * Create a new stream from a value and existing stream.
@@ -69,7 +67,7 @@ var cons = (val, s) ->
 /**
  * Joins two streams into a new stream.
  * 
- * @param s1 Stream
+ * @param s1 Stream.
  * @param f Function returning second stream.
  * 
  * @return Stream of two joined streams.
@@ -77,7 +75,7 @@ var cons = (val, s) ->
 var appendz = (s1, f) ->
     (isEmpty(s1) ?
         f() :
-        stream(first(s1), curry(appendz, rest(s1), f)));
+        memoStream(first(s1), curry(appendz, rest(s1), f)));
 
 /**
  * Joins multiple streams into a new stream.
@@ -89,9 +87,7 @@ var append = (function(){
         appendz(s1, constant(s2));
     
     return (/*...*/) ->
-        (arguments.length === 0 ?
-            end :
-            arrayReduce.call(arguments, reducer));
+        arrayReduce.call(arguments, reducer, end);
 }());
 
 /**
@@ -103,23 +99,22 @@ var concat = s ->
         appendz(first(s), curry(concat, rest(s))));
 
 /**
- * Create a new stream from an enumerable object.
+ * Create a new stream from an array like object.
  * 
- * @param enumerable Enumerable object.
+ * @param arr Array like object object.
  * 
  * @return Stream of enumerable values from enumerable object.
  */
 var from = (function(){
-    var fromImpl = (enumerable, i, len) ->
+    var fromImpl = (arr, i, len) ->
         (i >= len ?
             end : 
-            memoStream(enumerable[i], curry(fromImpl, enumerable, i + 1, len)));
+            memoStream(arr[i], curry(fromImpl, arr, i + 1, len)));
     
-    return function STREAM_FROM(enumerable) {
-        return (enumerable === undefined ?
+    return arr ->
+        (arr === undefined ?
             end :
-            fromImpl(enumerable, 0, enumerable.length));
-    };
+            fromImpl(arr, 0, arr.length));
 }());
 
 /* Primitive Operators
@@ -163,12 +158,12 @@ var isStream = s ->
 /* 
  ******************************************************************************/
 /**
- * Iterate over a stream.
+ * Iterate over a stream in order.
  *
- * @param s Stream being iterated over.
- * @param {function(value, index): *} f Function called for each element of 's'.
+ * @param {function(value, index): *} f Function to call each element of 's'.
+ * @param s Stream to iterate over.
  */
-var forEach = function(s, f) {
+var forEach = function(f, s) {
     var i = 0;
     while (!isEmpty(s)) {
        f(first(s), i);
@@ -187,9 +182,8 @@ var forEach = function(s, f) {
  * 
  * @return Result of reduction.
  */
-var foldl = function(f, z, s) {
-    forEach(s, (x, i) -> 
-        (z = f(z, x, i)));
+var foldl = (f, z, s) -> {
+    forEach((x, i) -> (z = f(z, x, i)), s);
     return z;
 };
 

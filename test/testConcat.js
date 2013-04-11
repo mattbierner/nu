@@ -10,14 +10,14 @@ define(['nu/stream'], function(stream){
                     stream.from([2, 3])]));
                 assert.deepEqual(stream.toArray(g), [0, 1, 2, 3]);
             }],
-            ["S1 empty append",
+            ["S1 empty concat",
             function(){
                 var g = stream.concat(stream.from([
                     stream.end,
                     stream.from([2, 3])]));
                 assert.deepEqual(stream.toArray(g), [2, 3]);
             }],
-            ["S2 empty append",
+            ["S2 empty concat",
             function(){
                 var g = stream.concat(stream.from([
                     stream.from([0, 1]),
@@ -34,7 +34,7 @@ define(['nu/stream'], function(stream){
                 assert.deepEqual(stream.first(g), 0);
                 assert.deepEqual(stream.first(stream.rest(g)), 0);
             }],
-            ["Inf s2 append",
+            ["Inf s2 concat",
             function(){
                 var s2 = stream.stream(2, function(){ return s2; });
                 var g = stream.concat(stream.from([
@@ -46,7 +46,7 @@ define(['nu/stream'], function(stream){
                 assert.deepEqual(stream.first(stream.rest(stream.rest(g))), 2);
                 assert.deepEqual(stream.first(stream.rest(stream.rest(stream.rest(g)))), 2);
             }],
-            ["Both Inf append",
+            ["Both Inf concat",
             function(){
                 var s1 = stream.stream(0, function(){ return s1; });
                 var s2 = stream.stream(2, function(){ return s2; });
