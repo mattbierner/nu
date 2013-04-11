@@ -9,9 +9,7 @@ var arrayReduce = Array.prototype.reduce;
 /* Helper functions
  ******************************************************************************/
 var curry = (f /*, ...*/) ->
-    (arguments.length === 1 ?
-        f :
-        f.bind.apply(f, arguments));
+    f.bind.apply(f, arguments);
 
 var identity = x -> x;
 

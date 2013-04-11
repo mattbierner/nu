@@ -1,5 +1,5 @@
 /**
- * @fileOverview Stream generation utilities.
+ * @fileOverview Sub stream selection.
  */
 define(['nu/stream'],
 function(stream) {
@@ -7,10 +7,8 @@ function(stream) {
 
 /* Helper functions
  ******************************************************************************/
-var bind = (f /*, ...*/) ->
-    (arguments.length === 1 ?
-        f :
-        f.bind.apply(f, arguments));
+var curry = (f /*, ...*/) ->
+    f.bind.apply(f, arguments);
 
 /* Gen
  ******************************************************************************/
@@ -29,9 +27,9 @@ var takeWhile = (function(){
         if (stream.isEmpty(s)) {
             return s;
         }
-        var first = stream.first(s);
-        return (pred(first, i) ?
-            stream.stream(first, bind(takeWhileImpl, i + 1, pred, stream.rest(s))) :
+        var x = stream.first(s);
+        return (pred(x, i) ?
+            stream.stream(x, curry(takeWhileImpl, i + 1, pred, stream.rest(s))) :
             stream.end);
     };
     
