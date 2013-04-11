@@ -168,8 +168,7 @@ Create stream from joining stream of streams 's'.
 Iterate over each element of stream 's' in order, calling function 'f' on each
 element.
 
-'f' is passed three arguments: an element, its index, and the stream 'forEach'
-was called on.
+'f' is passed two arguments: an element and its index  in 's'.
 
 'forEach' does not return a value.
 
@@ -184,9 +183,8 @@ Return the result.
 
 This is an eager operation and will hang on infinite streams.
 
-'f' is passed four arguments: the previous value, the current value, the index
-of the current value, and the stream 'foldl' was called on. It returns the
-previous element for the next iteration.
+'f' is passed three arguments: the previous value, the current value, the index
+of the current value in 's'. It returns the previous element for the next iteration.
 
     var add = (x, y) -> x + y;
     stream.foldl(add, 0, stream.from([1, 2, 3])); // 6
@@ -223,7 +221,7 @@ returns the new element.
 Create a stream consisting only of elements from 's' that satisfy 
 predicate 'pred'.
 
-'pred' is passed three arguments: an element, its index in 's', and 's'. 'pred' 
+'pred' is passed two arguments: an element and its index in 's'. 'pred' 
 returns whether the element should be included in the new stream.
 
 May hang in certain cases, such as when all elements in an infinite stream are
@@ -254,7 +252,7 @@ for every element in 's'.
 This is an eager operation. It may hang in certain cases, such as an infinite stream
 where every element is accepted.
  
-'pred' is passed three arguments: an element, its index in 's', and 's'. 
+'pred' is passed two arguments: an element and its index in 's'. 
 
     quantifier.every(x -> x < 10, stream.from([0, 1, 2, 3])); // true
     
@@ -267,7 +265,7 @@ for any element in 's'.
 This is an eager operation. It may hang in certain cases, such as an infinite stream
 where every element is not accepted.
  
-'pred' is passed three arguments: an element, its index in 's', and 's'. 
+'pred' is passed two arguments: an element and its index in 's'. 
 
     quantifier.any(x -> x < 10, stream.from([0, 1, 2, 3])); // true
     
@@ -311,7 +309,7 @@ to one and may be negative.
 ### takeWhile(pred, s) ###
 Create a sub stream of 's', taking elements while 'pred' is satisfied.
 
-'pred' is passed three arguments: an element, its index in 's', and 's'. 'pred' 
+'pred' is passed two arguments: an element and its index in 's'. 'pred' 
 returns whether to take this element. Once 'pred' returns false once, no more 
 elements are taken.
 
@@ -333,7 +331,7 @@ returning the rest of the stream.
 
 May hang if 'pred' on a infinte stream and never returns false.
 
-'pred' is passed three arguments: an element, its index in 's', and 's'. 'pred' 
+'pred' is passed two arguments: an element and its index in 's'. 'pred' 
 returns whether to take this element. Once 'pred' returns false, skipping stops
 and the rest of stream is returned.
 
