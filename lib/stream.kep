@@ -165,7 +165,7 @@ var forEach = function(f, s) {
     var i = 0;
     while (!isEmpty(s)) {
        f(first(s), i);
-       ++i;
+       i = i + 1;
        s = rest(s);
     }
 };
@@ -249,7 +249,7 @@ var filter = curry(function STREAM_FILTER(i, pred, s) {
         if (pred(x, i)) {
             return memoStream(x, curry(STREAM_FILTER, i + 1, pred, rest(s)));
         }
-        ++i;
+        i = i + 1;
         s = rest(s);
     }
     return s;

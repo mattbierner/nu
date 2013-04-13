@@ -71,7 +71,7 @@ var skipWhile = function(pred, s) {
         if (!pred(stream.first(s), i)) {
             return s;
         }
-        ++i;
+        i = i + 1;
         s = stream.rest(s);
     }
     return stream.end;
