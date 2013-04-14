@@ -147,12 +147,14 @@ var isEmpty = s -> (s === end);
 /**
  * Is a given object a stream?
  * 
+ * Returns true for empty streams as well.
+ * 
  * @param s Object to test.
  * 
  * @return Is 's' a valid stream.
  */
 var isStream = s ->
-    (s && s.hasOwnProperty('first') && s.hasOwnProperty('rest'));
+    ((s && s.hasOwnProperty('first') && s.hasOwnProperty('rest')) || s === end);
 /* 
  ******************************************************************************/
 /**
