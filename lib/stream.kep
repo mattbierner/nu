@@ -8,12 +8,9 @@ var arrayReduce = Array.prototype.reduce;
 
 /* Helper functions
  ******************************************************************************/
-var curry = (f /*, ...*/) ->
-    f.bind.apply(f, arguments);
+var curry = (f /*, ...*/) -> f.bind.apply(f, arguments);
 
-var identity = x -> x;
-
-var constant = curry(curry, identity);
+var constant = x -> () -> x;
 
 var memo = f -> {
     var value;
