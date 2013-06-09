@@ -1,5 +1,10 @@
 # ChangeLog #
 
+## 2.0.4 - June 9, 2013
+* Range uses a more general check, isNaN, for testing if a value is supplied.
+  Before, a specific test for undefined was used. The new version supports
+  the builtin number conversion logic.
+
 ## 2.0.3 - April 13, 2013
 * Fixed 'isStream' to also return true for empty streams. This is the expected
   behavior.
