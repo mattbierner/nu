@@ -7,7 +7,7 @@ function(stream) {
 
 /* Helper functions
  ******************************************************************************/
-var curry = (f /*, ...*/) ->
+var curry = \f /*, ...*/ ->
     f.bind.apply(f, arguments);
 
 /* Gen
@@ -20,7 +20,7 @@ var curry = (f /*, ...*/) ->
  * 
  * @return Lazy stream of 'x' repeated 'times' times.
  */
-var repeat = (times, x) ->
+var repeat = \times, x ->
     (times <= 0 ?
         stream.end :
         stream.stream(x, curry(repeat, times - 1, x)));
@@ -35,10 +35,10 @@ var repeat = (times, x) ->
  * @return Lazy stream for range.
  */
 var range = (function(){
-    var rangeImpl = (lower, upper, step) ->
+    var rangeImpl = \lower, upper, step ->
         ((step > 0 ? upper <= lower : upper >= lower) ?
             stream.end :
-            stream.stream(lower, curry(range, lower + step, upper, step)));
+            stream.stream(lower, curry(rangeImpl, lower + step, upper, step)));
     
     return function(lower, upper, step) {
         lower = (lower === undefined ? Infinity : lower);

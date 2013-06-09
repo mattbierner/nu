@@ -1,5 +1,9 @@
 # ChangeLog #
 
+## 2.0.3 - April 13, 2013
+* Fixed 'isStream' to also return true for empty streams. This is the expected
+  behavior.
+
 ## 2.0.2 - April 10, 2013
 * 'forEach' also update to use correct argument order.
 

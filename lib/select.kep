@@ -7,7 +7,7 @@ function(stream) {
 
 /* Helper functions
  ******************************************************************************/
-var curry = (f /*, ...*/) ->
+var curry = \f /*, ...*/ ->
     f.bind.apply(f, arguments);
 
 /* Gen
@@ -33,7 +33,7 @@ var takeWhile = (function(){
             stream.end);
     };
     
-    return (pred, s) ->
+    return \pred, s ->
         takeWhileImpl(0, pred, s);
 }());
 
@@ -48,10 +48,10 @@ var takeWhile = (function(){
  * 
  * @returns Lazy stream of at most 'count' elements from 's'.
  */
-var take = (count, s) ->
+var take = \count, s ->
     (isNaN(count) || count < 0 ?
         s : 
-        takeWhile((v, i) -> (i < count), s));
+        takeWhile(\(v, i) -> (i < count), s));
 
 /**
  * Create a stream that skips leading elements from 's' while a predicate is
@@ -85,10 +85,10 @@ var skipWhile = function(pred, s) {
  * 
  * @returns Stream of elements from 's' after 'count' elements.
  */
-var skip = (count, s) ->
+var skip = \count, s ->
     (isNaN(count) || count <= 0 ?
         s :
-        skipWhile((v, i) -> (i < count), s));
+        skipWhile(\(v, i) -> (i < count), s));
 
 
 /* Export

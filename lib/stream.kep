@@ -8,13 +8,13 @@ var arrayReduce = Array.prototype.reduce;
 
 /* Helper functions
  ******************************************************************************/
-var curry = (f /*, ...*/) -> f.bind.apply(f, arguments);
+var curry = \f /*, ...*/ -> f.bind.apply(f, arguments);
 
-var constant = x -> () -> x;
+var constant = \x -> \() -> x;
 
-var memo = f -> {
+var memo = \f -> {
     var value;
-    return (/*...*/) -> 
+    return \(/*...*/) -> 
          (value === undefined ?
             (value = f.apply(undefined, arguments)) :
             value);
@@ -37,7 +37,7 @@ var end = null;
  * 
  * @return A new stream.
  */
-var stream = (val, f) -> ({
+var stream = \val, f -> ({
     'first': val,
     'rest': f
 });
@@ -45,7 +45,7 @@ var stream = (val, f) -> ({
 /**
  * Create a new stream that memoizes rest results.
  */
-var memoStream = (val, f) ->
+var memoStream = \val, f ->
     stream(val, memo(f));
 
 /**
@@ -56,7 +56,7 @@ var memoStream = (val, f) ->
  * 
  * @return A new stream.
  */
-var cons = (val, s) -> 
+var cons = \val, s -> 
     stream(val, constant(s));
 
 /**
@@ -67,7 +67,7 @@ var cons = (val, s) ->
  * 
  * @return Stream of two joined streams.
  */
-var appendz = (s1, f) ->
+var appendz = \s1, f ->
     (isEmpty(s1) ?
         f() :
         memoStream(first(s1), curry(appendz, rest(s1), f)));
@@ -77,18 +77,16 @@ var appendz = (s1, f) ->
  * 
  * @return Stream of joined streams.
  */
-var append = (function(){
-    var reducer = (s1, s2) ->
-        appendz(s1, constant(s2));
-    
-    return (/*...*/) ->
-        arrayReduce.call(arguments, reducer, end);
-}());
+var append =
+    let
+        reducer = \s1, s2 -> appendz(s1, constant(s2))
+    in
+        \(/*...*/) -> arrayReduce.call(arguments, reducer, end);
 
 /**
  * Joins a stream of streams into a new stream
  */
-var concat = s ->
+var concat = \s ->
     (isEmpty(s) ?
         s :
         appendz(first(s), curry(concat, rest(s))));
@@ -101,12 +99,12 @@ var concat = s ->
  * @return Stream of enumerable values from enumerable object.
  */
 var from = (function(){
-    var fromImpl = (arr, i, len) ->
+    var fromImpl = \arr, i, len ->
         (i >= len ?
             end : 
             memoStream(arr[i], curry(fromImpl, arr, i + 1, len)));
     
-    return arr ->
+    return \arr ->
         (arr === undefined ?
             end :
             fromImpl(arr, 0, arr.length));
@@ -121,7 +119,7 @@ var from = (function(){
  * 
  * @return First element of 's'.
  */
-var first = s -> s.first;
+var first = \s -> s.first;
 
 /**
  * Get the rest of a given stream, excluding the first element.
@@ -130,7 +128,7 @@ var first = s -> s.first;
  * 
  * @return Stream for rest of 's'.
  */
-var rest = s -> s.rest(first(s));
+var rest = \s -> s.rest(first(s));
 
 /**
  * Is a given stream empty.
@@ -139,7 +137,7 @@ var rest = s -> s.rest(first(s));
  *
  *@return Is 's' empty.
  */
-var isEmpty = s -> (s === end);
+var isEmpty = \s -> (s === end);
 
 /**
  * Is a given object a stream?
@@ -150,7 +148,7 @@ var isEmpty = s -> (s === end);
  * 
  * @return Is 's' a valid stream.
  */
-var isStream = s ->
+var isStream = \s ->
     ((s && s.hasOwnProperty('first') && s.hasOwnProperty('rest')) || s === end);
 /* 
  ******************************************************************************/
@@ -179,8 +177,8 @@ var forEach = function(f, s) {
  * 
  * @return Result of reduction.
  */
-var foldl = (f, z, s) -> {
-    forEach((x, i) -> (z = f(z, x, i)), s);
+var foldl = \f, z, s -> {
+    forEach(\(x, i) -> (z = f(z, x, i)), s);
     return z;
 };
 
@@ -206,14 +204,14 @@ var foldr = curry(function STREAM_FOLDR(i, f, z, s) {
  *
  * @return Array created from stream..
  */
-var toArray = (function(){
-    var builder = (p, c) -> {
-        p.push(c);
-        return p;
-    };
-    return s ->
-        foldl(builder, [], s);
-}());
+var toArray =
+    let 
+        builder = \p, c -> {
+            p.push(c);
+            return p;
+        }
+    in
+        \s -> foldl(builder, [], s);
 
 /* 
  ******************************************************************************/
@@ -259,7 +257,7 @@ var filter = curry(function STREAM_FILTER(i, pred, s) {
 /**
  * Apply 'f' to stream 's' and join results into a new stream.
  */
-var bind = (f, s) ->
+var bind = \f, s ->
      concat(map(f, s));
 
 /* Export
