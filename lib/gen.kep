@@ -7,8 +7,7 @@ function(stream) {
 
 /* Helper functions
  ******************************************************************************/
-var curry = \f /*, ...*/ ->
-    f.bind.apply(f, arguments);
+var curry = \f /*, ...*/ -> f.bind.apply(f, arguments);
 
 /* Gen
  ******************************************************************************/
@@ -23,7 +22,7 @@ var curry = \f /*, ...*/ ->
 var repeat = \times, x ->
     (times <= 0 ?
         stream.end :
-        stream.stream(x, curry(repeat, times - 1, x)));
+        stream.memoStream(x, curry(repeat, times - 1, x)));
 
 /**
  * Generate a stream of numbers in a given range.
@@ -38,18 +37,16 @@ var range = (function(){
     var rangeImpl = \lower, upper, step ->
         ((step > 0 ? upper <= lower : upper >= lower) ?
             stream.end :
-            stream.stream(lower, curry(rangeImpl, lower + step, upper, step)));
+            stream.memoStream(lower, curry(rangeImpl, lower + step, upper, step)));
     
     return function(lower, upper, step) {
-        lower = (lower === undefined ? Infinity : lower);
-        if (upper === undefined) {
-            upper = lower;
-            lower = 0;
-        }
-        return rangeImpl(lower, upper, (step === undefined ? 1 : step));
+        lower = (isNaN(lower) ? Infinity : +lower);
+        step = (isNaN(step) ? 1 : +step);
+        return (isNaN(upper) ?
+            rangeImpl(0, lower, step) :
+            rangeImpl(lower, upper, step));
     };
 }());
-
 
 /* Export
  ******************************************************************************/
@@ -57,6 +54,5 @@ return {
    'repeat': repeat,
    'range': range
 };
-
 
 });

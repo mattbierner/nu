@@ -4,7 +4,7 @@
 define(function() {
 "use strict";
 
-var arrayReduce = Array.prototype.reduce;
+var arrayReduce = Function.prototype.call.bind(Array.prototype.reduce);
 
 /* Helper functions
  ******************************************************************************/
@@ -81,7 +81,7 @@ var append =
     let
         reducer = \s1, s2 -> appendz(s1, constant(s2))
     in
-        \(/*...*/) -> arrayReduce.call(arguments, reducer, end);
+        \(/*...*/) -> arrayReduce(arguments, reducer, end);
 
 /**
  * Joins a stream of streams into a new stream
@@ -104,10 +104,7 @@ var from = (function(){
             end : 
             memoStream(arr[i], curry(fromImpl, arr, i + 1, len)));
     
-    return \arr ->
-        (arr === undefined ?
-            end :
-            fromImpl(arr, 0, arr.length));
+    return \arr -> fromImpl(arr, 0, arr.length);
 }());
 
 /* Primitive Operators
@@ -289,6 +286,5 @@ return {
     
     'bind': bind
 };
-
 
 });
