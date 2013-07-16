@@ -1,6 +1,7 @@
 /**
  * @fileOverview Sub stream selection.
  */
+static define;
 define(['nu/stream'],
 function(stream) {
 "use strict";
@@ -65,13 +66,10 @@ var take = \count, s ->
  * @returns Stream of elements from 's' after predicate was not satisfied.
  */
 var skipWhile = function(pred, s) {
-    var i = 0;
-    while (!stream.isEmpty(s)) {
-        if (!pred(stream.first(s), i)) {
-            return s;
-        }
+    for (var head = s, i = 0; !stream.isEmpty(head); head = stream.rest(head)) {
+        if (!pred(stream.first(head), i))
+            return head;
         i = i + 1;
-        s = stream.rest(s);
     }
     return stream.end;
 };

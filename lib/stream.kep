@@ -1,6 +1,7 @@
 /**
  * @fileOverview Core stream functionality.
  */
+static define;
 define(function() {
 "use strict";
 
@@ -14,10 +15,11 @@ var constant = \x -> \() -> x;
 
 var memo = \f -> {
     var value;
-    return \(/*...*/) -> 
-         (value === undefined ?
-            (value = f.apply(undefined, arguments)) :
-            value);
+    return \(/*...*/) -> {
+        if (value === undefined)
+            value = f.apply(this, arguments);
+        return value;
+    };
 };
 
 /* Constants
@@ -27,7 +29,7 @@ var memo = \f -> {
  */
 var end = null;
 
-/* Stream Construction
+/* Stream
  ******************************************************************************/
 /**
  * Create a new stream.
@@ -48,6 +50,50 @@ var stream = \val, f -> ({
 var memoStream = \val, f ->
     stream(val, memo(f));
 
+/* Primitive Operators
+ ******************************************************************************/
+/**
+ * Get the first element of a given stream.
+ * 
+ * @param s Stream.
+ * 
+ * @return First element of 's'.
+ */
+var first = \s -> s.first;
+
+/**
+ * Get the rest of a given stream, excluding the first element.
+ * 
+ * @param s Stream.
+ * 
+ * @return Stream for rest of 's'.
+ */
+var rest = \s -> s.rest(first(s));
+
+/**
+ * Is a given stream empty.
+ * 
+ * @param s Stream.
+ *
+ *@return Is 's' empty.
+ */
+var isEmpty = \s -> (s === end);
+
+/**
+ * Is a given object a stream?
+ * 
+ * Returns true for empty streams as well.
+ * 
+ * @param s Object to test.
+ * 
+ * @return Is 's' a valid stream.
+ */
+var isStream = \s ->
+    ((s && s.hasOwnProperty('first') && s.hasOwnProperty('rest')) || s === end);
+
+
+/* Stream Construction
+ ******************************************************************************/
 /**
  * Create a new stream from a value and existing stream.
  * 
@@ -107,46 +153,7 @@ var from = (function(){
     return \arr -> fromImpl(arr, 0, arr.length);
 }());
 
-/* Primitive Operators
- ******************************************************************************/
-/**
- * Get the first element of a given stream.
- * 
- * @param s Stream.
- * 
- * @return First element of 's'.
- */
-var first = \s -> s.first;
 
-/**
- * Get the rest of a given stream, excluding the first element.
- * 
- * @param s Stream.
- * 
- * @return Stream for rest of 's'.
- */
-var rest = \s -> s.rest(first(s));
-
-/**
- * Is a given stream empty.
- * 
- * @param s Stream.
- *
- *@return Is 's' empty.
- */
-var isEmpty = \s -> (s === end);
-
-/**
- * Is a given object a stream?
- * 
- * Returns true for empty streams as well.
- * 
- * @param s Object to test.
- * 
- * @return Is 's' a valid stream.
- */
-var isStream = \s ->
-    ((s && s.hasOwnProperty('first') && s.hasOwnProperty('rest')) || s === end);
 /* 
  ******************************************************************************/
 /**
@@ -156,11 +163,9 @@ var isStream = \s ->
  * @param s Stream to iterate over.
  */
 var forEach = function(f, s) {
-    var i = 0;
-    while (!isEmpty(s)) {
-       f(first(s), i);
+    for (var head = s, i = 0; !isEmpty(head); head = rest(head)) {
+       f(first(head), i);
        i = i + 1;
-       s = rest(s);
     }
 };
 
@@ -175,8 +180,9 @@ var forEach = function(f, s) {
  * @return Result of reduction.
  */
 var foldl = \f, z, s -> {
-    forEach(\(x, i) -> (z = f(z, x, i)), s);
-    return z;
+    var r = z;
+    forEach(\(x, i) -> { r = f(r, x, i); return r; }, s);
+    return r;
 };
 
 /**
@@ -238,13 +244,12 @@ var map = curry(function STREAM_MAP(i, f, s) {
  * @return New stream from filtered 's'.
  */
 var filter = curry(function STREAM_FILTER(i, pred, s) {
-    while (!isEmpty(s)) {
-        var x = first(s);
-        if (pred(x, i)) {
-            return memoStream(x, curry(STREAM_FILTER, i + 1, pred, rest(s)));
+    for (var head = s, index = i; !isEmpty(head); head = rest(head)) {
+        var x = first(head);
+        if (pred(x, index)) {
+            return memoStream(x, curry(STREAM_FILTER, index + 1, pred, rest(head)));
         }
-        i = i + 1;
-        s = rest(s);
+        index = index + 1;
     }
     return s;
 }, 0);

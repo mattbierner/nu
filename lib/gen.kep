@@ -1,6 +1,7 @@
 /**
  * @fileOverview Stream generation.
  */
+static define;
 define(['nu/stream'],
 function(stream) {
 "use strict";
@@ -39,12 +40,12 @@ var range = (function(){
             stream.end :
             stream.memoStream(lower, curry(rangeImpl, lower + step, upper, step)));
     
-    return function(lower, upper, step) {
-        lower = (isNaN(lower) ? Infinity : +lower);
-        step = (isNaN(step) ? 1 : +step);
+    return \lower, upper, step -> {
+        var rangeLower = (isNaN(lower) ? Infinity : +lower),
+            rangeStep = (isNaN(step) ? 1 : +step);
         return (isNaN(upper) ?
-            rangeImpl(0, lower, step) :
-            rangeImpl(lower, upper, step));
+            rangeImpl(0, rangeLower, rangeStep) :
+            rangeImpl(rangeLower, upper, rangeStep));
     };
 }());
 
