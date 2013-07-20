@@ -244,14 +244,14 @@ var map = curry(function STREAM_MAP(i, f, s) {
  * @return New stream from filtered 's'.
  */
 var filter = curry(function STREAM_FILTER(i, pred, s) {
-    for (var head = s, index = i; !isEmpty(head); head = rest(head)) {
+    var head = s;
+    for (var index = i; !isEmpty(head); head = rest(head)) {
         var x = first(head);
-        if (pred(x, index)) {
+        if (pred(x, index))
             return memoStream(x, curry(STREAM_FILTER, index + 1, pred, rest(head)));
-        }
         index = index + 1;
     }
-    return s;
+    return head;
 }, 0);
 
 /* 
