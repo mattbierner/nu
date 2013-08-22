@@ -6,9 +6,7 @@ define(['nu/stream'],
 function(stream) {
 "use strict";
 
-/* Helper functions
- ******************************************************************************/
-var curry = \f /*, ...*/ -> f.bind.apply(f, arguments);
+var curry = \f, ... -> f.bind.apply(f, arguments);
 
 /* Gen
  ******************************************************************************/
@@ -22,20 +20,14 @@ var curry = \f /*, ...*/ -> f.bind.apply(f, arguments);
  * 
  * @returns Lazy stream of elements taken from 's'.
  */
-var takeWhile = (function(){
-    var takeWhileImpl = function(i, pred, s) {
-        if (stream.isEmpty(s)) {
-            return s;
-        }
-        var x = stream.first(s);
-        return (pred(x, i) ?
-            stream.stream(x, curry(takeWhileImpl, i + 1, pred, stream.rest(s))) :
-            stream.end);
-    };
-    
-    return \pred, s ->
-        takeWhileImpl(0, pred, s);
-}());
+var takeWhile = curry(function takeWhile(i, pred, s) {
+    if (stream.isEmpty(s))
+        return s;
+    var x = stream.first(s);
+    return (pred(x, i) ?
+        stream.stream(x, curry(takeWhile, i + 1, pred, stream.rest(s))) :
+        stream.end);
+}, 0);
 
 /**
  * Create a stream of at most 'count' elements from 's'.
@@ -85,8 +77,7 @@ var skipWhile = function(pred, s) {
 var skip = \count, s ->
     (isNaN(count) || count <= 0 ?
         s :
-        skipWhile(\(v, i) -> (i < count), s));
-
+        skipWhile(\v, i -> (i < count), s));
 
 /* Export
  ******************************************************************************/
@@ -97,4 +88,5 @@ return {
     'skipWhile': skipWhile,
     'skip': skip
 };
+
 });

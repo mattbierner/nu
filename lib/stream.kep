@@ -7,15 +7,13 @@ define(function() {
 
 var arrayReduce = Function.prototype.call.bind(Array.prototype.reduce);
 
-/* Helper functions
- ******************************************************************************/
-var curry = \f /*, ...*/ -> f.bind.apply(f, arguments);
+var curry = \f, ... -> f.bind.apply(f, arguments);
 
 var constant = \x -> \() -> x;
 
 var memo = \f -> {
     var value;
-    return \(/*...*/) -> {
+    return \... -> {
         if (value === undefined)
             value = f.apply(this, arguments);
         return value;
@@ -127,7 +125,7 @@ var append =
     let
         reducer = \s1, s2 -> appendz(s1, constant(s2))
     in
-        \(/*...*/) -> arrayReduce(arguments, reducer, end);
+        \... -> arrayReduce(arguments, reducer, end);
 
 /**
  * Joins a stream of streams into a new stream
@@ -144,14 +142,14 @@ var concat = \s ->
  * 
  * @return Stream of enumerable values from enumerable object.
  */
-var from = (function(){
-    var fromImpl = \arr, i, len ->
+var from = let
+    fromImpl = \arr, i, len ->
         (i >= len ?
             end : 
-            memoStream(arr[i], curry(fromImpl, arr, i + 1, len)));
+            memoStream(arr[i], curry(fromImpl, arr, i + 1, len)))
     
-    return \arr -> fromImpl(arr, 0, arr.length);
-}());
+in
+    \arr -> fromImpl(arr, 0, arr.length);
 
 
 /* 
@@ -181,7 +179,7 @@ var forEach = function(f, s) {
  */
 var foldl = \f, z, s -> {
     var r = z;
-    forEach(\(x, i) -> { r = f(r, x, i); return r; }, s);
+    forEach(\x, i -> { r = f(r, x, i); return r; }, s);
     return r;
 };
 
@@ -207,14 +205,13 @@ var foldr = curry(function STREAM_FOLDR(i, f, z, s) {
  *
  * @return Array created from stream..
  */
-var toArray =
-    let 
-        builder = \p, c -> {
-            p.push(c);
-            return p;
-        }
-    in
-        \s -> foldl(builder, [], s);
+var toArray = let 
+    builder = \p, c -> {
+        p.push(c);
+        return p;
+    }
+in
+    \s -> foldl(builder, [], s);
 
 /* 
  ******************************************************************************/

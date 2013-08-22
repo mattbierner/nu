@@ -6,9 +6,7 @@ define(['nu/stream'],
 function(stream) {
 "use strict";
 
-/* Helper functions
- ******************************************************************************/
-var curry = \f /*, ...*/ -> f.bind.apply(f, arguments);
+var curry = \f, ... -> f.bind.apply(f, arguments);
 
 /* Gen
  ******************************************************************************/
@@ -34,20 +32,19 @@ var repeat = \times, x ->
  * 
  * @return Lazy stream for range.
  */
-var range = (function(){
-    var rangeImpl = \lower, upper, step ->
+var range = let
+    rangeImpl = \lower, upper, step ->
         ((step > 0 ? upper <= lower : upper >= lower) ?
             stream.end :
-            stream.memoStream(lower, curry(rangeImpl, lower + step, upper, step)));
-    
-    return \lower, upper, step -> {
+            stream.memoStream(lower, curry(rangeImpl, lower + step, upper, step)))
+in
+    \lower, upper, step -> {
         var rangeLower = (isNaN(lower) ? Infinity : +lower),
             rangeStep = (isNaN(step) ? 1 : +step);
         return (isNaN(upper) ?
             rangeImpl(0, rangeLower, rangeStep) :
             rangeImpl(rangeLower, upper, rangeStep));
     };
-}());
 
 /* Export
  ******************************************************************************/
