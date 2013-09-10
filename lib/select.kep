@@ -57,7 +57,7 @@ var take = \count, s ->
  * 
  * @returns Stream of elements from 's' after predicate was not satisfied.
  */
-var skipWhile = function(pred, s) {
+var skipWhile = \pred, s -> {
     for (var head = s, i = 0; !stream.isEmpty(head); head = stream.rest(head)) {
         if (!pred(stream.first(head), i))
             return head;

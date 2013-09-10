@@ -121,11 +121,10 @@ var appendz = \s1, f ->
  * 
  * @return Stream of joined streams.
  */
-var append =
-    let
-        reducer = \s1, s2 -> appendz(s1, constant(s2))
-    in
-        \... -> arrayReduce(arguments, reducer, end);
+var append = let
+    reducer = \s1, s2 -> appendz(s1, constant(s2))
+in
+    \... -> arrayReduce(arguments, reducer, end);
 
 /**
  * Joins a stream of streams into a new stream
@@ -149,7 +148,7 @@ var from = let
             memoStream(arr[i], curry(fromImpl, arr, i + 1, len)))
     
 in
-    \arr -> fromImpl(arr, 0, arr.length);
+    \arr{'length': len} -> fromImpl(arr, 0, len);
 
 
 /* 
@@ -160,7 +159,7 @@ in
  * @param {function(value, index): *} f Function to call each element of 's'.
  * @param s Stream to iterate over.
  */
-var forEach = function(f, s) {
+var forEach = \f, s -> {
     for (var head = s, i = 0; !isEmpty(head); head = rest(head)) {
        f(first(head), i);
        i = i + 1;
@@ -199,9 +198,9 @@ var foldr = curry(function STREAM_FOLDR(i, f, z, s) {
 }, 0);
 
 /**
- * Reduces a stream right to left.
+ * Convert a finite stream to an array.
  *
- * @param s Stream being reduced.
+ * @param s Stream.
  *
  * @return Array created from stream..
  */
