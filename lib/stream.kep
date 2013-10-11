@@ -1,10 +1,33 @@
 /**
  * @fileOverview Core stream functionality.
  */
-static define;
-define(function() {
-"use strict";
+package (
+    end,
 
+    stream,
+    memoStream,
+    
+    cons,
+    append,
+    appendz,
+    concat,
+    from,
+
+    first,
+    rest,
+    isEmpty,
+    isStream,
+    
+    forEach,
+    foldl,
+    foldr,
+    toArray,
+    
+    map,
+    filter,
+    
+    bind)
+{
 var arrayReduce = Function.prototype.call.bind(Array.prototype.reduce);
 
 var curry = \f, ... -> f.bind.apply(f, arguments);
@@ -25,7 +48,7 @@ var memo = \f -> {
 /**
  * The empty stream.
  */
-var end = null;
+end = null;
 
 /* Stream
  ******************************************************************************/
@@ -37,7 +60,7 @@ var end = null;
  * 
  * @return A new stream.
  */
-var stream = \val, f -> ({
+stream = \val, f -> ({
     'first': val,
     'rest': f
 });
@@ -45,7 +68,7 @@ var stream = \val, f -> ({
 /**
  * Create a new stream that memoizes rest results.
  */
-var memoStream = \val, f ->
+memoStream = \val, f ->
     stream(val, memo(f));
 
 /* Primitive Operators
@@ -57,7 +80,7 @@ var memoStream = \val, f ->
  * 
  * @return First element of 's'.
  */
-var first = \s -> s.first;
+first = \s -> s.first;
 
 /**
  * Get the rest of a given stream, excluding the first element.
@@ -66,7 +89,7 @@ var first = \s -> s.first;
  * 
  * @return Stream for rest of 's'.
  */
-var rest = \s -> s.rest(first(s));
+rest = \s -> s.rest(first(s));
 
 /**
  * Is a given stream empty.
@@ -75,7 +98,7 @@ var rest = \s -> s.rest(first(s));
  *
  *@return Is 's' empty.
  */
-var isEmpty = \s -> (s === end);
+isEmpty = \s -> (s === end);
 
 /**
  * Is a given object a stream?
@@ -86,7 +109,7 @@ var isEmpty = \s -> (s === end);
  * 
  * @return Is 's' a valid stream.
  */
-var isStream = \s ->
+isStream = \s ->
     ((s && s.hasOwnProperty('first') && s.hasOwnProperty('rest')) || s === end);
 
 
@@ -100,7 +123,7 @@ var isStream = \s ->
  * 
  * @return A new stream.
  */
-var cons = \val, s -> 
+cons = \val, s -> 
     stream(val, constant(s));
 
 /**
@@ -111,7 +134,7 @@ var cons = \val, s ->
  * 
  * @return Stream of two joined streams.
  */
-var appendz = \s1, f ->
+appendz = \s1, f ->
     (isEmpty(s1) ?
         f() :
         memoStream(first(s1), curry(appendz, rest(s1), f)));
@@ -121,7 +144,7 @@ var appendz = \s1, f ->
  * 
  * @return Stream of joined streams.
  */
-var append = let
+append = let
     reducer = \s1, s2 -> appendz(s1, constant(s2))
 in
     \... -> arrayReduce(arguments, reducer, end);
@@ -129,7 +152,7 @@ in
 /**
  * Joins a stream of streams into a new stream
  */
-var concat = \s ->
+concat = \s ->
     (isEmpty(s) ?
         s :
         appendz(first(s), curry(concat, rest(s))));
@@ -141,7 +164,7 @@ var concat = \s ->
  * 
  * @return Stream of enumerable values from enumerable object.
  */
-var from = let
+from = let
     fromImpl = \arr, i, len ->
         (i >= len ?
             end : 
@@ -159,7 +182,7 @@ in
  * @param {function(value, index): *} f Function to call each element of 's'.
  * @param s Stream to iterate over.
  */
-var forEach = \f, s -> {
+forEach = \f, s -> {
     for (var head = s, i = 0; !isEmpty(head); head = rest(head)) {
        f(first(head), i);
        i = i + 1;
@@ -176,7 +199,7 @@ var forEach = \f, s -> {
  * 
  * @return Result of reduction.
  */
-var foldl = \f, z, s -> {
+foldl = \f, z, s -> {
     var r = z;
     forEach(\x, i -> { r = f(r, x, i); return r; }, s);
     return r;
@@ -191,7 +214,7 @@ var foldl = \f, z, s -> {
  * 
  * @return Result of reduction.
  */
-var foldr = curry(function STREAM_FOLDR(i, f, z, s) {
+foldr = curry(function STREAM_FOLDR(i, f, z, s) {
     return (isEmpty(s) ?
         z :
         f(STREAM_FOLDR(i + 1, f, z, rest(s)), first(s), i));
@@ -204,7 +227,7 @@ var foldr = curry(function STREAM_FOLDR(i, f, z, s) {
  *
  * @return Array created from stream..
  */
-var toArray = let 
+toArray = let 
     builder = \p, c -> {
         p.push(c);
         return p;
@@ -223,7 +246,7 @@ in
  * 
  * @return Stream of mapped values.
  */
-var map = curry(function STREAM_MAP(i, f, s) {
+map = curry(function STREAM_MAP(i, f, s) {
     return (isEmpty(s) ?
         s :
         memoStream(f(first(s), i), curry(STREAM_MAP, i + 1, f, rest(s))));
@@ -239,7 +262,7 @@ var map = curry(function STREAM_MAP(i, f, s) {
  * 
  * @return New stream from filtered 's'.
  */
-var filter = curry(function STREAM_FILTER(i, pred, s) {
+filter = curry(function STREAM_FILTER(i, pred, s) {
     var head = s;
     for (var index = i; !isEmpty(head); head = rest(head)) {
         var x = first(head);
@@ -255,37 +278,7 @@ var filter = curry(function STREAM_FILTER(i, pred, s) {
 /**
  * Apply 'f' to stream 's' and join results into a new stream.
  */
-var bind = \f, s ->
+bind = \f, s ->
      concat(map(f, s));
 
-/* Export
- ******************************************************************************/
-return {
-    'end': end,
-
-    'stream': stream,
-    'memoStream': memoStream,
-    
-    'cons': cons,
-    'append': append,
-    'appendz': appendz,
-    'concat': concat,
-    'from': from,
-
-    'first': first,
-    'rest': rest,
-    'isEmpty': isEmpty,
-    'isStream': isStream,
-    
-    'forEach': forEach,
-    'foldl': foldl,
-    'foldr': foldr,
-    'toArray': toArray,
-    
-    'map': map,
-    'filter': filter,
-    
-    'bind': bind
 };
-
-});

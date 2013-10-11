@@ -1,10 +1,12 @@
 /**
  * @fileOverview Stream generation.
  */
-static define;
-define(['nu/stream'],
-function(stream) {
-"use strict";
+package (
+    repeat,
+    range)
+with
+    import 'nu/stream' {end, memoStream}
+{
 
 var curry = \f, ... -> f.bind.apply(f, arguments);
 
@@ -18,10 +20,10 @@ var curry = \f, ... -> f.bind.apply(f, arguments);
  * 
  * @return Lazy stream of 'x' repeated 'times' times.
  */
-var repeat = \times, x ->
+repeat = \times, x ->
     (times <= 0 ?
-        stream.end :
-        stream.memoStream(x, curry(repeat, times - 1, x)));
+        end :
+        memoStream(x, curry(repeat, times - 1, x)));
 
 /**
  * Generate a stream of numbers in a given range.
@@ -32,11 +34,11 @@ var repeat = \times, x ->
  * 
  * @return Lazy stream for range.
  */
-var range = let
+range = let
     rangeImpl = \lower, upper, step ->
         ((step > 0 ? upper <= lower : upper >= lower) ?
-            stream.end :
-            stream.memoStream(lower, curry(rangeImpl, lower + step, upper, step)))
+            end :
+            memoStream(lower, curry(rangeImpl, lower + step, upper, step)))
 in
     \lower, upper, step -> {
         var rangeLower = (isNaN(lower) ? Infinity : +lower),
@@ -46,11 +48,4 @@ in
             rangeImpl(rangeLower, upper, rangeStep));
     };
 
-/* Export
- ******************************************************************************/
-return {
-   'repeat': repeat,
-   'range': range
-};
-
-});
+}

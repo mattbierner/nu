@@ -1,10 +1,14 @@
 /**
  * @fileOverview Sub stream selection.
  */
-static define;
-define(['nu/stream'],
-function(stream) {
-"use strict";
+package (
+    takeWhile,
+    take,
+    skipWhile,
+    skip)
+with
+    import 'nu/stream' {end, first, isEmpty, stream, rest}
+{
 
 var curry = \f, ... -> f.bind.apply(f, arguments);
 
@@ -20,13 +24,13 @@ var curry = \f, ... -> f.bind.apply(f, arguments);
  * 
  * @returns Lazy stream of elements taken from 's'.
  */
-var takeWhile = curry(function takeWhile(i, pred, s) {
-    if (stream.isEmpty(s))
+takeWhile = curry(function takeWhile(i, pred, s) {
+    if (isEmpty(s))
         return s;
-    var x = stream.first(s);
+    var x = first(s);
     return (pred(x, i) ?
-        stream.stream(x, curry(takeWhile, i + 1, pred, stream.rest(s))) :
-        stream.end);
+        stream(x, curry(takeWhile, i + 1, pred, rest(s))) :
+        end);
 }, 0);
 
 /**
@@ -40,7 +44,7 @@ var takeWhile = curry(function takeWhile(i, pred, s) {
  * 
  * @returns Lazy stream of at most 'count' elements from 's'.
  */
-var take = \count, s ->
+take = \count, s ->
     (isNaN(count) || count < 0 ?
         s : 
         takeWhile(\(v, i) -> (i < count), s));
@@ -57,13 +61,13 @@ var take = \count, s ->
  * 
  * @returns Stream of elements from 's' after predicate was not satisfied.
  */
-var skipWhile = \pred, s -> {
-    for (var head = s, i = 0; !stream.isEmpty(head); head = stream.rest(head)) {
-        if (!pred(stream.first(head), i))
+skipWhile = \pred, s -> {
+    for (var head = s, i = 0; !isEmpty(head); head = rest(head)) {
+        if (!pred(first(head), i))
             return head;
         i = i + 1;
     }
-    return stream.end;
+    return end;
 };
 
 /**
@@ -74,19 +78,9 @@ var skipWhile = \pred, s -> {
  * 
  * @returns Stream of elements from 's' after 'count' elements.
  */
-var skip = \count, s ->
+skip = \count, s ->
     (isNaN(count) || count <= 0 ?
         s :
         skipWhile(\v, i -> (i < count), s));
 
-/* Export
- ******************************************************************************/
-return {
-    'takeWhile': takeWhile,
-    'take': take,
-    
-    'skipWhile': skipWhile,
-    'skip': skip
-};
-
-});
+}
