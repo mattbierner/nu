@@ -6,7 +6,7 @@ package (
     every)
 with
     import 'nu/stream' {isEmpty, first, rest}
-{
+in {
 /**
  * Tests a stream against a predicate and returns if the predicate is satisfied
  * for any element.
@@ -53,4 +53,4 @@ every = \pred, s -> {
     return true;
 };
 
-});
+}

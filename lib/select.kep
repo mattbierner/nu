@@ -8,7 +8,7 @@ package (
     skip)
 with
     import 'nu/stream' {end, first, isEmpty, stream, rest}
-{
+in {
 
 var curry = \f, ... -> f.bind.apply(f, arguments);
 
@@ -24,14 +24,16 @@ var curry = \f, ... -> f.bind.apply(f, arguments);
  * 
  * @returns Lazy stream of elements taken from 's'.
  */
-takeWhile = curry(function takeWhile(i, pred, s) {
-    if (isEmpty(s))
-        return s;
-    var x = first(s);
-    return (pred(x, i) ?
-        stream(x, curry(takeWhile, i + 1, pred, rest(s))) :
-        end);
-}, 0);
+takeWhile = curry(
+    let takeWhile = \i, pred, s -> {
+        if (isEmpty(s))
+            return s;
+        var x = first(s);
+        return (pred(x, i) ?
+            stream(x, curry(takeWhile, i + 1, pred, rest(s))) :
+            end);
+    } in takeWhile,
+    0);
 
 /**
  * Create a stream of at most 'count' elements from 's'.
