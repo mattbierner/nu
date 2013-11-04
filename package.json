@@ -3,17 +3,17 @@
   "version": "2.0.5",
   "description": "Small Lazy Stream Javascript Library",
   "main": "stream",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git@github.com:mattbierner/nu.git"
   },
+  "dependencies": {
+     "amdefine": ">=0.1.0",
+     "amd-loader": "0.0.5"
+   },
   "keywords": [
-    'stream', 
-    'lazy',
-    'list'
+    "stream", 
+    "lazy"
   ],
   "author": "Matt Bierner",
   "license": "MIT"

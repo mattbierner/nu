@@ -8,10 +8,6 @@ with
     import 'nu/stream' {end, memoStream}
 in {
 
-var curry = \f, ... -> f.bind.apply(f, arguments);
-
-/* Gen
- ******************************************************************************/
 /**
  * Repeat 'x' 'times' times.
  * 
@@ -23,7 +19,7 @@ var curry = \f, ... -> f.bind.apply(f, arguments);
 repeat = \times, x ->
     (times <= 0 ?
         end :
-        memoStream(x, curry(repeat, times - 1, x)));
+        memoStream(x, (repeat, times - 1, x)));
 
 /**
  * Generate a stream of numbers in a given range.
@@ -38,7 +34,7 @@ range = let
     rangeImpl = \lower, upper, step ->
         ((step > 0 ? upper <= lower : upper >= lower) ?
             end :
-            memoStream(lower, curry(rangeImpl, lower + step, upper, step)))
+            memoStream(lower, (rangeImpl, lower + step, upper, step)))
 in
     \lower, upper, step -> let
         rangeLower = (isNaN(lower) ? Infinity : +lower),

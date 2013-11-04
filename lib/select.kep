@@ -10,8 +10,6 @@ with
     import 'nu/stream' {end, first, isEmpty, stream, rest}
 in {
 
-var curry = \f, ... -> f.bind.apply(f, arguments);
-
 /* Gen
  ******************************************************************************/
 /**
@@ -24,13 +22,13 @@ var curry = \f, ... -> f.bind.apply(f, arguments);
  * 
  * @returns Lazy stream of elements taken from 's'.
  */
-takeWhile = curry(
+takeWhile = (
     let takeWhile = \i, pred, s -> {
         if (isEmpty(s))
             return s;
         var x = first(s);
         return (pred(x, i) ?
-            stream(x, curry(takeWhile, i + 1, pred, rest(s))) :
+            stream(x, (takeWhile, i + 1, pred, rest(s))) :
             end);
     } in takeWhile,
     0);
@@ -49,7 +47,7 @@ takeWhile = curry(
 take = \count, s ->
     (isNaN(count) || count < 0 ?
         s : 
-        takeWhile(\(v, i) -> (i < count), s));
+        takeWhile(\_, i -> (i < count), s));
 
 /**
  * Create a stream that skips leading elements from 's' while a predicate is
@@ -83,6 +81,6 @@ skipWhile = \pred, s -> {
 skip = \count, s ->
     (isNaN(count) || count <= 0 ?
         s :
-        skipWhile(\v, i -> (i < count), s));
+        skipWhile(\_, i -> (i < count), s));
 
 }

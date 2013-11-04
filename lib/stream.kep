@@ -28,17 +28,16 @@ package (
     
     bind)
 {
-var arrayReduce = Function.prototype.call.bind(Array.prototype.reduce);
 
-var curry = \f, ... -> f.bind.apply(f, arguments);
+var arrayReduce = Function.prototype.call.bind(Array.prototype.reduce);
 
 var constant = \x -> \() -> x;
 
 var memo = \f -> {
     var value;
-    return \... -> {
+    return \args(...) -> {
         if (value === undefined)
-            value = f.apply(this, arguments);
+            value = f.apply(this, args);
         return value;
     };
 };
@@ -137,7 +136,7 @@ cons = \val, s ->
 appendz = \s1, f ->
     (isEmpty(s1) ?
         f() :
-        memoStream(first(s1), curry(appendz, rest(s1), f)));
+        memoStream(first(s1), (appendz, rest(s1), f)));
 
 /**
  * Joins multiple streams into a new stream.
@@ -147,7 +146,7 @@ appendz = \s1, f ->
 append = let
     reducer = \s1, s2 -> appendz(s1, constant(s2))
 in
-    \... -> arrayReduce(arguments, reducer, end);
+    \streams(...) -> arrayReduce(streams, reducer, end);
 
 /**
  * Joins a stream of streams into a new stream
@@ -155,7 +154,7 @@ in
 concat = \s ->
     (isEmpty(s) ?
         s :
-        appendz(first(s), curry(concat, rest(s))));
+        appendz(first(s), (concat, rest(s))));
 
 /**
  * Create a new stream from an array like object.
@@ -168,7 +167,7 @@ from = let
     fromImpl = \arr, i, len ->
         (i >= len ?
             end : 
-            memoStream(arr[i], curry(fromImpl, arr, i + 1, len)))
+            memoStream(arr[i], (fromImpl, arr, i + 1, len)))
     
 in
     \arr{length} -> fromImpl(arr, 0, length);
@@ -201,7 +200,7 @@ forEach = \f, s -> {
  */
 foldl = \f, z, s -> {
     var r = z;
-    forEach(\x, i -> { r = f(r, x, i); return r; }, s);
+    forEach(\x, i -> { r = f(r, x, i); }, s);
     return r;
 };
 
@@ -214,7 +213,7 @@ foldl = \f, z, s -> {
  * 
  * @return Result of reduction.
  */
-foldr = curry(
+foldr = (
     let foldr = \i, f, z, s ->
         (isEmpty(s) ?
             z :
@@ -229,7 +228,7 @@ foldr = curry(
  *
  * @return Array created from stream..
  */
-toArray = let 
+toArray = let
     builder = \p, c -> {
         p.push(c);
         return p;
@@ -248,11 +247,11 @@ in
  * 
  * @return Stream of mapped values.
  */
-map = curry(
+map = (
     let map = \i, f, s ->
         (isEmpty(s) ?
             s :
-            memoStream(f(first(s), i), curry(map, i + 1, f, rest(s))))
+            memoStream(f(first(s), i), (map, i + 1, f, rest(s))))
     in map,
     0);
 
@@ -266,13 +265,13 @@ map = curry(
  * 
  * @return New stream from filtered 's'.
  */
-filter = curry(
+filter = (
     let filter = \i, pred, s -> {
         var head = s;
         for (var index = i; !isEmpty(head); head = rest(head)) {
             var x = first(head);
             if (pred(x, index))
-                return memoStream(x, curry(filter, index + 1, pred, rest(head)));
+                return memoStream(x, (filter, index + 1, pred, rest(head)));
             index = index + 1;
         }
         return head;
@@ -284,7 +283,6 @@ filter = curry(
 /**
  * Apply 'f' to stream 's' and join results into a new stream.
  */
-bind = \f, s ->
-     concat(map(f, s));
+bind = map \>> concat;
 
 }
