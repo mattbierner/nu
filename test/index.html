@@ -18,9 +18,24 @@
             }
         });
         require(
-            ['testAppend', 'testConcat', 'testBind', 'testFoldl', 'testFoldr', 'testMap', 'testFilter',
-                'testForEach', 'testRepeat', 'testRange', 'testAny', 'testEvery', 'testSkip',
-                'testSkipWhile', 'testTake', 'testTakeWhile'],
+            ['testAppend',
+            'testConcat',
+            'testBind',
+            'testFoldl',
+            'testFoldr',
+            'testReduce',
+            'testReduceRight',
+            'testMap',
+            'testFilter',
+            'testForEach',
+            'testRepeat',
+            'testRange',
+            'testAny',
+            'testEvery',
+            'testSkip',
+            'testSkipWhile',
+            'testTake',
+            'testTakeWhile'],
             function()
             {
                 Array.prototype.forEach.call(arguments, function(m) {

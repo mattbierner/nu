@@ -5,21 +5,21 @@ define(['nu/stream'], function(stream){
     }
     
     return {
-        'module': "Foldr Tests",
+        'module': "Foldr",
         'tests': [
-            ["Simple Reduce",
+            ["Simple foldr",
             function(){
                 assert.deepEqual(
                     stream.foldr(r, 3, stream.from([0, 1, 2])),
                     [0, [1, [2, 3]]]);
             }],
-            ["Single Reduce",
+            ["Single foldr",
             function(){
                 assert.deepEqual(
                     stream.foldr(r, 10, stream.from([0])),
                     [0, 10]);
             }],
-            ["Reduce Index",
+            ["foldr Index",
             function(){
                 assert.deepEqual(
                     stream.foldr(function(p, c, i) {
@@ -27,7 +27,7 @@ define(['nu/stream'], function(stream){
                     }, 0, stream.from([0, 1, 2, 3])),
                     14);
             }],
-            ["Empty Reduce",
+            ["Empty foldr",
             function(){
                 assert.equal(
                     stream.foldr(r, 0, stream.end),

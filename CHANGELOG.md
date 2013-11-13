@@ -1,5 +1,12 @@
 # ChangeLog #
 
+## 2.1.0 - November __, 2013
+* Added `stream.zip` to create stream of pairs from two streams.
+* Added `stream.reverse` to reverse a finite stream.
+* Added `stream.reduce` for left fold without initial value.
+* Added `stream.reduceRight` for left fold without initial value.
+* Improved `foldr` to work with longer, but still finite, streams.
+
 ## 2.0.5 - July 20, 2013
 * Fixed silly error that prevented filter from working correctly.
 

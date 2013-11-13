@@ -19,10 +19,15 @@ package (
     isStream,
     
     forEach,
+    
+    reverse,
     foldl,
     foldr,
+    reduce,
+    reduceRight,
     toArray,
     
+    zip,
     map,
     filter,
     
@@ -32,6 +37,8 @@ package (
 var arrayReduce = Function.prototype.call.bind(Array.prototype.reduce);
 
 var constant = \x -> \() -> x;
+
+var flip = \f -> \x, y -> f(y, x);
 
 var memo = \f -> {
     var value;
@@ -172,9 +179,10 @@ from = let
 in
     \arr{length} -> fromImpl(arr, 0, length);
 
-
 /* 
  ******************************************************************************/
+var count = \n -> stream(n, (+, 1) \> count);
+
 /**
  * Iterate over a stream in order.
  *
@@ -194,7 +202,7 @@ forEach = \f, s -> {
  * @param {function(previous, current, index)} f Function that reduces 
  *     's'.
  * @param z Initial value used for fold.
- * @param s Stream being reduced.
+ * @param s Stream.
  * 
  * @return Result of reduction.
  */
@@ -205,21 +213,58 @@ foldl = \f, z, s -> {
 };
 
 /**
+ * Reverse a stream.
+ * 
+ * Must be finite.
+ * 
+ * @param s Stream.
+ */
+reverse = (foldl,
+    flip(cons),
+    end);
+
+/**
  * Right fold on a stream.
  *
  * @param {function(previous, current, index)} f Function that reduces 's'.
  * @param z Initial value used for fold.
- * @param s Stream being reduced.
+ * @param s Stream.
  * 
  * @return Result of reduction.
  */
-foldr = (
-    let foldr = \i, f, z, s ->
-        (isEmpty(s) ?
-            z :
-            f(foldr(i + 1, f, z, rest(s)), first(s), i))
-    in foldr,
-    0);
+foldr = \f, z, s ->
+    foldl(
+        \p, [c, i] -> f(p, c, i),
+        z,
+        reverse <| zip(s, count(0)));
+
+/**
+ * Left fold on a non empty stream without an initial value.
+ * 
+ * @param {function(previous, current, index)} f Function that reduces 
+ *     's'.
+ * @param s Stream.
+ * 
+ * @return Result of reduction.
+ */
+reduce = \f, s ->
+    foldl(f, first(s), rest(s));
+
+/**
+ * right fold on a non empty stream without an initial value.
+ * 
+ * @param {function(previous, current, index)} f Function that reduces 
+ *     's'.
+ * @param s Stream.
+ * 
+ * @return Result of reduction.
+ */
+reduceRight = \f, s ->
+    let inner = reverse <| zip(s, count(0)) in
+        foldl(
+            \p, [c, i] -> f(p, c, i),
+            first(inner)[0],
+            rest(inner));
 
 /**
  * Convert a finite stream to an array.
@@ -238,6 +283,20 @@ in
 
 /* 
  ******************************************************************************/
+/**
+ * Combine two streams into a stream of pairs.
+ * 
+ * Takes as many elements as the shorter of the two contains.
+ * 
+ * @param l1 Stream
+ * @param l2 Stream
+ */
+zip = \l1, l2 ->
+    (isEmpty(l1) || isEmpty(l2) ? end :
+        memoStream(
+            [first(l1), first(l2)],
+            (zip, rest(l1), rest(l2))));
+
 /**
  * Create a new stream of mapped values from an existing stream.
  * 
