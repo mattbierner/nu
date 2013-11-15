@@ -10,24 +10,20 @@ define(["require", "exports", "nu/stream"], (function(require, exports, __o) {
         first = __o["first"],
         rest = __o["rest"];
     (any = (function(pred, s) {
-        var i = 0,
-            current = s;
+        var current = s;
         while (!isEmpty(current)) {
-            if (pred(first(current), i)) return true;
+            if (pred(first(current))) return true;
 
-            (i = (i + 1));
             (current = rest(current));
         }
 
         return false;
     }));
     (every = (function(pred, s) {
-        var i = 0,
-            current = s;
+        var current = s;
         while (!isEmpty(current)) {
-            if (!pred(first(current), i)) return false;
+            if (!pred(first(current))) return false;
 
-            (i = (i + 1));
             (current = rest(current));
         }
 

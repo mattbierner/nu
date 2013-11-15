@@ -7,10 +7,20 @@ package (
     skipWhile,
     skip)
 with
-    import 'nu/stream' {end, first, isEmpty, stream, rest}
+    import 'nu/stream' {
+        end,
+        first,
+        isEmpty,
+        map,
+        stream,
+        rest,
+        indexed}
 in {
 
-/* Gen
+var value = \[i, x] -> x;
+var index = \[i, x] -> i;
+
+/* Selections
  ******************************************************************************/
 /**
  * Create a stream of elements yielded from 's' while a predicate is
@@ -22,16 +32,12 @@ in {
  * 
  * @returns Lazy stream of elements taken from 's'.
  */
-takeWhile = (
-    let takeWhile = \i, pred, s -> {
-        if (isEmpty(s))
-            return s;
-        var x = first(s);
-        return (pred(x, i) ?
-            stream(x, (takeWhile, i + 1, pred, rest(s))) :
-            end);
-    } in takeWhile,
-    0);
+takeWhile = \pred, s ->
+    (isEmpty(s) ? s :
+        let x = first(s) in
+            (pred(x) ?
+                stream(x, (takeWhile, pred, rest(s))) :
+                end));
 
 /**
  * Create a stream of at most 'count' elements from 's'.
@@ -47,7 +53,11 @@ takeWhile = (
 take = \count, s ->
     (isNaN(count) || count < 0 ?
         s : 
-        takeWhile(\_, i -> (i < count), s));
+        map(
+            value,
+            takeWhile(
+                index \> (>, count), 
+                indexed <| s)));
 
 /**
  * Create a stream that skips leading elements from 's' while a predicate is
@@ -55,18 +65,16 @@ take = \count, s ->
  * 
  * May result in an empty stream if 's' ends before the predicate is satisfied.
  * 
- * @param {function(value, index): boolean} pred Predicate that determines 
+ * @param {function(value): boolean} pred Predicate that determines 
  *     elements to skip.
  * * @param s Stream to yield elements from.
  * 
  * @returns Stream of elements from 's' after predicate was not satisfied.
  */
 skipWhile = \pred, s -> {
-    for (var head = s, i = 0; !isEmpty(head); head = rest(head)) {
-        if (!pred(first(head), i))
+    for (var head = s; !isEmpty(head); head = rest(head))
+        if (!pred(first(head)))
             return head;
-        i = i + 1;
-    }
     return end;
 };
 
@@ -81,6 +89,10 @@ skipWhile = \pred, s -> {
 skip = \count, s ->
     (isNaN(count) || count <= 0 ?
         s :
-        skipWhile(\_, i -> (i < count), s));
+        map(
+            value,
+            skipWhile(
+                index \> (>, count),
+                indexed <| s)));
 
 }

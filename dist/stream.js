@@ -4,7 +4,7 @@
 */
 define(["require", "exports"], (function(require, exports) {
     "use strict";
-    var end, stream, memoStream, cons, append, appendz, concat, from, first, rest, isEmpty, isStream, forEach, reverse, foldl, foldr, reduce, reduceRight, toArray, zip, map, filter, bind;
+    var end, NIL, stream, memoStream, cons, append, appendz, concat, from, first, rest, isEmpty, isStream, forEach, reverse, foldl, foldr, reduce, reduceRight, toArray, zip, indexed, map, filter, bind;
     var arrayReduce = Function.prototype.call.bind(Array.prototype.reduce);
     var constant = (function(x) {
         return (function() {
@@ -26,6 +26,7 @@ define(["require", "exports"], (function(require, exports) {
         });
     });
     (end = null);
+    (NIL = end);
     (stream = (function(val, f) {
         return ({
             "first": val,
@@ -79,52 +80,44 @@ define(["require", "exports"], (function(require, exports) {
             });
         }
     })());
-    var count = (function(n) {
-        return stream(n, (function(f, g) {
-            return (function(x) {
-                return f(g(x));
+    (zip = (function(l1, l2) {
+        return ((isEmpty(l1) || isEmpty(l2)) ? end : memoStream([first(l1), first(l2)], zip.bind(null, rest(l1), rest(l2))));
+    }));
+    (indexed = (function() {
+        {
+            var count = (function(n) {
+                return stream(n, (function(f, g) {
+                    return (function(x) {
+                        return f(g(x));
+                    });
+                })(count, (function(x, y) {
+                    return (x + y);
+                }).bind(null, 1)));
             });
-        })(count, (function(x, y) {
-            return (x + y);
-        }).bind(null, 1)));
-    });
-    (forEach = (function(f, s) {
-        for (var head = s, i = 0; !isEmpty(head);
-            (head = rest(head))) {
-            f(first(head), i);
-            (i = (i + 1));
+            return zip.bind(null, count(0));
         }
+    })());
+    (forEach = (function(f, s) {
+        for (var head = s; !isEmpty(head);
+            (head = rest(head))) f(first(head));
 
     }));
     (foldl = (function(f, z, s) {
         var r = z;
-        forEach((function(x, i) {
-            (r = f(r, x, i));
+        forEach((function(x) {
+            (r = f(r, x));
         }), s);
         return r;
     }));
     (reverse = foldl.bind(null, flip(cons), end));
     (foldr = (function(f, z, s) {
-        return foldl((function(p, __a) {
-            var c = __a[0],
-                i = __a[1];
-            return f(p, c, i);
-        }), z, reverse(zip(s, count(0))));
+        return foldl(f, z, reverse(s));
     }));
     (reduce = (function(f, s) {
         return foldl(f, first(s), rest(s));
     }));
     (reduceRight = (function(f, s) {
-        return (function() {
-            {
-                var inner = reverse(zip(s, count(0)));
-                return foldl((function(p, __a) {
-                    var c = __a[0],
-                        i = __a[1];
-                    return f(p, c, i);
-                }), first(inner)[0], rest(inner));
-            }
-        })();
+        return reduce(f, reverse(s));
     }));
     (toArray = (function() {
         {
@@ -137,40 +130,27 @@ define(["require", "exports"], (function(require, exports) {
             });
         }
     })());
-    (zip = (function(l1, l2) {
-        return ((isEmpty(l1) || isEmpty(l2)) ? end : memoStream([first(l1), first(l2)], zip.bind(null, rest(l1), rest(l2))));
+    (map = (function(f, s) {
+        return (isEmpty(s) ? s : memoStream(f(first(s)), map.bind(null, f, rest(s))));
     }));
-    (map = (function() {
-        {
-            var map = (function(i, f, s) {
-                return (isEmpty(s) ? s : memoStream(f(first(s), i), map.bind(null, (i + 1), f, rest(s))));
-            });
-            return map;
-        }
-    })().bind(null, 0));
-    (filter = (function() {
-        {
-            var filter = (function(i, pred, s) {
-                var head = s;
-                for (var index = i; !isEmpty(head);
-                    (head = rest(head))) {
-                    var x = first(head);
-                    if (pred(x, index)) return memoStream(x, filter.bind(null, (index + 1), pred, rest(head)));
+    (filter = (function(pred, s) {
+        var head = s;
+        for (; !isEmpty(head);
+            (head = rest(head))) {
+            var x = first(head);
+            if (pred(x)) return memoStream(x, filter.bind(null, pred, rest(head)));
 
-                    (index = (index + 1));
-                }
-
-                return head;
-            });
-            return filter;
         }
-    })().bind(null, 0));
+
+        return head;
+    }));
     (bind = (function(f, g) {
         return (function() {
             return f(g.apply(null, arguments));
         });
     })(concat, map));
     (exports.end = end);
+    (exports.NIL = NIL);
     (exports.stream = stream);
     (exports.memoStream = memoStream);
     (exports.cons = cons);
@@ -190,6 +170,7 @@ define(["require", "exports"], (function(require, exports) {
     (exports.reduceRight = reduceRight);
     (exports.toArray = toArray);
     (exports.zip = zip);
+    (exports.indexed = indexed);
     (exports.map = map);
     (exports.filter = filter);
     (exports.bind = bind);

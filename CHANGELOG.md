@@ -1,6 +1,11 @@
 # ChangeLog #
 
-## 2.1.0 - November __, 2013
+## 3.0.0 - November 15, 2013
+* Removed use of index in all operations.
+** Pass in an indexed stream to replicate old behavior.
+* Added `stream.indexed` to create an indexed stream.
+
+## 2.1.0 - November 13, 2013
 * Added `stream.zip` to create stream of pairs from two streams.
 * Added `stream.reverse` to reverse a finite stream.
 * Added `stream.reduce` for left fold without initial value.

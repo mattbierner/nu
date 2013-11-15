@@ -3,7 +3,8 @@
  */
 package (
     end,
-
+    NIL,
+    
     stream,
     memoStream,
     
@@ -28,6 +29,8 @@ package (
     toArray,
     
     zip,
+    indexed,
+    
     map,
     filter,
     
@@ -55,6 +58,7 @@ var memo = \f -> {
  * The empty stream.
  */
 end = null;
+NIL = end;
 
 /* Stream
  ******************************************************************************/
@@ -118,7 +122,6 @@ isEmpty = \s -> (s === end);
 isStream = \s ->
     ((s && s.hasOwnProperty('first') && s.hasOwnProperty('rest')) || s === end);
 
-
 /* Stream Construction
  ******************************************************************************/
 /**
@@ -175,31 +178,49 @@ from = let
         (i >= len ?
             end : 
             memoStream(arr[i], (fromImpl, arr, i + 1, len)))
-    
 in
     \arr{length} -> fromImpl(arr, 0, length);
 
 /* 
  ******************************************************************************/
-var count = \n -> stream(n, (+, 1) \> count);
+
+/**
+ * Combine two streams into a stream of pairs.
+ * 
+ * Takes as many elements as the shorter of the two contains.
+ * 
+ * @param l1 Stream
+ * @param l2 Stream
+ */
+zip = \l1, l2 ->
+    (isEmpty(l1) || isEmpty(l2) ? end :
+        memoStream(
+            [first(l1), first(l2)],
+            (zip, rest(l1), rest(l2))));
+
+/**
+ * Create a stream of pairs of index and value.
+ */
+indexed = let
+    count = \n -> stream(n, (+, 1) \> count)
+in
+    (zip, count(0));
 
 /**
  * Iterate over a stream in order.
  *
- * @param {function(value, index): *} f Function to call each element of 's'.
+ * @param {function(value): *} f Function to call each element of 's'.
  * @param s Stream to iterate over.
  */
 forEach = \f, s -> {
-    for (var head = s, i = 0; !isEmpty(head); head = rest(head)) {
-       f(first(head), i);
-       i = i + 1;
-    }
+    for (var head = s; !isEmpty(head); head = rest(head))
+       f(first(head));
 };
 
 /**
  * Left fold on a stream.
  * 
- * @param {function(previous, current, index)} f Function that reduces 
+ * @param {function(previous, current)} f Function that reduces 
  *     's'.
  * @param z Initial value used for fold.
  * @param s Stream.
@@ -208,7 +229,7 @@ forEach = \f, s -> {
  */
 foldl = \f, z, s -> {
     var r = z;
-    forEach(\x, i -> { r = f(r, x, i); }, s);
+    forEach(\x -> { r = f(r, x); }, s);
     return r;
 };
 
@@ -226,22 +247,19 @@ reverse = (foldl,
 /**
  * Right fold on a stream.
  *
- * @param {function(previous, current, index)} f Function that reduces 's'.
+ * @param {function(previous, current)} f Function that reduces 's'.
  * @param z Initial value used for fold.
  * @param s Stream.
  * 
  * @return Result of reduction.
  */
 foldr = \f, z, s ->
-    foldl(
-        \p, [c, i] -> f(p, c, i),
-        z,
-        reverse <| zip(s, count(0)));
+    foldl(f, z, reverse <| s);
 
 /**
  * Left fold on a non empty stream without an initial value.
  * 
- * @param {function(previous, current, index)} f Function that reduces 
+ * @param {function(previous, current)} f Function that reduces 
  *     's'.
  * @param s Stream.
  * 
@@ -253,18 +271,14 @@ reduce = \f, s ->
 /**
  * right fold on a non empty stream without an initial value.
  * 
- * @param {function(previous, current, index)} f Function that reduces 
+ * @param {function(previous, current)} f Function that reduces 
  *     's'.
  * @param s Stream.
  * 
  * @return Result of reduction.
  */
 reduceRight = \f, s ->
-    let inner = reverse <| zip(s, count(0)) in
-        foldl(
-            \p, [c, i] -> f(p, c, i),
-            first(inner)[0],
-            rest(inner));
+    reduce(f, reverse <| s);
 
 /**
  * Convert a finite stream to an array.
@@ -284,20 +298,6 @@ in
 /* 
  ******************************************************************************/
 /**
- * Combine two streams into a stream of pairs.
- * 
- * Takes as many elements as the shorter of the two contains.
- * 
- * @param l1 Stream
- * @param l2 Stream
- */
-zip = \l1, l2 ->
-    (isEmpty(l1) || isEmpty(l2) ? end :
-        memoStream(
-            [first(l1), first(l2)],
-            (zip, rest(l1), rest(l2))));
-
-/**
  * Create a new stream of mapped values from an existing stream.
  * 
  * @param {function(value)} f Function that transforms source values and
@@ -306,36 +306,28 @@ zip = \l1, l2 ->
  * 
  * @return Stream of mapped values.
  */
-map = (
-    let map = \i, f, s ->
-        (isEmpty(s) ?
-            s :
-            memoStream(f(first(s), i), (map, i + 1, f, rest(s))))
-    in map,
-    0);
+map = \f, s ->
+    (isEmpty(s) ? s :
+        memoStream(f(first(s)), (map, f, rest(s))));
 
 /**
  * Create a new stream of filtered values from an existing stream.
  * 
- * @param {function(value, index): boolean} predicate Predicate function used to filter
- *     stream. Takes the value to test as well as its index in
- *     the unfiltered source.
+ * @param {function(value): boolean} predicate Predicate function used to filter
+ *     stream. 
  * * @param s Stream being filtered.
  * 
  * @return New stream from filtered 's'.
  */
-filter = (
-    let filter = \i, pred, s -> {
-        var head = s;
-        for (var index = i; !isEmpty(head); head = rest(head)) {
-            var x = first(head);
-            if (pred(x, index))
-                return memoStream(x, (filter, index + 1, pred, rest(head)));
-            index = index + 1;
-        }
-        return head;
-    } in filter,
-    0);
+filter = \pred, s -> {
+    var head = s;
+    for (; !isEmpty(head); head = rest(head)) {
+        var x = first(head);
+        if (pred(x))
+            return memoStream(x, (filter, pred, rest(head)));
+    }
+    return head;
+};
 
 /* 
  ******************************************************************************/

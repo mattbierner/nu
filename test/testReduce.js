@@ -7,25 +7,25 @@ define(['nu/stream'], function(stream){
     return {
         'module': "Reduce",
         'tests': [
-            ["Simple Reduce",
+            ["Simple",
             function(){
                 assert.deepEqual(
                     stream.reduce(r, stream.from([0, 1, 2])),
                     [[0, 1], 2]);
             }],
-            ["Single Reduce",
+            ["Single",
             function(){
                 assert.deepEqual(
                     stream.reduce(r, stream.from([0])),
                     0);
             }],
-            ["Reduce Index",
+            ["Index",
             function(){
                 assert.equal(
-                    stream.reduce(function(p, c, i) {
-                        return i;
-                    }, stream.from([0, 1, 2, 3])),
-                    2);
+                    stream.reduce(function(p, c) {
+                        return c[0];
+                    }, stream.indexed(stream.from([0, 1, 2, 3]))),
+                    3);
             }]
         ],
     };

@@ -4,9 +4,9 @@ define(['nu/stream'], function(stream){
         'tests': [
             ["Simple Map",
             function(){
-                var g = stream.map(function(v, i){
-                    return v + i;
-                }, stream.from([0, 1, 2]));
+                var g = stream.map(function(v){
+                    return v[0] +v[1];
+                }, stream.indexed(stream.from([0, 1, 2])));
                 assert.equal(stream.first(g), 0);
                 assert.equal(stream.first(stream.rest(g)), 2);
                 assert.equal(stream.first(stream.rest(stream.rest(g))), 4);
@@ -15,9 +15,9 @@ define(['nu/stream'], function(stream){
             ["Large Map",
             function(){
                 var arr = new Array(10000);
-                var g = stream.map(function(v, i){
-                    return i;
-                }, stream.from(arr));
+                var g = stream.map(function(v){
+                    return v[0];
+                }, stream.indexed(stream.from(arr)));
                 
                 assert.equal(stream.first(g), 0);
                 assert.equal(stream.first(stream.rest(g)), 1);

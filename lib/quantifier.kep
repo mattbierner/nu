@@ -14,18 +14,17 @@ in {
  * 
  * Succeeds fast. May stall on an infinite stream if predicate is never satisfied.
  * 
- * @param {function(value, index): boolean} pred Predicate function that tests
+ * @param {function(value): boolean} pred Predicate function that tests
  *     values from the stream.
  * * @param s Stream to test.
  * 
  * @return Was the predicate satisfied for any element?
  */
 any = \pred, s -> {
-    var i = 0, current = s;
+    var current = s;
     while (!isEmpty(current)) {
-        if (pred(first(current), i))
+        if (pred(first(current)))
             return true;
-        i = i + 1;
         current = rest(current);
     }
     return false;
@@ -37,18 +36,17 @@ any = \pred, s -> {
  * 
  * Fails fast. May stall on an infinite stream if predicate is always satisfied.
  * 
- * @param {function(value, index): boolean} pred Predicate function that tests
+ * @param {function(value): boolean} pred Predicate function that tests
  *     values from the stream.
  * * @param s Stream to test.
  * 
  * @return Was the predicate satisfied for all elements?
  */
 every = \pred, s -> {
-    var i = 0, current = s;
+    var current = s;
     while (!isEmpty(current)) {
-        if (!pred(first(current), i))
+        if (!pred(first(current)))
             return false;
-        i = i + 1;
         current = rest(current);
     }
     return true;
