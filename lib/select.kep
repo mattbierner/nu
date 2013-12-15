@@ -2,23 +2,23 @@
  * @fileOverview Sub stream selection.
  */
 package (
-    takeWhile,
-    take,
-    skipWhile,
+    takeWhile
+    take
+    skipWhile
     skip)
 with
     import 'nu/stream' {
-        end,
-        first,
-        isEmpty,
-        map,
-        stream,
+        end
+        first
+        isEmpty
+        map
+        stream
         rest,
         indexed}
 in {
 
-var value = \[i, x] -> x;
-var index = \[i, x] -> i;
+var value = \[i x] -> x;
+var index = \[i x] -> i;
 
 /* Selections
  ******************************************************************************/
@@ -32,7 +32,7 @@ var index = \[i, x] -> i;
  * 
  * @returns Lazy stream of elements taken from 's'.
  */
-takeWhile = \pred, s ->
+takeWhile = \pred s ->
     (isEmpty(s) ? s :
         let x = first(s) in
             (pred(x) ?
@@ -50,7 +50,7 @@ takeWhile = \pred, s ->
  * 
  * @returns Lazy stream of at most 'count' elements from 's'.
  */
-take = \count, s ->
+take = \count s ->
     (isNaN(count) || count < 0 ?
         s : 
         map(
@@ -71,7 +71,7 @@ take = \count, s ->
  * 
  * @returns Stream of elements from 's' after predicate was not satisfied.
  */
-skipWhile = \pred, s -> {
+skipWhile = \pred s -> {
     for (var head = s; !isEmpty(head); head = rest(head))
         if (!pred(first(head)))
             return head;
@@ -86,7 +86,7 @@ skipWhile = \pred, s -> {
  * 
  * @returns Stream of elements from 's' after 'count' elements.
  */
-skip = \count, s ->
+skip = \count s ->
     (isNaN(count) || count <= 0 ?
         s :
         map(

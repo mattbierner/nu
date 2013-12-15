@@ -6,14 +6,9 @@ See http://mattbierner.github.io/nu/ for more info and API.
 
 
 # Code #
-Nu is written in Javascript / Khepri. [Khepri][khepri] is a ECMAScript subset
-that, among other things, adds a shorted lambda function syntax. It is also
-implemented using Nu. Besides lambda functions, Khepri files (*.kep) are
-pretty much plain old Javascript.
-
-For now, both the .js and .kep versions of source code will be kept in 'lib/',
-but only Khepri sources will be developed and Javascript files will be
-generated from it.
+Nu is written in Khepri. [Khepri][khepri] is an ECMAScript language
+that compiles to Javascript. The `dist` directory contains the generated js library
+while the Khepri source is in `lib` directory.
 
 
 [khepri]: https://github.com/mattbierner/khepri

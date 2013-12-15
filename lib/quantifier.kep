@@ -2,10 +2,10 @@
  * @fileOverview Stream quantifiers.
  */
 package (
-    any,
+    any
     every)
 with
-    import 'nu/stream' {isEmpty, first, rest}
+    import 'nu/stream' {isEmpty first rest}
 in {
 
 /**
@@ -20,7 +20,7 @@ in {
  * 
  * @return Was the predicate satisfied for any element?
  */
-any = \pred, s -> {
+any = \pred s -> {
     var current = s;
     while (!isEmpty(current)) {
         if (pred(first(current)))
@@ -42,7 +42,7 @@ any = \pred, s -> {
  * 
  * @return Was the predicate satisfied for all elements?
  */
-every = \pred, s -> {
+every = \pred s -> {
     var current = s;
     while (!isEmpty(current)) {
         if (!pred(first(current)))

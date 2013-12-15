@@ -2,37 +2,37 @@
  * @fileOverview Core stream functionality.
  */
 package (
-    end,
-    NIL,
+    end
+    NIL
     
-    stream,
-    memoStream,
+    stream
+    memoStream
     
-    cons,
-    append,
-    appendz,
-    concat,
-    from,
+    cons
+    append
+    appendz
+    concat
+    from
 
-    first,
-    rest,
-    isEmpty,
-    isStream,
+    first
+    rest
+    isEmpty
+    isStream
     
-    forEach,
+    forEach
     
-    reverse,
-    foldl,
-    foldr,
-    reduce,
-    reduceRight,
-    toArray,
+    reverse
+    foldl
+    foldr
+    reduce
+    reduceRight
+    toArray
     
-    zip,
-    indexed,
+    zip
+    indexed
     
-    map,
-    filter,
+    map
+    filter
     
     bind)
 {
@@ -41,7 +41,7 @@ var arrayReduce = Function.prototype.call.bind(Array.prototype.reduce);
 
 var constant = \x -> \() -> x;
 
-var flip = \f -> \x, y -> f(y, x);
+var flip = \f -> \x y -> f(y, x);
 
 var memo = \f -> {
     var value;
@@ -70,7 +70,7 @@ NIL = end;
  * 
  * @return A new stream.
  */
-stream = \val, f -> ({
+stream = \val f -> ({
     'first': val,
     'rest': f
 });
@@ -78,7 +78,7 @@ stream = \val, f -> ({
 /**
  * Create a new stream that memoizes rest results.
  */
-memoStream = \val, f ->
+memoStream = \val f ->
     stream(val, memo(f));
 
 /* Primitive Operators
@@ -132,7 +132,7 @@ isStream = \s ->
  * 
  * @return A new stream.
  */
-cons = \val, s -> 
+cons = \val s -> 
     stream(val, constant(s));
 
 /**
@@ -143,7 +143,7 @@ cons = \val, s ->
  * 
  * @return Stream of two joined streams.
  */
-appendz = \s1, f ->
+appendz = \s1 f ->
     (isEmpty(s1) ?
         f() :
         memoStream(first(s1), (appendz, rest(s1), f)));
@@ -154,7 +154,7 @@ appendz = \s1, f ->
  * @return Stream of joined streams.
  */
 append = let
-    reducer = \s1, s2 -> appendz(s1, constant(s2))
+    reducer = \s1 s2 -> appendz(s1, constant(s2))
 in
     \streams(...) -> arrayReduce(streams, reducer, end);
 
@@ -174,12 +174,12 @@ concat = \s ->
  * @return Stream of enumerable values from enumerable object.
  */
 from = let
-    fromImpl = \arr, i, len ->
+    fromImpl = \arr i len ->
         (i >= len ?
             end : 
             memoStream(arr[i], (fromImpl, arr, i + 1, len)))
 in
-    \arr{length} -> fromImpl(arr, 0, length);
+    \arr#{length} -> fromImpl(arr, 0, length);
 
 /* 
  ******************************************************************************/
@@ -192,7 +192,7 @@ in
  * @param l1 Stream
  * @param l2 Stream
  */
-zip = \l1, l2 ->
+zip = \l1 l2 ->
     (isEmpty(l1) || isEmpty(l2) ? end :
         memoStream(
             [first(l1), first(l2)],
@@ -212,7 +212,7 @@ in
  * @param {function(value): *} f Function to call each element of 's'.
  * @param s Stream to iterate over.
  */
-forEach = \f, s -> {
+forEach = \f s -> {
     for (var head = s; !isEmpty(head); head = rest(head))
        f(first(head));
 };
@@ -227,7 +227,7 @@ forEach = \f, s -> {
  * 
  * @return Result of reduction.
  */
-foldl = \f, z, s -> {
+foldl = \f z s -> {
     var r = z;
     forEach(\x -> { r = f(r, x); }, s);
     return r;
@@ -253,7 +253,7 @@ reverse = (foldl,
  * 
  * @return Result of reduction.
  */
-foldr = \f, z, s ->
+foldr = \f z s ->
     foldl(f, z, reverse <| s);
 
 /**
@@ -265,7 +265,7 @@ foldr = \f, z, s ->
  * 
  * @return Result of reduction.
  */
-reduce = \f, s ->
+reduce = \f s ->
     foldl(f, first(s), rest(s));
 
 /**
@@ -277,7 +277,7 @@ reduce = \f, s ->
  * 
  * @return Result of reduction.
  */
-reduceRight = \f, s ->
+reduceRight = \f s ->
     reduce(f, reverse <| s);
 
 /**
@@ -306,7 +306,7 @@ in
  * 
  * @return Stream of mapped values.
  */
-map = \f, s ->
+map = \f s ->
     (isEmpty(s) ? s :
         memoStream(f(first(s)), (map, f, rest(s))));
 
@@ -319,7 +319,7 @@ map = \f, s ->
  * 
  * @return New stream from filtered 's'.
  */
-filter = \pred, s -> {
+filter = \pred s -> {
     var head = s;
     for (; !isEmpty(head); head = rest(head)) {
         var x = first(head);

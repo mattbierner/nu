@@ -13,20 +13,16 @@ define(["require", "exports", "nu/stream"], (function(require, exports, __o) {
         var current = s;
         while (!isEmpty(current)) {
             if (pred(first(current))) return true;
-
             (current = rest(current));
         }
-
         return false;
     }));
     (every = (function(pred, s) {
         var current = s;
         while (!isEmpty(current)) {
             if (!pred(first(current))) return false;
-
             (current = rest(current));
         }
-
         return true;
     }));
     (exports.any = any);

@@ -4,6 +4,8 @@
 * Removed use of index in all operations.
 ** Pass in an indexed stream to replicate old behavior.
 * Added `stream.indexed` to create an indexed stream.
+* Added `NIL` as alias for `end`.
+* Source files now live in `dist` instead of `lib`.
 
 ## 2.1.0 - November 13, 2013
 * Added `stream.zip` to create stream of pairs from two streams.

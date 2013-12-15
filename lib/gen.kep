@@ -2,10 +2,10 @@
  * @fileOverview Stream generation.
  */
 package (
-    repeat,
+    repeat
     range)
 with
-    import 'nu/stream' {end, memoStream}
+    import 'nu/stream' {end memoStream}
 in {
 
 /**
@@ -16,7 +16,7 @@ in {
  * 
  * @return Lazy stream of 'x' repeated 'times' times.
  */
-repeat = \times, x ->
+repeat = \times x ->
     (times <= 0 ?
         end :
         memoStream(x, (repeat, times - 1, x)));
@@ -31,12 +31,12 @@ repeat = \times, x ->
  * @return Lazy stream for range.
  */
 range = let
-    rangeImpl = \lower, upper, step ->
+    rangeImpl = \lower upper step ->
         ((step > 0 ? upper <= lower : upper >= lower) ?
             end :
             memoStream(lower, (rangeImpl, lower + step, upper, step)))
 in
-    \lower, upper, step -> let
+    \lower upper step -> let
         rangeLower = (isNaN(lower) ? Infinity : +lower),
         rangeStep = (isNaN(step) ? 1 : +step)
     in
