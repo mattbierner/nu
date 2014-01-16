@@ -8,12 +8,12 @@ package (
     skip)
 with
     import 'nu/stream' {
-        end
+        NIL
         first
         isEmpty
         map
         stream
-        rest,
+        rest
         indexed}
 in {
 
@@ -37,12 +37,12 @@ takeWhile = \pred s ->
         let x = first(s) in
             (pred(x) ?
                 stream(x, (takeWhile, pred, rest(s))) :
-                end));
+                NIL));
 
 /**
  * Create a stream of at most 'count' elements from 's'.
  * 
- * May yield fewer than 'count' elements if 's' ends.
+ * May yield fewer than 'count' elem ents if 's' NILs.
  * 
  * @param {Number} count Number of elements to take. Must be greater than or 
  *     equal to zero. Defaults to 'Infinity'.
@@ -63,7 +63,7 @@ take = \count s ->
  * Create a stream that skips leading elements from 's' while a predicate is
  * satisfied.
  * 
- * May result in an empty stream if 's' ends before the predicate is satisfied.
+ * May result in an empty stream if 's' NILs before the predicate is satisfied.
  * 
  * @param {function(value): boolean} pred Predicate that determines 
  *     elements to skip.
@@ -75,7 +75,7 @@ skipWhile = \pred s -> {
     for (var head = s; !isEmpty(head); head = rest(head))
         if (!pred(first(head)))
             return head;
-    return end;
+    return NIL;
 };
 
 /**

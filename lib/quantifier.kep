@@ -32,7 +32,7 @@ any = \pred s -> {
 
 /**
  * Tests a stream against a predicate and returns if the predicate is satisfied
- * for all element.
+ * for all elements.
  * 
  * Fails fast. May stall on an infinite stream if predicate is always satisfied.
  * 

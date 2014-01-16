@@ -6,31 +6,27 @@ define(["require", "exports", "nu/stream"], (function(require, exports, __o) {
     "use strict";
     var takeWhile, take, skipWhile, skip;
     var __o = __o,
-        end = __o["end"],
+        NIL = __o["NIL"],
         first = __o["first"],
         isEmpty = __o["isEmpty"],
         map = __o["map"],
         stream = __o["stream"],
         rest = __o["rest"],
         indexed = __o["indexed"];
-    var value = (function(__a) {
-        var __a = __a,
-            i = __a[0],
-            x = __a[1];
+    var value = (function(__o0) {
+        var i = __o0[0],
+            x = __o0[1];
         return x;
     });
-    var index = (function(__a) {
-        var __a = __a,
-            i = __a[0],
-            x = __a[1];
+    var index = (function(__o0) {
+        var i = __o0[0],
+            x = __o0[1];
         return i;
     });
     (takeWhile = (function(pred, s) {
         return (isEmpty(s) ? s : (function() {
-                {
-                    var x = first(s);
-                    return (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : end);
-                }
+                var x = first(s);
+                return (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : NIL);
             })
             .call(this));
     }));
@@ -48,7 +44,7 @@ define(["require", "exports", "nu/stream"], (function(require, exports, __o) {
         for (var head = s; !isEmpty(head);
             (head = rest(head)))
             if (!pred(first(head))) return head;
-        return end;
+        return NIL;
     }));
     (skip = (function(count, s) {
         return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile((function(f, g) {

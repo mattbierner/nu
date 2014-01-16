@@ -5,7 +5,7 @@ package (
     repeat
     range)
 with
-    import 'nu/stream' {end memoStream}
+    import 'nu/stream' {NIL memoStream}
 in {
 
 /**
@@ -18,7 +18,7 @@ in {
  */
 repeat = \times x ->
     (times <= 0 ?
-        end :
+        NIL :
         memoStream(x, (repeat, times - 1, x)));
 
 /**
@@ -33,7 +33,7 @@ repeat = \times x ->
 range = let
     rangeImpl = \lower upper step ->
         ((step > 0 ? upper <= lower : upper >= lower) ?
-            end :
+            NIL :
             memoStream(lower, (rangeImpl, lower + step, upper, step)))
 in
     \lower upper step -> let

@@ -55,31 +55,26 @@ define(["require", "exports"], (function(require, exports) {
         return (isEmpty(s1) ? f() : memoStream(first(s1), appendz.bind(null, rest(s1), f)));
     }));
     (append = (function() {
-            {
-                var reducer = (function(s1, s2) {
-                    return appendz(s1, constant(s2));
-                });
-                return (function() {
-                    var streams = arguments;
-                    return arrayReduce(streams, reducer, end);
-                });
-            }
+            var reducer = (function(s1, s2) {
+                return appendz(s1, constant(s2));
+            });
+            return (function() {
+                var streams = arguments;
+                return arrayReduce(streams, reducer, end);
+            });
         })
         .call(this));
     (concat = (function(s) {
         return (isEmpty(s) ? s : appendz(first(s), concat.bind(null, rest(s))));
     }));
     (from = (function() {
-            {
-                var fromImpl = (function(arr, i, len) {
-                    return ((i >= len) ? end : memoStream(arr[i], fromImpl.bind(null, arr, (i + 1), len)));
-                });
-                return (function(arr) {
-                    var arr = arr,
-                        length = arr["length"];
-                    return fromImpl(arr, 0, length);
-                });
-            }
+            var fromImpl = (function(arr, i, len) {
+                return ((i >= len) ? end : memoStream(arr[i], fromImpl.bind(null, arr, (i + 1), len)));
+            });
+            return (function(arr) {
+                var length = arr["length"];
+                return fromImpl(arr, 0, length);
+            });
         })
         .call(this));
     (zip = (function(l1, l2) {
@@ -87,19 +82,17 @@ define(["require", "exports"], (function(require, exports) {
             rest(l1), rest(l2))));
     }));
     (indexed = (function() {
-            {
-                var count = (function(n) {
-                    return stream(n, (function(f, g) {
-                        return (function(x) {
-                            return f(g(x));
-                        });
-                    })(count, (function(x, y) {
-                            return (x + y);
-                        })
-                        .bind(null, 1)));
-                });
-                return zip.bind(null, count(0));
-            }
+            var count = (function(n) {
+                return stream(n, (function(f, g) {
+                    return (function(x) {
+                        return f(g(x));
+                    });
+                })(count, (function(x, y) {
+                        return (x + y);
+                    })
+                    .bind(null, 1)));
+            });
+            return zip.bind(null, count(0));
         })
         .call(this));
     (forEach = (function(f, s) {
@@ -124,15 +117,13 @@ define(["require", "exports"], (function(require, exports) {
         return reduce(f, reverse(s));
     }));
     (toArray = (function() {
-            {
-                var builder = (function(p, c) {
-                    p.push(c);
-                    return p;
-                });
-                return (function(s) {
-                    return foldl(builder, [], s);
-                });
-            }
+            var builder = (function(p, c) {
+                p.push(c);
+                return p;
+            });
+            return (function(s) {
+                return foldl(builder, [], s);
+            });
         })
         .call(this));
     (map = (function(f, s) {
