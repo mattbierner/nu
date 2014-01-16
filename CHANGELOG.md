@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 3.0.1 - January 15, 2014
+* Removed `.min.min.js` error file in dist.
+
 ## 3.0.0 - November 15, 2013
 * Removed use of index in all operations.
 ** Pass in an indexed stream to replicate old behavior.
