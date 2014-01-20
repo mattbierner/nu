@@ -5,7 +5,7 @@ package (
     any
     every)
 with
-    import 'nu/stream' {isEmpty first rest}
+    import './stream' {isEmpty first rest}
 in {
 
 /**

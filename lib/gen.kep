@@ -5,7 +5,7 @@ package (
     repeat
     range)
 with
-    import 'nu/stream' {NIL memoStream}
+    import './stream' {NIL memoStream}
 in {
 
 /**

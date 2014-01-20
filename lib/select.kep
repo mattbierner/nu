@@ -7,7 +7,7 @@ package (
     skipWhile
     skip)
 with
-    import 'nu/stream' {
+    import './stream' {
         NIL
         first
         isEmpty

@@ -2,9 +2,9 @@
  * THIS FILE IS AUTO GENERATED from 'lib/quantifier.kep'
  * DO NOT EDIT
 */
-define(["require", "exports", "./stream"], (function(require, exports, __o) {
-    "use strict";
-    var isEmpty = __o["isEmpty"],
+"use strict"; {
+    var __o = require("./stream"),
+        isEmpty = __o["isEmpty"],
         first = __o["first"],
         rest = __o["rest"];
     var any, every;
@@ -26,4 +26,4 @@ define(["require", "exports", "./stream"], (function(require, exports, __o) {
     }));
     (exports.any = any);
     (exports.every = every);
-}));
+}

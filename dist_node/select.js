@@ -2,9 +2,9 @@
  * THIS FILE IS AUTO GENERATED from 'lib/select.kep'
  * DO NOT EDIT
 */
-define(["require", "exports", "./stream"], (function(require, exports, __o) {
-    "use strict";
-    var NIL = __o["NIL"],
+"use strict"; {
+    var __o = require("./stream"),
+        NIL = __o["NIL"],
         first = __o["first"],
         isEmpty = __o["isEmpty"],
         map = __o["map"],
@@ -59,4 +59,4 @@ define(["require", "exports", "./stream"], (function(require, exports, __o) {
     (exports.take = take);
     (exports.skipWhile = skipWhile);
     (exports.skip = skip);
-}));
+}

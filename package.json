@@ -1,20 +1,26 @@
 {
-  "name": "Nu",
-  "version": "3.0.1",
-  "description": "Small Lazy Stream Javascript Library",
-  "main": "stream",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:mattbierner/nu.git"
-  },
-  "dependencies": {
-     "amdefine": ">=0.1.0",
-     "amd-loader": "0.0.5"
-   },
-  "keywords": [
-    "stream", 
-    "lazy"
-  ],
-  "author": "Matt Bierner",
-  "license": "MIT"
+    "name": "nu",
+    "version": "3.0.1",
+    "description": "Small Lazy Stream Javascript Library",
+    "keywords": [
+        "stream", 
+        "lazy"
+    ],
+    "author": "Matt Bierner",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:mattbierner/nu.git"
+    },
+    
+    "main": "index.js",
+    "dependencies": {},
+    "directories": {
+        "lib": "dist_node"
+    },
+    "files": [
+        "dist_node/",
+        "lib",
+        "index.js"
+    ]
 }
