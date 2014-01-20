@@ -168,4 +168,4 @@ define(["require", "exports"], (function(require, exports) {
     (exports.map = map);
     (exports.filter = filter);
     (exports.bind = bind);
-}))
+}));

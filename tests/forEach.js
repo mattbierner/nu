@@ -3,22 +3,22 @@ var nu = require('../index');
 
 exports.simple = function(test) {
     var sum = 0;
-    var g = nu.forEach(function(v) {
+    var g = nu.stream.forEach(function(v) {
         sum += v;
-    }, nu.from([1,2,3,4]));
+    }, nu.stream.from([1,2,3,4]));
     test.equal(sum, 10);
     test.done();
 };
 
 exports.large = function(test) {
     var i = 1000;
-    var s = nu.end;
+    var s = nu.stream.end;
     while (i >= 0) {
-        s = nu.cons(i--, s);
+        s = nu.stream.cons(i--, s);
     }
     
     var sum = 0;
-    var g = nu.forEach(function(v) {
+    var g = nu.stream.forEach(function(v) {
         sum += v;
     }, s);
     

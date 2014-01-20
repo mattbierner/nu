@@ -7,30 +7,30 @@ var r = function(p, c) {
 
 exports.simple = function(test) {
     test.deepEqual(
-        nu.foldl(r, 0, nu.from([1, 2])),
+        nu.stream.foldl(r, 0, nu.stream.from([1, 2])),
         [[0, 1], 2]);
     test.done();
 };
 
 exports.single = function(test) {
     test.deepEqual(
-        nu.foldl(r, 10, nu.from([0])),
+        nu.stream.foldl(r, 10, nu.stream.from([0])),
         [10, 0]);
     test.done();
 };
 
 exports.indexed = function(test) {
     test.equal(
-        nu.foldl(function(p, c) {
+        nu.stream.foldl(function(p, c) {
             return c[1];
-        }, 0, nu.indexed(nu.from([0, 1, 2, 3]))),
+        }, 0, nu.stream.indexed(nu.stream.from([0, 1, 2, 3]))),
         3);
     test.done();
 };
 
 exports.empty = function(test) {
     test.equal(
-        nu.foldl(r, 10, nu.end),
+        nu.stream.foldl(r, 10, nu.stream.end),
         10);
     test.done();
 };

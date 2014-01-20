@@ -7,23 +7,23 @@ var r = function(p, c) {
 
 exports.simple = function(test) {
     test.deepEqual(
-        nu.reduceRight(r, nu.from([0, 1, 2, 3])),
+        nu.stream.reduceRight(r, nu.stream.from([0, 1, 2, 3])),
         [0, [1, [2, 3]]]);
     test.done();
 };
 
 exports.single = function(test) {
     test.deepEqual(
-        nu.reduceRight(r, nu.from([0])),
+        nu.stream.reduceRight(r, nu.stream.from([0])),
         0);
     test.done();
 };
 
 exports.indexed = function(test) {
     test.deepEqual(
-        nu.reduceRight(function(p, c) {
+        nu.stream.reduceRight(function(p, c) {
             return c[0];
-        }, nu.indexed(nu.from([0, 1, 2, 3]))),
+        }, nu.stream.indexed(nu.stream.from([0, 1, 2, 3]))),
         0);
     test.done();
 };

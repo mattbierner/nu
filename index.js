@@ -1,10 +1,6 @@
-var copy = function(from, to) {
-    Object.keys(from).forEach(function(x) {
-        to[x] = from[x];
-    });
+module.exports = {
+    'stream': require('./dist_node/stream'),
+    'gen': require('./dist_node/gen'),
+    'quantifier': require('./dist_node/quantifier'),
+    'select': require('./dist_node/select')
 };
-
-copy(require('./dist_node/stream'), exports);
-copy(require('./dist_node/gen'), exports);
-copy(require('./dist_node/quantifier'), exports);
-copy(require('./dist_node/select'), exports);

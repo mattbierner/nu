@@ -1,6 +1,6 @@
 {
     "name": "nu-stream",
-    "version": "3.0.2",
+    "version": "3.1.0",
     "description": "Small lazy stream Javascript library",
     "keywords": [
         "stream", 
