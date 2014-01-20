@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 3.0.2 - January 20, 2014
+* Made node package.
+
 ## 3.0.1 - January 15, 2014
 * Removed `.min.min.js` error file in dist.
 
