@@ -1,7 +1,11 @@
 # ChangeLog #
 
+## 3.1.0 - January 20, 2014
+* Reworked node package to export submodules instead of grouping everything into
+  top level scope..
+
 ## 3.0.2 - January 20, 2014
-* Made node package.
+* node package.
 
 ## 3.0.1 - January 15, 2014
 * Removed `.min.min.js` error file in dist.
