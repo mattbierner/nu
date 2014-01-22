@@ -1,7 +1,3 @@
-/*
- * THIS FILE IS AUTO GENERATED from 'lib/select.kep'
- * DO NOT EDIT
-*/
 "use strict";
 var __o = require("./stream"),
     NIL = __o["NIL"],
@@ -10,18 +6,17 @@ var __o = require("./stream"),
     map = __o["map"],
     stream = __o["stream"],
     rest = __o["rest"],
-    indexed = __o["indexed"];
-var takeWhile, take, skipWhile, skip;
-var value = (function(__o0) {
-    var i = __o0[0],
-        x = __o0[1];
-    return x;
-});
-var index = (function(__o0) {
-    var i = __o0[0],
-        x = __o0[1];
-    return i;
-});
+    indexed = __o["indexed"],
+    takeWhile, take, skipWhile, skip, value = (function(__o0) {
+        var i = __o0[0],
+            x = __o0[1];
+        return x;
+    }),
+    index = (function(__o0) {
+        var i = __o0[0],
+            x = __o0[1];
+        return i;
+    });
 (takeWhile = (function(pred, s) {
     return (isEmpty(s) ? s : (function() {
             var x = first(s);

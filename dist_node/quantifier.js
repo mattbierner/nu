@@ -1,13 +1,9 @@
-/*
- * THIS FILE IS AUTO GENERATED from 'lib/quantifier.kep'
- * DO NOT EDIT
-*/
 "use strict";
 var __o = require("./stream"),
     isEmpty = __o["isEmpty"],
     first = __o["first"],
-    rest = __o["rest"];
-var any, every;
+    rest = __o["rest"],
+    any, every;
 (any = (function(pred, s) {
     var current = s;
     while (!isEmpty(current)) {

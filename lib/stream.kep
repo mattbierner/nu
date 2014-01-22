@@ -47,7 +47,7 @@ var memo = \f -> {
     var value;
     return \args(...) -> {
         if (value === undefined)
-            value = f.apply(this, args);
+            value = f.apply(undefined, args);
         return value;
     };
 };
@@ -183,7 +183,6 @@ in
 
 /* 
  ******************************************************************************/
-
 /**
  * Combine two streams into a stream of pairs.
  * 
