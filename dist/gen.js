@@ -1,3 +1,7 @@
+/*
+ * THIS FILE IS AUTO GENERATED from 'lib/gen.kep'
+ * DO NOT EDIT
+*/
 define(["require", "exports", "./stream"], (function(require, exports, __o) {
     "use strict";
     var NIL = __o["NIL"],

@@ -1,3 +1,7 @@
+/*
+ * THIS FILE IS AUTO GENERATED from 'lib/select.kep'
+ * DO NOT EDIT
+*/
 "use strict";
 var __o = require("./stream"),
     NIL = __o["NIL"],
@@ -19,10 +23,9 @@ var __o = require("./stream"),
     });
 (takeWhile = (function(pred, s) {
     return (isEmpty(s) ? s : (function() {
-            var x = first(s);
-            return (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : NIL);
-        })
-        .call(this));
+        var x = first(s);
+        return (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : NIL);
+    })());
 }));
 (take = (function(count, s) {
     return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(f, g) {

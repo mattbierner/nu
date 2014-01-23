@@ -144,9 +144,9 @@ cons = \val s ->
  * @return Stream of two joined streams.
  */
 appendz = \s1 f ->
-    (isEmpty(s1) ?
-        f() :
-        memoStream(first(s1), (appendz, rest(s1), f)));
+    ?isEmpty(s1)
+        :f()
+        :memoStream(first(s1), (appendz, rest(s1), f));
 
 /**
  * Joins multiple streams into a new stream.
@@ -162,9 +162,9 @@ in
  * Joins a stream of streams into a new stream
  */
 concat = \s ->
-    (isEmpty(s) ?
-        s :
-        appendz(first(s), (concat, rest(s))));
+    ?isEmpty(s)
+        :s
+        :appendz(first(s), (concat, rest(s)));
 
 /**
  * Create a new stream from an array like object.
@@ -175,9 +175,9 @@ concat = \s ->
  */
 from = let
     fromImpl = \arr i len ->
-        (i >= len ?
-            end : 
-            memoStream(arr[i], (fromImpl, arr, i + 1, len)))
+        ?i >= len
+            :end
+            :memoStream(arr[i], (fromImpl, arr, i + 1, len))
 in
     \arr#{length} -> fromImpl(arr, 0, length);
 
@@ -192,10 +192,11 @@ in
  * @param l2 Stream
  */
 zip = \l1 l2 ->
-    (isEmpty(l1) || isEmpty(l2) ? end :
-        memoStream(
+    ?(isEmpty(l1) || isEmpty(l2))
+        :end
+        :memoStream(
             [first(l1), first(l2)],
-            (zip, rest(l1), rest(l2))));
+            (zip, rest(l1), rest(l2)));
 
 /**
  * Create a stream of pairs of index and value.
@@ -306,8 +307,9 @@ in
  * @return Stream of mapped values.
  */
 map = \f s ->
-    (isEmpty(s) ? s :
-        memoStream(f(first(s)), (map, f, rest(s))));
+    ?isEmpty(s)
+        :s
+        :memoStream(f(first(s)), (map, f, rest(s)));
 
 /**
  * Create a new stream of filtered values from an existing stream.

@@ -33,11 +33,12 @@ var index = \[i x] -> i;
  * @returns Lazy stream of elements taken from 's'.
  */
 takeWhile = \pred s ->
-    (isEmpty(s) ? s :
-        let x = first(s) in
-            (pred(x) ?
-                stream(x, (takeWhile, pred, rest(s))) :
-                NIL));
+    ?isEmpty(s)
+        :s
+        :let x = first(s) in
+            ?pred(x)
+                :stream(x, (takeWhile, pred, rest(s)))
+                :NIL;
 
 /**
  * Create a stream of at most 'count' elements from 's'.
@@ -51,13 +52,13 @@ takeWhile = \pred s ->
  * @returns Lazy stream of at most 'count' elements from 's'.
  */
 take = \count s ->
-    (isNaN(count) || count < 0 ?
-        s : 
-        map(
+    ?(isNaN(count) || count < 0)
+        :s 
+        :map(
             value,
             takeWhile(
                 index \> (>, count), 
-                indexed <| s)));
+                indexed <| s));
 
 /**
  * Create a stream that skips leading elements from 's' while a predicate is
@@ -87,12 +88,12 @@ skipWhile = \pred s -> {
  * @returns Stream of elements from 's' after 'count' elements.
  */
 skip = \count s ->
-    (isNaN(count) || count <= 0 ?
-        s :
-        map(
+    ?(isNaN(count) || count <= 0)
+        :s
+        :map(
             value,
             skipWhile(
                 index \> (>, count),
-                indexed <| s)));
+                indexed <| s));
 
 }
