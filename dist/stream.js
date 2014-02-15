@@ -87,7 +87,8 @@ define(["require", "exports"], (function(require, exports) {
     });
     (indexed = zip.bind(null, count(0)));
     (forEach = (function(f, s) {
-        for (var head = s; !isEmpty(head);
+        for (var head = s;
+            (!isEmpty(head));
             (head = rest(head))) f(first(head));
     }));
     (foldl = (function(f, z, s) {
@@ -119,7 +120,8 @@ define(["require", "exports"], (function(require, exports) {
     }));
     (filter = (function(pred, s) {
         var head = s;
-        for (; !isEmpty(head);
+        for (;
+            (!isEmpty(head));
             (head = rest(head))) {
             var x = first(head);
             if (pred(x)) return memoStream(x, filter.bind(null, pred, rest(head)));

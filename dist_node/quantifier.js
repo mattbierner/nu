@@ -1,3 +1,7 @@
+/*
+ * THIS FILE IS AUTO GENERATED from 'lib/quantifier.kep'
+ * DO NOT EDIT
+*/
 "use strict";
 var __o = require("./stream"),
     isEmpty = __o["isEmpty"],
@@ -6,7 +10,7 @@ var __o = require("./stream"),
     any, every;
 (any = (function(pred, s) {
     var current = s;
-    while (!isEmpty(current)) {
+    while ((!isEmpty(current))) {
         if (pred(first(current))) return true;
         (current = rest(current));
     }
@@ -14,8 +18,8 @@ var __o = require("./stream"),
 }));
 (every = (function(pred, s) {
     var current = s;
-    while (!isEmpty(current)) {
-        if (!pred(first(current))) return false;
+    while ((!isEmpty(current))) {
+        if ((!pred(first(current)))) return false;
         (current = rest(current));
     }
     return true;

@@ -15,8 +15,8 @@ var rangeImpl = (function(lower, upper, step) {
         lower + step), upper, step)));
 });
 (range = (function(lower, upper, step) {
-    var rangeLower = (isNaN(lower) ? Infinity : +lower),
-        rangeStep = (isNaN(step) ? 1 : +step);
+    var rangeLower = (isNaN(lower) ? Infinity : (+lower)),
+        rangeStep = (isNaN(step) ? 1 : (+step));
     return (isNaN(upper) ? rangeImpl(0, rangeLower, rangeStep) : rangeImpl(rangeLower, upper, rangeStep));
 }));
 (exports.repeat = repeat);

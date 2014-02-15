@@ -133,7 +133,7 @@ isStream = \s ->
  * @return A new stream.
  */
 cons = \val s -> 
-    stream(val, constant(s));
+    stream(val, constant s);
 
 /**
  * Joins two streams into a new stream.
@@ -144,9 +144,9 @@ cons = \val s ->
  * @return Stream of two joined streams.
  */
 appendz = \s1 f ->
-    ?isEmpty(s1)
+    ?isEmpty s1
         :f()
-        :memoStream(first(s1), (appendz, rest(s1), f));
+        :memoStream(first s1, appendz@(rest s1, f));
 
 /**
  * Joins multiple streams into a new stream.
@@ -154,7 +154,7 @@ appendz = \s1 f ->
  * @return Stream of joined streams.
  */
 append = let
-    reducer = \s1 s2 -> appendz(s1, constant(s2))
+    reducer = \s1 s2 -> appendz(s1, constant s2)
 in
     \streams(...) -> arrayReduce(streams, reducer, end);
 
@@ -162,9 +162,9 @@ in
  * Joins a stream of streams into a new stream
  */
 concat = \s ->
-    ?isEmpty(s)
+    ?isEmpty s
         :s
-        :appendz(first(s), (concat, rest(s)));
+        :appendz(first s, concat@(rest s));
 
 /**
  * Create a new stream from an array like object.
@@ -177,7 +177,7 @@ from = let
     fromImpl = \arr i len ->
         ?i >= len
             :end
-            :memoStream(arr[i], (fromImpl, arr, i + 1, len))
+            :memoStream(arr.(i), fromImpl@(arr, i + 1, len))
 in
     \arr#{length} -> fromImpl(arr, 0, length);
 
@@ -192,19 +192,19 @@ in
  * @param l2 Stream
  */
 zip = \l1 l2 ->
-    ?(isEmpty(l1) || isEmpty(l2))
+    ?isEmpty l1 || isEmpty l2
         :end
         :memoStream(
-            [first(l1), first(l2)],
-            (zip, rest(l1), rest(l2)));
+            [first l1, first l2],
+            zip@(rest l1, rest l2));
 
 /**
  * Create a stream of pairs of index and value.
  */
 indexed = let
-    count = \n -> stream(n, (+, 1) \> count)
+    count = \n -> stream(n, (+)@1 \> count)
 in
-    (zip, count(0));
+    zip@(count 0);
 
 /**
  * Iterate over a stream in order.
@@ -213,8 +213,8 @@ in
  * @param s Stream to iterate over.
  */
 forEach = \f s -> {
-    for (var head = s; !isEmpty(head); head = rest(head))
-       f(first(head));
+    for (var head = s; !isEmpty(head); head = rest head)
+       f(first head);
 };
 
 /**
@@ -240,8 +240,8 @@ foldl = \f z s -> {
  * 
  * @param s Stream.
  */
-reverse = (foldl,
-    flip(cons),
+reverse = foldl@(
+    flip cons,
     end);
 
 /**
@@ -254,7 +254,7 @@ reverse = (foldl,
  * @return Result of reduction.
  */
 foldr = \f z s ->
-    foldl(f, z, reverse <| s);
+    foldl(f, z, reverse s);
 
 /**
  * Left fold on a non empty stream without an initial value.
@@ -266,7 +266,7 @@ foldr = \f z s ->
  * @return Result of reduction.
  */
 reduce = \f s ->
-    foldl(f, first(s), rest(s));
+    foldl(f, first s, rest s);
 
 /**
  * right fold on a non empty stream without an initial value.
@@ -278,7 +278,7 @@ reduce = \f s ->
  * @return Result of reduction.
  */
 reduceRight = \f s ->
-    reduce(f, reverse <| s);
+    reduce(f, reverse s);
 
 /**
  * Convert a finite stream to an array.
@@ -307,9 +307,9 @@ in
  * @return Stream of mapped values.
  */
 map = \f s ->
-    ?isEmpty(s)
+    ?isEmpty s
         :s
-        :memoStream(f(first(s)), (map, f, rest(s)));
+        :memoStream(f(first s), map@(f, rest s));
 
 /**
  * Create a new stream of filtered values from an existing stream.
@@ -322,10 +322,10 @@ map = \f s ->
  */
 filter = \pred s -> {
     var head = s;
-    for (; !isEmpty(head); head = rest(head)) {
-        var x = first(head);
-        if (pred(x))
-            return memoStream(x, (filter, pred, rest(head)));
+    for (; !(isEmpty head); head = rest head) {
+        var x = first head;
+        if (pred x)
+            return memoStream(x, filter@(pred, rest head));
     }
     return head;
 };

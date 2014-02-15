@@ -22,10 +22,10 @@ in {
  */
 any = \pred s -> {
     var current = s;
-    while (!isEmpty(current)) {
-        if (pred(first(current)))
+    while (!isEmpty current) {
+        if (pred(first current))
             return true;
-        current = rest(current);
+        current = rest current;
     }
     return false;
 };
@@ -44,10 +44,10 @@ any = \pred s -> {
  */
 every = \pred s -> {
     var current = s;
-    while (!isEmpty(current)) {
-        if (!pred(first(current)))
+    while (!isEmpty current) {
+        if (!pred(first current))
             return false;
-        current = rest(current);
+        current = rest current;
     }
     return true;
 };

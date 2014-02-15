@@ -11,14 +11,14 @@ var __o = require("./stream"),
     stream = __o["stream"],
     rest = __o["rest"],
     indexed = __o["indexed"],
-    takeWhile, take, skipWhile, skip, value = (function(__o0) {
-        var i = __o0[0],
-            x = __o0[1];
+    takeWhile, take, skipWhile, skip, value = (function(__o) {
+        var i = __o[0],
+            x = __o[1];
         return x;
     }),
-    index = (function(__o0) {
-        var i = __o0[0],
-            x = __o0[1];
+    index = (function(__o) {
+        var i = __o[0],
+            x = __o[1];
         return i;
     });
 (takeWhile = (function(pred, s) {
@@ -38,9 +38,10 @@ var __o = require("./stream"),
         .bind(null, count), index), indexed(s))));
 }));
 (skipWhile = (function(pred, s) {
-    for (var head = s; !isEmpty(head);
+    for (var head = s;
+        (!isEmpty(head));
         (head = rest(head)))
-        if (!pred(first(head))) return head;
+        if ((!pred(first(head)))) return head;
     return NIL;
 }));
 (skip = (function(count, s) {
