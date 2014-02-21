@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 3.1.1 - Feb 21, 2014
+* Reduce number of function calls.
+
 ## 3.1.0 - January 20, 2014
 * Reworked node package to export submodules instead of grouping everything into
   top level scope..

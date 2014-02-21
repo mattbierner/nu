@@ -45,9 +45,9 @@ var flip = \f -> \x y -> f(y, x);
 
 var memo = \f -> {
     var value;
-    return \args(...) -> {
+    return \x -> {
         if (value === undefined)
-            value = f.apply(undefined, args);
+            value = f(x);
         return value;
     };
 };
@@ -99,7 +99,7 @@ first = \s -> s.first;
  * 
  * @return Stream for rest of 's'.
  */
-rest = \s -> s.rest(first(s));
+rest = \s -> s.rest();
 
 /**
  * Is a given stream empty.
@@ -108,7 +108,7 @@ rest = \s -> s.rest(first(s));
  *
  *@return Is 's' empty.
  */
-isEmpty = \s -> (s === end);
+isEmpty = \s -> (s === NIL);
 
 /**
  * Is a given object a stream?
@@ -120,7 +120,7 @@ isEmpty = \s -> (s === end);
  * @return Is 's' a valid stream.
  */
 isStream = \s ->
-    ((s && s.hasOwnProperty('first') && s.hasOwnProperty('rest')) || s === end);
+    ((s && s.hasOwnProperty('first') && s.hasOwnProperty('rest')) || s === NIL);
 
 /* Stream Construction
  ******************************************************************************/
@@ -202,7 +202,7 @@ zip = \l1 l2 ->
  * Create a stream of pairs of index and value.
  */
 indexed = let
-    count = \n -> stream(n, (+)@1 \> count)
+    count = \n -> stream(n, count@(n + 1))
 in
     zip@(count 0);
 

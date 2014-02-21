@@ -18,9 +18,8 @@ var end, NIL, stream, memoStream, cons, append, appendz, concat, from, first, re
     }),
     memo = (function(f) {
         var value;
-        return (function() {
-            var args = arguments;
-            if ((value === undefined))(value = f.apply(undefined, args));
+        return (function(x) {
+            if ((value === undefined))(value = f(x));
             return value;
         });
     });
@@ -39,13 +38,13 @@ var end, NIL, stream, memoStream, cons, append, appendz, concat, from, first, re
     return s.first;
 }));
 (rest = (function(s) {
-    return s.rest(first(s));
+    return s.rest();
 }));
 (isEmpty = (function(s) {
-    return (s === end);
+    return (s === NIL);
 }));
 (isStream = (function(s) {
-    return (((s && s.hasOwnProperty("first")) && s.hasOwnProperty("rest")) || (s === end));
+    return (((s && s.hasOwnProperty("first")) && s.hasOwnProperty("rest")) || (s === NIL));
 }));
 (cons = (function(val, s) {
     return stream(val, constant(s));
@@ -75,14 +74,7 @@ var fromImpl = (function(arr, i, len) {
         rest(l2))));
 }));
 var count = (function(n) {
-    return stream(n, (function(f, g) {
-        return (function(x) {
-            return f(g(x));
-        });
-    })(count, (function(x, y) {
-            return (x + y);
-        })
-        .bind(null, 1)));
+    return stream(n, count.bind(null, (n + 1)));
 });
 (indexed = zip.bind(null, count(0)));
 (forEach = (function(f, s) {
