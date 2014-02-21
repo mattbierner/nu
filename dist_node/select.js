@@ -22,10 +22,8 @@ var __o = require("./stream"),
         return i;
     });
 (takeWhile = (function(pred, s) {
-    return (isEmpty(s) ? s : (function() {
-        var x = first(s);
-        return (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : NIL);
-    })());
+    var x;
+    return (isEmpty(s) ? s : ((x = first(s)), (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : NIL)));
 }));
 (take = (function(count, s) {
     return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(f, g) {

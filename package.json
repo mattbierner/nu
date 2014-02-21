@@ -25,7 +25,9 @@
     ],
     "dependencies": {},
     "devDependencies": {
-        "nodeunit": "0.8.x"
+        "nodeunit": "0.8.x",
+        
+        "khepri": "0.14.x"
     },
     
     "scripts": {
