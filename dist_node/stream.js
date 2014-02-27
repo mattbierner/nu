@@ -84,9 +84,9 @@ var count = (function(n) {
 }));
 (foldl = (function(f, z, s) {
     var r = z;
-    forEach((function(x) {
-        (r = f(r, x));
-    }), s);
+    for (var head = s;
+        (!isEmpty(head));
+        (head = rest(head)))(r = f(r, first(head)));
     return r;
 }));
 (reverse = foldl.bind(null, flip(cons), end));
@@ -110,14 +110,13 @@ var builder = (function(p, c) {
     return (isEmpty(s) ? s : memoStream(f(first(s)), map.bind(null, f, rest(s))));
 }));
 (filter = (function(pred, s) {
-    var head = s;
-    for (;
+    for (var head = s;
         (!isEmpty(head));
         (head = rest(head))) {
         var x = first(head);
         if (pred(x)) return memoStream(x, filter.bind(null, pred, rest(head)));
     }
-    return head;
+    return NIL;
 }));
 (bind = (function(f, g) {
     return (function() {

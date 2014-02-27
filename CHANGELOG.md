@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 3.1.2 - Feb 26, 2014
+* Eliminated one function call per folding.
+
 ## 3.1.1 - Feb 21, 2014
 * Reduce number of function calls.
 

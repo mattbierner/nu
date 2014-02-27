@@ -174,7 +174,7 @@ concat = \s ->
  * @return Stream of enumerable values from enumerable object.
  */
 from = let
-    fromImpl = \arr i len ->
+    fromImpl := \arr i len ->
         ?i >= len
             :end
             :memoStream(arr.(i), fromImpl@(arr, i + 1, len))
@@ -202,7 +202,7 @@ zip = \l1 l2 ->
  * Create a stream of pairs of index and value.
  */
 indexed = let
-    count = \n -> stream(n, count@(n + 1))
+    count := \n -> stream(n, count@(n + 1))
 in
     zip@(count 0);
 
@@ -213,7 +213,7 @@ in
  * @param s Stream to iterate over.
  */
 forEach = \f s -> {
-    for (var head = s; !isEmpty(head); head = rest head)
+    for (var head = s; !isEmpty head; head = rest head)
        f(first head);
 };
 
@@ -229,7 +229,8 @@ forEach = \f s -> {
  */
 foldl = \f z s -> {
     var r = z;
-    forEach(\x -> { r = f(r, x); }, s);
+    for (var head = s; !isEmpty head; head = rest head)
+       r = f(r, first head);
     return r;
 };
 
@@ -321,13 +322,12 @@ map = \f s ->
  * @return New stream from filtered 's'.
  */
 filter = \pred s -> {
-    var head = s;
-    for (; !(isEmpty head); head = rest head) {
-        var x = first head;
+    for (var head = s; !isEmpty head; head = rest head)
+    with x = first head in {
         if (pred x)
             return memoStream(x, filter@(pred, rest head));
     }
-    return head;
+    return NIL;
 };
 
 /* 

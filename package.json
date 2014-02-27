@@ -1,6 +1,6 @@
 {
     "name": "nu-stream",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "description": "Small lazy stream Javascript library",
     "keywords": [
         "stream", 
@@ -27,7 +27,7 @@
     "devDependencies": {
         "nodeunit": "0.8.x",
         
-        "khepri": "0.14.x"
+        "khepri": "0.16.x"
     },
     
     "scripts": {

@@ -9,19 +9,17 @@ var __o = require("./stream"),
     rest = __o["rest"],
     any, every;
 (any = (function(pred, s) {
-    var current = s;
-    while ((!isEmpty(current))) {
+    for (var current = s;
+        (!isEmpty(current));
+        (current = rest(current)))
         if (pred(first(current))) return true;
-        (current = rest(current));
-    }
     return false;
 }));
 (every = (function(pred, s) {
-    var current = s;
-    while ((!isEmpty(current))) {
+    for (var current = s;
+        (!isEmpty(current));
+        (current = rest(current)))
         if ((!pred(first(current)))) return false;
-        (current = rest(current));
-    }
     return true;
 }));
 (exports.any = any);

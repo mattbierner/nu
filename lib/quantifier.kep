@@ -21,12 +21,9 @@ in {
  * @return Was the predicate satisfied for any element?
  */
 any = \pred s -> {
-    var current = s;
-    while (!isEmpty current) {
+    for (var current = s; !isEmpty current; current = rest current) 
         if (pred(first current))
             return true;
-        current = rest current;
-    }
     return false;
 };
 
@@ -43,12 +40,9 @@ any = \pred s -> {
  * @return Was the predicate satisfied for all elements?
  */
 every = \pred s -> {
-    var current = s;
-    while (!isEmpty current) {
+    for (var current = s; !isEmpty current; current = rest current)
         if (!pred(first current))
             return false;
-        current = rest current;
-    }
     return true;
 };
 

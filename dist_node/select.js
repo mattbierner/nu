@@ -26,14 +26,14 @@ var __o = require("./stream"),
     return (isEmpty(s) ? s : ((x = first(s)), (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : NIL)));
 }));
 (take = (function(count, s) {
+    var x;
     return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(f, g) {
         return (function(x) {
             return f(g(x));
         });
-    })((function(x, y) {
-            return (x > y);
-        })
-        .bind(null, count), index), indexed(s))));
+    })(((x = count), (function(y) {
+        return (x > y);
+    })), index), indexed(s))));
 }));
 (skipWhile = (function(pred, s) {
     for (var head = s;
@@ -43,14 +43,14 @@ var __o = require("./stream"),
     return NIL;
 }));
 (skip = (function(count, s) {
+    var x;
     return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile((function(f, g) {
         return (function(x) {
             return f(g(x));
         });
-    })((function(x, y) {
-            return (x > y);
-        })
-        .bind(null, count), index), indexed(s))));
+    })(((x = count), (function(y) {
+        return (x > y);
+    })), index), indexed(s))));
 }));
 (exports.takeWhile = takeWhile);
 (exports.take = take);
