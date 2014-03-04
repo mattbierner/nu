@@ -1,7 +1,8 @@
 /*
  * THIS FILE IS AUTO GENERATED from 'lib/stream.kep'
  * DO NOT EDIT
-*/"use strict";
+*/
+"use strict";
 var end, NIL, stream, memoStream, cons, append, appendz, concat, from, first, rest, isEmpty, isStream, forEach, reverse,
         foldl, foldr, reduce, reduceRight, toArray, zip, zipWith, indexed, map, filter, bind, arrayReduce = Function.prototype
         .call.bind(Array.prototype.reduce),

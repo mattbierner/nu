@@ -1,7 +1,8 @@
 /*
  * THIS FILE IS AUTO GENERATED from 'lib/select.kep'
  * DO NOT EDIT
-*/"use strict";
+*/
+"use strict";
 var __o = require("./stream"),
     NIL = __o["NIL"],
     first = __o["first"],
