@@ -1,8 +1,7 @@
 /*
  * THIS FILE IS AUTO GENERATED from 'lib/select.kep'
  * DO NOT EDIT
-*/
-define(["require", "exports", "./stream"], (function(require, exports, __o) {
+*/define(["require", "exports", "./stream"], (function(require, exports, __o) {
     "use strict";
     var NIL = __o["NIL"],
         first = __o["first"],
@@ -22,20 +21,19 @@ define(["require", "exports", "./stream"], (function(require, exports, __o) {
             return i;
         });
     (takeWhile = (function(pred, s) {
-        return (isEmpty(s) ? s : (function() {
-            var x = first(s);
-            return (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : NIL);
-        })());
+        var x;
+        return (isEmpty(s) ? s : ((x = first(s)), (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(
+            s))) : NIL)));
     }));
     (take = (function(count, s) {
+        var x;
         return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(f, g) {
             return (function(x) {
                 return f(g(x));
             });
-        })((function(x, y) {
-                return (x > y);
-            })
-            .bind(null, count), index), indexed(s))));
+        })(((x = count), (function(y) {
+            return (x > y);
+        })), index), indexed(s))));
     }));
     (skipWhile = (function(pred, s) {
         for (var head = s;
@@ -45,14 +43,14 @@ define(["require", "exports", "./stream"], (function(require, exports, __o) {
         return NIL;
     }));
     (skip = (function(count, s) {
+        var x;
         return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile((function(f, g) {
             return (function(x) {
                 return f(g(x));
             });
-        })((function(x, y) {
-                return (x > y);
-            })
-            .bind(null, count), index), indexed(s))));
+        })(((x = count), (function(y) {
+            return (x > y);
+        })), index), indexed(s))));
     }));
     (exports.takeWhile = takeWhile);
     (exports.take = take);

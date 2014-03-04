@@ -1,12 +1,11 @@
 /*
  * THIS FILE IS AUTO GENERATED from 'lib/stream.kep'
  * DO NOT EDIT
-*/
-define(["require", "exports"], (function(require, exports) {
+*/define(["require", "exports"], (function(require, exports) {
     "use strict";
     var end, NIL, stream, memoStream, cons, append, appendz, concat, from, first, rest, isEmpty, isStream,
-            forEach, reverse, foldl, foldr, reduce, reduceRight, toArray, zip, indexed, map, filter, bind,
-            arrayReduce = Function.prototype.call.bind(Array.prototype.reduce),
+            forEach, reverse, foldl, foldr, reduce, reduceRight, toArray, zip, zipWith, indexed, map, filter,
+            bind, arrayReduce = Function.prototype.call.bind(Array.prototype.reduce),
         constant = (function(x) {
             return (function() {
                 return x;
@@ -41,8 +40,9 @@ define(["require", "exports"], (function(require, exports) {
     (rest = (function(s) {
         return s.rest();
     }));
-    (isEmpty = (function(s) {
-        return (s === NIL);
+    var x = NIL;
+    (isEmpty = (function(y) {
+        return (x === y);
     }));
     (isStream = (function(s) {
         return (((s && s.hasOwnProperty("first")) && s.hasOwnProperty("rest")) || (s === NIL));
@@ -70,10 +70,13 @@ define(["require", "exports"], (function(require, exports) {
         var length = arr["length"];
         return fromImpl(arr, 0, length);
     }));
-    (zip = (function(l1, l2) {
-        return ((isEmpty(l1) || isEmpty(l2)) ? end : memoStream([first(l1), first(l2)], zip.bind(null,
-            rest(l1), rest(l2))));
+    (zipWith = (function(f, l1, l2) {
+        return ((isEmpty(l1) || isEmpty(l2)) ? NIL : memoStream(f(first(l1), first(l2)), zipWith.bind(
+            null, f, rest(l1), rest(l2))));
     }));
+    (zip = zipWith.bind(null, (function(x, y) {
+        return [x, y];
+    })));
     var count = (function(n) {
         return stream(n, count.bind(null, (n + 1)));
     });
@@ -145,6 +148,7 @@ define(["require", "exports"], (function(require, exports) {
     (exports.reduceRight = reduceRight);
     (exports.toArray = toArray);
     (exports.zip = zip);
+    (exports.zipWith = zipWith);
     (exports.indexed = indexed);
     (exports.map = map);
     (exports.filter = filter);

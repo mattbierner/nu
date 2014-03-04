@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 3.2.0 - March 4, 2014
+* Added `zipWith` `zip` generalization.
+
 ## 3.1.2 - Feb 26, 2014
 * Eliminated one function call per folding.
 

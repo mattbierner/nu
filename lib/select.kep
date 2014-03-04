@@ -73,8 +73,8 @@ take = \count s ->
  * @returns Stream of elements from 's' after predicate was not satisfied.
  */
 skipWhile = \pred s -> {
-    for (var head = s; !(isEmpty head); head = rest head)
-        if (!(pred (first head)))
+    for (var head = s; !isEmpty head; head = rest head)
+        if (!(pred(first head)))
             return head;
     return NIL;
 };

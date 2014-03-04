@@ -29,6 +29,7 @@ package (
     toArray
     
     zip
+    zipWith
     indexed
     
     map
@@ -108,7 +109,7 @@ rest = \s -> s.rest();
  *
  *@return Is 's' empty.
  */
-isEmpty = \s -> (s === NIL);
+isEmpty = (===, NIL);
 
 /**
  * Is a given object a stream?
@@ -184,6 +185,22 @@ in
 /* 
  ******************************************************************************/
 /**
+ * Combine two streams using `f`
+ * 
+ * Takes as many elements as the shorter of the two contains.
+ * 
+ * @param f Binary function that maps 
+ * @param l1 Stream
+ * @param l2 Stream
+ */
+zipWith = \f l1 l2 ->
+    ?isEmpty l1 || isEmpty l2
+        :NIL
+        :memoStream(
+            f(first l1, first l2),
+            zipWith@(f, rest l1, rest l2));
+    
+/**
  * Combine two streams into a stream of pairs.
  * 
  * Takes as many elements as the shorter of the two contains.
@@ -191,12 +208,7 @@ in
  * @param l1 Stream
  * @param l2 Stream
  */
-zip = \l1 l2 ->
-    ?isEmpty l1 || isEmpty l2
-        :end
-        :memoStream(
-            [first l1, first l2],
-            zip@(rest l1, rest l2));
+zip = zipWith@\x y -> [x, y];
 
 /**
  * Create a stream of pairs of index and value.
@@ -289,8 +301,8 @@ reduceRight = \f s ->
  * @return Array created from stream..
  */
 toArray = let
-    builder = \p, c -> {
-        p.push(c);
+    builder = \p c -> {
+        p.push c;
         return p;
     }
 in
