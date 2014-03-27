@@ -122,35 +122,37 @@
         }
         return NIL;
     }));
-    (bind = (function(f, g) {
-        return (function() {
-            return f(g.apply(null, arguments));
-        });
-    })(concat, map));
-    (exports.end = end);
-    (exports.NIL = NIL);
-    (exports.stream = stream);
-    (exports.memoStream = memoStream);
-    (exports.cons = cons);
-    (exports.append = append);
-    (exports.appendz = appendz);
-    (exports.concat = concat);
-    (exports.from = from);
-    (exports.first = first);
-    (exports.rest = rest);
-    (exports.isEmpty = isEmpty);
-    (exports.isStream = isStream);
-    (exports.forEach = forEach);
-    (exports.reverse = reverse);
-    (exports.foldl = foldl);
-    (exports.foldr = foldr);
-    (exports.reduce = reduce);
-    (exports.reduceRight = reduceRight);
-    (exports.toArray = toArray);
-    (exports.zip = zip);
-    (exports.zipWith = zipWith);
-    (exports.indexed = indexed);
-    (exports.map = map);
-    (exports.filter = filter);
-    (exports.bind = bind);
+    var x0 = map,
+        y = concat,
+        f = y,
+        g = x0;
+    (bind = (function() {
+        return f(g.apply(null, arguments));
+    }));
+    (exports["end"] = end);
+    (exports["NIL"] = NIL);
+    (exports["stream"] = stream);
+    (exports["memoStream"] = memoStream);
+    (exports["cons"] = cons);
+    (exports["append"] = append);
+    (exports["appendz"] = appendz);
+    (exports["concat"] = concat);
+    (exports["from"] = from);
+    (exports["first"] = first);
+    (exports["rest"] = rest);
+    (exports["isEmpty"] = isEmpty);
+    (exports["isStream"] = isStream);
+    (exports["forEach"] = forEach);
+    (exports["reverse"] = reverse);
+    (exports["foldl"] = foldl);
+    (exports["foldr"] = foldr);
+    (exports["reduce"] = reduce);
+    (exports["reduceRight"] = reduceRight);
+    (exports["toArray"] = toArray);
+    (exports["zip"] = zip);
+    (exports["zipWith"] = zipWith);
+    (exports["indexed"] = indexed);
+    (exports["map"] = map);
+    (exports["filter"] = filter);
+    (exports["bind"] = bind);
 }));

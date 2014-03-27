@@ -38,13 +38,13 @@ package (
     bind)
 {
 
-var arrayReduce = Function.prototype.call.bind(Array.prototype.reduce);
+var arrayReduce := Function.prototype.call.bind(Array.prototype.reduce);
 
-var constant = \x -> \() -> x;
+var constant := \x -> \() -> x;
 
-var flip = \f -> \x y -> f(y, x);
+var flip := \f -> \x y -> f(y, x);
 
-var memo = \f -> {
+var memo := \f -> {
     var value;
     return \x -> {
         if (value === undefined)

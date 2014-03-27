@@ -1,5 +1,5 @@
 /*
- * THIS FILE IS AUTO GENERATED from 'lib/select.kep'
+ * THIS FILE IS AUTO GENERATED FROM 'lib/select.kep'
  * DO NOT EDIT
 */
 "use strict";
@@ -26,14 +26,13 @@ var __o = require("./stream"),
     return (isEmpty(s) ? s : ((x = first(s)), (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : NIL)));
 }));
 (take = (function(count, s) {
-    var x;
-    return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(f, g) {
-        return (function(x) {
-            return f(g(x));
-        });
-    })(((x = count), (function(y) {
-        return (x > y);
-    })), index), indexed(s))));
+    var x, x0, y, f, g;
+    return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile(((x = index), (x0 = count), (y = (function(
+        y) {
+        return (x0 > y);
+    })), (f = y), (g = x), (function(x) {
+        return f(g(x));
+    })), indexed(s))));
 }));
 (skipWhile = (function(pred, s) {
     for (var head = s;
@@ -43,16 +42,15 @@ var __o = require("./stream"),
     return NIL;
 }));
 (skip = (function(count, s) {
-    var x;
-    return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile((function(f, g) {
-        return (function(x) {
-            return f(g(x));
-        });
-    })(((x = count), (function(y) {
-        return (x > y);
-    })), index), indexed(s))));
+    var x, x0, y, f, g;
+    return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile(((x = index), (x0 = count), (y = (
+        function(y) {
+            return (x0 > y);
+        })), (f = y), (g = x), (function(x) {
+        return f(g(x));
+    })), indexed(s))));
 }));
-(exports.takeWhile = takeWhile);
-(exports.take = take);
-(exports.skipWhile = skipWhile);
-(exports.skip = skip);
+(exports["takeWhile"] = takeWhile);
+(exports["take"] = take);
+(exports["skipWhile"] = skipWhile);
+(exports["skip"] = skip);

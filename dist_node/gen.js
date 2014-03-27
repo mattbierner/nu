@@ -1,5 +1,5 @@
 /*
- * THIS FILE IS AUTO GENERATED from 'lib/gen.kep'
+ * THIS FILE IS AUTO GENERATED FROM 'lib/gen.kep'
  * DO NOT EDIT
 */
 "use strict";
@@ -19,5 +19,5 @@ var rangeImpl = (function(lower, upper, step) {
         rangeStep = (isNaN(step) ? 1 : (+step));
     return (isNaN(upper) ? rangeImpl(0, rangeLower, rangeStep) : rangeImpl(rangeLower, upper, rangeStep));
 }));
-(exports.repeat = repeat);
-(exports.range = range);
+(exports["repeat"] = repeat);
+(exports["range"] = range);
