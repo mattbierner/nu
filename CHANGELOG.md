@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 3.2.1 - April 7, 2014
+* Performance improvements though recompile with khepri V0.21.13.
+
 ## 3.2.0 - March 4, 2014
 * Added `zipWith` `zip` generalization.
 

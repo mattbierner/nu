@@ -1,7 +1,8 @@
 /*
- * THIS FILE IS AUTO GENERATED from 'lib/select.kep'
+ * THIS FILE IS AUTO GENERATED FROM 'lib/select.kep'
  * DO NOT EDIT
-*/define(["require", "exports", "./stream"], (function(require, exports, __o) {
+*/
+define(["require", "exports", "./stream"], (function(require, exports, __o) {
     "use strict";
     var NIL = __o["NIL"],
         first = __o["first"],
@@ -10,14 +11,12 @@
         stream = __o["stream"],
         rest = __o["rest"],
         indexed = __o["indexed"],
-        takeWhile, take, skipWhile, skip, value = (function(__o) {
-            var i = __o[0],
-                x = __o[1];
+        takeWhile, take, skipWhile, skip, value = (function(__o0) {
+            var x = __o0["1"];
             return x;
         }),
-        index = (function(__o) {
-            var i = __o[0],
-                x = __o[1];
+        index = (function(__o0) {
+            var i = __o0["0"];
             return i;
         });
     (takeWhile = (function(pred, s) {
@@ -27,13 +26,10 @@
     }));
     (take = (function(count, s) {
         var x;
-        return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(f, g) {
-            return (function(x) {
-                return f(g(x));
-            });
-        })(((x = count), (function(y) {
-            return (x > y);
-        })), index), indexed(s))));
+        return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile(((x = index), (function(x0) {
+            var y = x(x0);
+            return (count > y);
+        })), indexed(s))));
     }));
     (skipWhile = (function(pred, s) {
         for (var head = s;
@@ -44,16 +40,13 @@
     }));
     (skip = (function(count, s) {
         var x;
-        return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile((function(f, g) {
-            return (function(x) {
-                return f(g(x));
-            });
-        })(((x = count), (function(y) {
-            return (x > y);
-        })), index), indexed(s))));
+        return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile(((x = index), (function(x0) {
+            var y = x(x0);
+            return (count > y);
+        })), indexed(s))));
     }));
-    (exports.takeWhile = takeWhile);
-    (exports.take = take);
-    (exports.skipWhile = skipWhile);
-    (exports.skip = skip);
+    (exports["takeWhile"] = takeWhile);
+    (exports["take"] = take);
+    (exports["skipWhile"] = skipWhile);
+    (exports["skip"] = skip);
 }));

@@ -1,5 +1,5 @@
 /*
- * THIS FILE IS AUTO GENERATED from 'lib/quantifier.kep'
+ * THIS FILE IS AUTO GENERATED FROM 'lib/quantifier.kep'
  * DO NOT EDIT
 */
 define(["require", "exports", "./stream"], (function(require, exports, __o) {
@@ -22,6 +22,6 @@ define(["require", "exports", "./stream"], (function(require, exports, __o) {
             if ((!pred(first(current)))) return false;
         return true;
     }));
-    (exports.any = any);
-    (exports.every = every);
+    (exports["any"] = any);
+    (exports["every"] = every);
 }));

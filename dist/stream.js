@@ -1,25 +1,18 @@
 /*
- * THIS FILE IS AUTO GENERATED from 'lib/stream.kep'
+ * THIS FILE IS AUTO GENERATED FROM 'lib/stream.kep'
  * DO NOT EDIT
-*/define(["require", "exports"], (function(require, exports) {
+*/
+define(["require", "exports"], (function(require, exports) {
     "use strict";
     var end, NIL, stream, memoStream, cons, append, appendz, concat, from, first, rest, isEmpty, isStream,
             forEach, reverse, foldl, foldr, reduce, reduceRight, toArray, zip, zipWith, indexed, map, filter,
             bind, arrayReduce = Function.prototype.call.bind(Array.prototype.reduce),
-        constant = (function(x) {
-            return (function() {
-                return x;
-            });
-        }),
-        flip = (function(f) {
-            return (function(x, y) {
-                return f(y, x);
-            });
-        }),
         memo = (function(f) {
             var value;
             return (function(x) {
-                if ((value === undefined))(value = f(x));
+                if ((value === undefined)) {
+                    (value = f(x));
+                }
                 return value;
             });
         });
@@ -48,13 +41,17 @@
         return (((s && s.hasOwnProperty("first")) && s.hasOwnProperty("rest")) || (s === NIL));
     }));
     (cons = (function(val, s) {
-        return stream(val, constant(s));
+        return stream(val, (function() {
+            return s;
+        }));
     }));
     (appendz = (function(s1, f) {
         return (isEmpty(s1) ? f() : memoStream(first(s1), appendz.bind(null, rest(s1), f)));
     }));
     var reducer = (function(s1, s2) {
-        return appendz(s1, constant(s2));
+        return appendz(s1, (function() {
+            return s2;
+        }));
     });
     (append = (function() {
         var streams = arguments;
@@ -68,19 +65,19 @@
     });
     (from = (function(arr) {
         var length = arr["length"];
-        return fromImpl(arr, 0, length);
+        return ((0 >= length) ? end : memoStream(arr[0], fromImpl.bind(null, arr, 1, length)));
     }));
     (zipWith = (function(f, l1, l2) {
         return ((isEmpty(l1) || isEmpty(l2)) ? NIL : memoStream(f(first(l1), first(l2)), zipWith.bind(
             null, f, rest(l1), rest(l2))));
     }));
-    (zip = zipWith.bind(null, (function(x, y) {
-        return [x, y];
+    (zip = zipWith.bind(null, (function(x0, y) {
+        return [x0, y];
     })));
     var count = (function(n) {
         return stream(n, count.bind(null, (n + 1)));
     });
-    (indexed = zip.bind(null, count(0)));
+    (indexed = zip.bind(null, stream(0, count.bind(null, 1))));
     (forEach = (function(f, s) {
         for (var head = s;
             (!isEmpty(head));
@@ -90,18 +87,23 @@
         var r = z;
         for (var head = s;
             (!isEmpty(head));
-            (head = rest(head)))(r = f(r, first(head)));
+            (head = rest(head))) {
+            (r = f(r, first(head)));
+        }
         return r;
     }));
-    (reverse = foldl.bind(null, flip(cons), end));
-    (foldr = (function(f, z, s) {
-        return foldl(f, z, reverse(s));
+    var f;
+    (reverse = foldl.bind(null, ((f = cons), (function(x0, y) {
+        return f(y, x0);
+    })), end));
+    (foldr = (function(f0, z, s) {
+        return foldl(f0, z, reverse(s));
     }));
-    (reduce = (function(f, s) {
-        return foldl(f, first(s), rest(s));
+    (reduce = (function(f0, s) {
+        return foldl(f0, first(s), rest(s));
     }));
-    (reduceRight = (function(f, s) {
-        return reduce(f, reverse(s));
+    (reduceRight = (function(f0, s) {
+        return reduce(f0, reverse(s));
     }));
     var builder = (function(p, c) {
         p.push(c);
@@ -110,24 +112,22 @@
     (toArray = (function(s) {
         return foldl(builder, [], s);
     }));
-    (map = (function(f, s) {
-        return (isEmpty(s) ? s : memoStream(f(first(s)), map.bind(null, f, rest(s))));
+    (map = (function(f0, s) {
+        return (isEmpty(s) ? s : memoStream(f0(first(s)), map.bind(null, f0, rest(s))));
     }));
     (filter = (function(pred, s) {
         for (var head = s;
             (!isEmpty(head));
             (head = rest(head))) {
-            var x = first(head);
-            if (pred(x)) return memoStream(x, filter.bind(null, pred, rest(head)));
+            var x0 = first(head);
+            if (pred(x0)) return memoStream(x0, filter.bind(null, pred, rest(head)));
         }
         return NIL;
     }));
     var x0 = map,
-        y = concat,
-        f = y,
-        g = x0;
+        y = concat;
     (bind = (function() {
-        return f(g.apply(null, arguments));
+        return y(x0.apply(null, arguments));
     }));
     (exports["end"] = end);
     (exports["NIL"] = NIL);

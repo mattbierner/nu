@@ -29,6 +29,10 @@
     },
     
     "scripts": {
-        "test": "node test.js"
+        "test": "node test.js",
+        
+        "build": "npm run build-amd && npm run build-node",
+        "build-amd": "khepri lib -o dist",
+        "build-node": "khepri lib -o dist_node --package_manager=node"
     }
 }

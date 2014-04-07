@@ -1,5 +1,5 @@
 /*
- * THIS FILE IS AUTO GENERATED from 'lib/gen.kep'
+ * THIS FILE IS AUTO GENERATED FROM 'lib/gen.kep'
  * DO NOT EDIT
 */
 define(["require", "exports", "./stream"], (function(require, exports, __o) {
@@ -17,9 +17,11 @@ define(["require", "exports", "./stream"], (function(require, exports, __o) {
     (range = (function(lower, upper, step) {
         var rangeLower = (isNaN(lower) ? Infinity : (+lower)),
             rangeStep = (isNaN(step) ? 1 : (+step));
-        return (isNaN(upper) ? rangeImpl(0, rangeLower, rangeStep) : rangeImpl(rangeLower, upper,
-            rangeStep));
+        return (isNaN(upper) ? (((rangeStep > 0) ? (rangeLower <= 0) : (rangeLower >= 0)) ? NIL :
+            memoStream(0, rangeImpl.bind(null, (0 + rangeStep), rangeLower, rangeStep))) : (((
+            rangeStep > 0) ? (upper <= rangeLower) : (upper >= rangeLower)) ? NIL : memoStream(
+            rangeLower, rangeImpl.bind(null, (rangeLower + rangeStep), upper, rangeStep))));
     }));
-    (exports.repeat = repeat);
-    (exports.range = range);
+    (exports["repeat"] = repeat);
+    (exports["range"] = range);
 }));
