@@ -17,36 +17,48 @@ define(["require", "exports"], (function(require, exports) {
             });
         });
     (end = null);
-    (NIL = end);
+    (NIL = null);
     (stream = (function(val, f) {
         return ({
-            "first": val,
-            "rest": f
+            first: val,
+            rest: f
         });
     }));
     (memoStream = (function(val, f) {
-        return stream(val, memo(f));
+        var f0 = memo(f);
+        return ({
+            first: val,
+            rest: f0
+        });
     }));
-    (first = (function(s) {
-        return s.first;
+    (first = (function(x) {
+        return x.first;
     }));
     (rest = (function(s) {
         return s.rest();
     }));
-    var x = NIL;
     (isEmpty = (function(y) {
-        return (x === y);
+        return (null === y);
     }));
     (isStream = (function(s) {
-        return (((s && s.hasOwnProperty("first")) && s.hasOwnProperty("rest")) || (s === NIL));
+        return (((s && s.hasOwnProperty("first")) && s.hasOwnProperty("rest")) || (null === s));
     }));
     (cons = (function(val, s) {
-        return stream(val, (function() {
+        var f = (function() {
             return s;
-        }));
+        });
+        return ({
+            first: val,
+            rest: f
+        });
     }));
     (appendz = (function(s1, f) {
-        return (isEmpty(s1) ? f() : memoStream(first(s1), appendz.bind(null, rest(s1), f)));
+        var val, f0, f1;
+        return ((null === s1) ? f() : ((val = s1.first), (f0 = appendz.bind(null, s1.rest(), f)), (f1 =
+            memo(f0)), ({
+            first: val,
+            rest: f1
+        })));
     }));
     var reducer = (function(s1, s2) {
         return appendz(s1, (function() {
@@ -55,52 +67,79 @@ define(["require", "exports"], (function(require, exports) {
     });
     (append = (function() {
         var streams = arguments;
-        return arrayReduce(streams, reducer, end);
+        return arrayReduce(streams, reducer, null);
     }));
     (concat = (function(s) {
-        return (isEmpty(s) ? s : appendz(first(s), concat.bind(null, rest(s))));
+        return ((null === s) ? s : appendz(s.first, concat.bind(null, s.rest())));
     }));
     var fromImpl = (function(arr, i, len) {
-        return ((i >= len) ? end : memoStream(arr[i], fromImpl.bind(null, arr, (i + 1), len)));
+        var val, f, f0;
+        return ((i >= len) ? null : ((val = arr[i]), (f = fromImpl.bind(null, arr, (i + 1), len)), (f0 =
+            memo(f)), ({
+            first: val,
+            rest: f0
+        })));
     });
     (from = (function(arr) {
-        var length = arr["length"];
-        return ((0 >= length) ? end : memoStream(arr[0], fromImpl.bind(null, arr, 1, length)));
+        var val, f, f0, length = arr["length"];
+        return ((0 >= length) ? null : ((val = arr[0]), (f = fromImpl.bind(null, arr, 1, length)), (f0 =
+            memo(f)), ({
+            first: val,
+            rest: f0
+        })));
     }));
     (zipWith = (function(f, l1, l2) {
-        return ((isEmpty(l1) || isEmpty(l2)) ? NIL : memoStream(f(first(l1), first(l2)), zipWith.bind(
-            null, f, rest(l1), rest(l2))));
+        var val, f0, f1;
+        return (((null === l1) || (null === l2)) ? null : ((val = f(l1.first, l2.first)), (f0 = zipWith
+            .bind(null, f, l1.rest(), l2.rest())), (f1 = memo(f0)), ({
+            first: val,
+            rest: f1
+        })));
     }));
-    (zip = zipWith.bind(null, (function(x0, y) {
-        return [x0, y];
+    (zip = zipWith.bind(null, (function(x, y) {
+        return [x, y];
     })));
-    var count = (function(n) {
-        return stream(n, count.bind(null, (n + 1)));
-    });
-    (indexed = zip.bind(null, stream(0, count.bind(null, 1))));
-    (forEach = (function(f, s) {
+    var f, count = (function(n) {
+            var f = count.bind(null, (n + 1));
+            return ({
+                first: n,
+                rest: f
+            });
+        });
+    (indexed = zip.bind(null, ((f = count.bind(null, 1)), ({
+        first: 0,
+        rest: f
+    }))));
+    (forEach = (function(f0, s) {
+        var y, s0, x;
         for (var head = s;
-            (!isEmpty(head));
-            (head = rest(head))) f(first(head));
+            (!((y = head), (null === y)));
+            (head = ((s0 = head), s0.rest()))) f0(((x = head), x.first));
     }));
-    (foldl = (function(f, z, s) {
-        var r = z;
+    (foldl = (function(f0, z, s) {
+        var y, s0, r = z;
         for (var head = s;
-            (!isEmpty(head));
-            (head = rest(head))) {
-            (r = f(r, first(head)));
+            (!((y = head), (null === y)));
+            (head = ((s0 = head), s0.rest()))) {
+            var x;
+            (r = f0(r, ((x = head), x.first)));
         }
         return r;
     }));
-    var f;
-    (reverse = foldl.bind(null, ((f = cons), (function(x0, y) {
-        return f(y, x0);
-    })), end));
+    (reverse = foldl.bind(null, (function(x, y) {
+        var f0 = (function() {
+            return x;
+        });
+        return ({
+            first: y,
+            rest: f0
+        });
+    }), null));
     (foldr = (function(f0, z, s) {
         return foldl(f0, z, reverse(s));
     }));
     (reduce = (function(f0, s) {
-        return foldl(f0, first(s), rest(s));
+        return foldl(f0, s.first, s.rest());
     }));
     (reduceRight = (function(f0, s) {
         return reduce(f0, reverse(s));
@@ -113,21 +152,34 @@ define(["require", "exports"], (function(require, exports) {
         return foldl(builder, [], s);
     }));
     (map = (function(f0, s) {
-        return (isEmpty(s) ? s : memoStream(f0(first(s)), map.bind(null, f0, rest(s))));
+        var val, f1, f2;
+        return ((null === s) ? s : ((val = f0(s.first)), (f1 = map.bind(null, f0, s.rest())), (f2 =
+            memo(f1)), ({
+            first: val,
+            rest: f2
+        })));
     }));
     (filter = (function(pred, s) {
+        var y, s0;
         for (var head = s;
-            (!isEmpty(head));
-            (head = rest(head))) {
-            var x0 = first(head);
-            if (pred(x0)) return memoStream(x0, filter.bind(null, pred, rest(head)));
+            (!((y = head), (null === y)));
+            (head = ((s0 = head), s0.rest()))) {
+            var x = head,
+                x0 = x.first;
+            if (pred(x0)) {
+                var s1, f0 = filter.bind(null, pred, ((s1 = head), s1.rest())),
+                    f1 = memo(f0);
+                return ({
+                    first: x0,
+                    rest: f1
+                });
+            }
         }
-        return NIL;
+        return null;
     }));
-    var x0 = map,
-        y = concat;
+    var y = concat;
     (bind = (function() {
-        return y(x0.apply(null, arguments));
+        return y(map.apply(null, arguments));
     }));
     (exports["end"] = end);
     (exports["NIL"] = NIL);

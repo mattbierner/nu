@@ -8,6 +8,8 @@ with
     import './stream' {isEmpty first rest}
 in {
 
+var not := (_ \>, (!));
+
 /**
  * Tests a stream against a predicate and returns if the predicate is satisfied
  * for any element.
@@ -20,7 +22,7 @@ in {
  * 
  * @return Was the predicate satisfied for any element?
  */
-any = \pred s -> {
+any := \pred s -> {
     for (var current = s; !isEmpty current; current = rest current) 
         if (pred(first current))
             return true;
@@ -39,11 +41,7 @@ any = \pred s -> {
  * 
  * @return Was the predicate satisfied for all elements?
  */
-every = \pred s -> {
-    for (var current = s; !isEmpty current; current = rest current)
-        if (!pred(first current))
-            return false;
-    return true;
-};
+every := \pred s ->
+    !any(not pred, s);
 
 }

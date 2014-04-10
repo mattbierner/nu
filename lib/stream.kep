@@ -58,8 +58,8 @@ var memo := \f -> {
 /**
  * The empty stream.
  */
-end = null;
-NIL = end;
+end := null;
+NIL := end;
 
 /* Stream
  ******************************************************************************/
@@ -71,16 +71,16 @@ NIL = end;
  * 
  * @return A new stream.
  */
-stream = \val f -> ({
-    'first': val,
-    'rest': f
+stream := \val f -> ({
+    first: val,
+    rest: f
 });
 
 /**
  * Create a new stream that memoizes rest results.
  */
-memoStream = \val f ->
-    stream(val, memo(f));
+memoStream := \val f ->
+    stream(val, memo f);
 
 /* Primitive Operators
  ******************************************************************************/
@@ -91,7 +91,7 @@ memoStream = \val f ->
  * 
  * @return First element of 's'.
  */
-first = \s -> s.first;
+first := (.first);
 
 /**
  * Get the rest of a given stream, excluding the first element.
@@ -100,16 +100,14 @@ first = \s -> s.first;
  * 
  * @return Stream for rest of 's'.
  */
-rest = \s -> s.rest();
+rest := \s -> s.rest();
 
 /**
- * Is a given stream empty.
+ * Is a given stream empty?
  * 
  * @param s Stream.
- *
- *@return Is 's' empty.
  */
-isEmpty = (===, NIL);
+isEmpty := (===, NIL);
 
 /**
  * Is a given object a stream?
@@ -117,11 +115,10 @@ isEmpty = (===, NIL);
  * Returns true for empty streams as well.
  * 
  * @param s Object to test.
- * 
- * @return Is 's' a valid stream.
  */
-isStream = \s ->
-    ((s && s.hasOwnProperty('first') && s.hasOwnProperty('rest')) || s === NIL);
+isStream := \s ->
+    (  (s && s.hasOwnProperty('first') && s.hasOwnProperty('rest'))
+    || isEmpty s);
 
 /* Stream Construction
  ******************************************************************************/
@@ -133,7 +130,7 @@ isStream = \s ->
  * 
  * @return A new stream.
  */
-cons = \val s -> 
+cons := \val s -> 
     stream(val, constant s);
 
 /**
@@ -189,7 +186,7 @@ in
  * 
  * Takes as many elements as the shorter of the two contains.
  * 
- * @param f Binary function that maps 
+ * @param f Binary function to combine elements.
  * @param l1 Stream
  * @param l2 Stream
  */
@@ -208,12 +205,12 @@ zipWith = \f l1 l2 ->
  * @param l1 Stream
  * @param l2 Stream
  */
-zip = zipWith@\x y -> [x, y];
+zip := zipWith@\x y -> [x, y];
 
 /**
  * Create a stream of pairs of index and value.
  */
-indexed = let
+indexed := let
     count := \n -> stream(n, count@(n + 1))
 in
     zip@(count 0);
@@ -224,7 +221,7 @@ in
  * @param {function(value): *} f Function to call each element of 's'.
  * @param s Stream to iterate over.
  */
-forEach = \f s -> {
+forEach := \f s -> {
     for (var head = s; !isEmpty head; head = rest head)
        f(first head);
 };
@@ -239,7 +236,7 @@ forEach = \f s -> {
  * 
  * @return Result of reduction.
  */
-foldl = \f z s -> {
+foldl := \f z s -> {
     var r = z;
     for (var head = s; !isEmpty head; head = rest head)
        r = f(r, first head);
@@ -253,9 +250,7 @@ foldl = \f z s -> {
  * 
  * @param s Stream.
  */
-reverse = foldl@(
-    flip cons,
-    end);
+reverse = foldl@(flip cons, end);
 
 /**
  * Right fold on a stream.
@@ -290,7 +285,7 @@ reduce = \f s ->
  * 
  * @return Result of reduction.
  */
-reduceRight = \f s ->
+reduceRight := \f s ->
     reduce(f, reverse s);
 
 /**
@@ -300,7 +295,7 @@ reduceRight = \f s ->
  *
  * @return Array created from stream..
  */
-toArray = let
+toArray := let
     builder = \p c -> {
         p.push c;
         return p;
@@ -319,7 +314,7 @@ in
  * 
  * @return Stream of mapped values.
  */
-map = \f s ->
+map := \f s ->
     ?isEmpty s
         :s
         :memoStream(f(first s), map@(f, rest s));
@@ -333,7 +328,7 @@ map = \f s ->
  * 
  * @return New stream from filtered 's'.
  */
-filter = \pred s -> {
+filter := \pred s -> {
     for (var head = s; !isEmpty head; head = rest head)
     with x = first head in {
         if (pred x)

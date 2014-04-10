@@ -1,7 +1,11 @@
 # ChangeLog #
 
+## 3.2.2 - April 10, 2014
+* Performance improvements though recompile with khepri V0.23.0
+* More sane impl of `every`
+
 ## 3.2.1 - April 7, 2014
-* Performance improvements though recompile with khepri V0.21.13.
+* Performance improvements though recompile with khepri V0.21.13
 
 ## 3.2.0 - March 4, 2014
 * Added `zipWith` `zip` generalization.
