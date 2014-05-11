@@ -4,14 +4,14 @@
 */
 "use strict";
 var __o = require("./stream"),
-    NIL = __o["NIL"],
+    takeWhile, take, skipWhile, skip, NIL = __o["NIL"],
     first = __o["first"],
     isEmpty = __o["isEmpty"],
     map = __o["map"],
     stream = __o["stream"],
     rest = __o["rest"],
     indexed = __o["indexed"],
-    takeWhile, take, skipWhile, skip, value = (function(__o0) {
+    value = (function(__o0) {
         var x = __o0[1];
         return x;
     });
@@ -20,8 +20,8 @@ var __o = require("./stream"),
     return (isEmpty(s) ? s : ((x = first(s)), (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : NIL)));
 }));
 (take = (function(count, s) {
-    return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(x) {
-        var i = x[0];
+    return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(z) {
+        var i = z[0];
         return (count > i);
     }), indexed(s))));
 }));
@@ -33,8 +33,8 @@ var __o = require("./stream"),
     return NIL;
 }));
 (skip = (function(count, s) {
-    return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile((function(x) {
-        var i = x[0];
+    return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile((function(z) {
+        var i = z[0];
         return (count > i);
     }), indexed(s))));
 }));

@@ -4,13 +4,13 @@
 */
 "use strict";
 var __o = require("./stream"),
-    isEmpty = __o["isEmpty"],
+    any, every, isEmpty = __o["isEmpty"],
     first = __o["first"],
     rest = __o["rest"],
-    any, every, not = (function(y) {
-        return (function(x) {
-            var x0 = y(x);
-            return (!x0);
+    not = (function(y) {
+        return (function(z) {
+            var x = y(z);
+            return (!x);
         });
     });
 (any = (function(pred, s) {

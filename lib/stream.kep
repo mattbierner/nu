@@ -40,7 +40,7 @@ package (
 
 var arrayReduce := Function.prototype.call.bind(Array.prototype.reduce);
 
-var constant := \x -> \() -> x;
+var constant := \x -> \ -> x;
 
 var flip := \f -> \x y -> f(y, x);
 
@@ -58,8 +58,7 @@ var memo := \f -> {
 /**
  * The empty stream.
  */
-end := null;
-NIL := end;
+NIL := end := null;
 
 /* Stream
  ******************************************************************************/
@@ -154,7 +153,7 @@ appendz = \s1 f ->
 append = let
     reducer = \s1 s2 -> appendz(s1, constant s2)
 in
-    \streams(...) -> arrayReduce(streams, reducer, end);
+    \-streams(...) -> arrayReduce(streams, reducer, end);
 
 /**
  * Joins a stream of streams into a new stream

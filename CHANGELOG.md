@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 3.2.3 - May 10, 2014
+* Updated for Khepri V1.0.
+
 ## 3.2.2 - April 10, 2014
 * Performance improvements though recompile with khepri V0.23.0
 * More sane impl of `every`

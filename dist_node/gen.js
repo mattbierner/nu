@@ -4,9 +4,8 @@
 */
 "use strict";
 var __o = require("./stream"),
-    NIL = __o["NIL"],
-    memoStream = __o["memoStream"],
-    repeat, range;
+    repeat, range, NIL = __o["NIL"],
+    memoStream = __o["memoStream"];
 (repeat = (function(times, x) {
     return ((times <= 0) ? NIL : memoStream(x, repeat.bind(null, (times - 1), x)));
 }));

@@ -21,8 +21,8 @@ define(["require", "exports", "./stream"], (function(require, exports, __o) {
             s))) : NIL)));
     }));
     (take = (function(count, s) {
-        return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(x) {
-            var i = x[0];
+        return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(z) {
+            var i = z[0];
             return (count > i);
         }), indexed(s))));
     }));
@@ -34,8 +34,8 @@ define(["require", "exports", "./stream"], (function(require, exports, __o) {
         return NIL;
     }));
     (skip = (function(count, s) {
-        return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile((function(x) {
-            var i = x[0];
+        return ((isNaN(count) || (count <= 0)) ? s : map(value, skipWhile((function(z) {
+            var i = z[0];
             return (count > i);
         }), indexed(s))));
     }));
