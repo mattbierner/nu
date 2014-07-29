@@ -1,6 +1,7 @@
 ---
-layout: index
+layout: base
 ---
+
 
 # About 
 Nu is small Javascript library for working with lazy, infinite streams. It is
