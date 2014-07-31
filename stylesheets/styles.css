@@ -1,25 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
 
-.group:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-*, *:before, *:after {
-    box-sizing: border-box;
-}
-
-.cf:before,
-.cf:after {
-    content: " "; /* 1 */
-    display: table; /* 2 */
-}
-
-.cf:after {
-    clear: both;
-}
-
 
 /* normalize.css 2012-02-07T12:37 UTC - http://github.com/necolas/normalize.css */
 /* =============================================================================
@@ -581,27 +561,27 @@ header #logo-text {
     color: #fdfdfd;
 }
 
-header #blurb {
+header #title-text {
     display: table-cell;
     vertical-align: middle;
     margin: 0;
     padding: 0;
     padding-left: 0.8rem;
-    font-size: 1.1rem;
     color: #222;
     
 }
 
-header #blurb span {
+header #title-text span {
     display: block;
 }
 
-header #version {
-    position: absolute;
-    top: -2em;
-    right: 0;
-    padding-right: 1em;
+header #blurb {
+    font-size: 1.15rem;
 }
+
+header #version {
+    font-size: 0.85em;
+ }
 
 
 header #title h1 {
@@ -741,43 +721,9 @@ section #title .credits.right {
 }
 
 
-#footer-credits > * {
-    display: table-cell;
-    vertical-align: middle;
-}
-
-footer .credits {
-    width: 40%;
+footer {
     text-align: center;
-    line-height: 1.2em;
-    padding: 0 3em 0.5em 3em;
-    line-spacing: 0.8em;
 }
-
-footer .credits.left {
-    margin-left: 2em;
-}
-
-footer .credits.right {
-    margin-right: 2em;
-}
-
-#bottom-logo {
-    width: 20%;
-    z-index: -1000;
-    vertical-align: bottom;
-}
-
-#bottom-logo img {
-    display: block;
-    width: 100px;
-    margin: 0 auto -2px auto;
-}
-
-#credits {
-    padding-top: 0.2rem;
-    padding-bottom: 1.8rem;
-} 
 
 @media print, screen and (max-width: 580px) {
   #title .credits {
