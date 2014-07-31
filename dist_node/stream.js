@@ -3,14 +3,14 @@
  * DO NOT EDIT
 */
 "use strict";
-var end, NIL, stream, memoStream, cons, append, appendz, concat, from, first, rest, isEmpty, isStream, forEach, reverse,
-        foldl, foldr, reduce, reduceRight, toArray, zip, zipWith, indexed, map, filter, bind, arrayReduce = Function.prototype
-        .call.bind(Array.prototype.reduce),
+var end, NIL, stream, memoStream, rec, cons, append, appendz, concat, bind, from, first, rest, isEmpty, isStream,
+        reverse, foldl, foldr, reduce, reduceRight, zip, zipWith, indexed, map, filter, forEach, toArray, arrayReduce =
+        Function.prototype.call.bind(Array.prototype.reduce),
     memo = (function(f) {
         var value;
-        return (function(x) {
+        return (function() {
             if ((value === undefined)) {
-                (value = f(x));
+                (value = f());
             }
             return value;
         });
@@ -29,6 +29,12 @@ var end, NIL, stream, memoStream, cons, append, appendz, concat, from, first, re
         first: val,
         rest: f0
     });
+}));
+(rec = (function(def) {
+    var value = def((function() {
+        return value;
+    }));
+    return value;
 }));
 (first = (function(x) {
     return x.first;
@@ -53,7 +59,9 @@ var end, NIL, stream, memoStream, cons, append, appendz, concat, from, first, re
 }));
 (appendz = (function(s1, f) {
     var val, f0, f1;
-    return ((null === s1) ? f() : ((val = s1.first), (f0 = appendz.bind(null, s1.rest(), f)), (f1 = memo(f0)), ({
+    return ((null === s1) ? f() : ((val = s1.first), (f0 = (function() {
+        return appendz(s1.rest(), f);
+    })), (f1 = memo(f0)), ({
         first: val,
         rest: f1
     })));
@@ -68,11 +76,15 @@ var reducer = (function(s1, s2) {
     return arrayReduce(streams, reducer, null);
 }));
 (concat = (function(s) {
-    return ((null === s) ? s : appendz(s.first, concat.bind(null, s.rest())));
+    return ((null === s) ? s : appendz(s.first, (function() {
+        return concat(s.rest());
+    })));
 }));
 var fromImpl = (function(arr, i, len) {
     var val, f, f0;
-    return ((i >= len) ? null : ((val = arr[i]), (f = fromImpl.bind(null, arr, (i + 1), len)), (f0 = memo(f)), ({
+    return ((i >= len) ? null : ((val = arr[i]), (f = (function() {
+        return fromImpl(arr, (i + 1), len);
+    })), (f0 = memo(f)), ({
         first: val,
         rest: f0
     })));
@@ -80,15 +92,17 @@ var fromImpl = (function(arr, i, len) {
 (from = (function(arr) {
     var length = arr["length"],
         val, f, f0;
-    return ((0 >= length) ? null : ((val = arr[0]), (f = fromImpl.bind(null, arr, 1, length)), (f0 = memo(f)), ({
+    return ((0 >= length) ? null : ((val = arr[0]), (f = (function() {
+        return fromImpl(arr, 1, length);
+    })), (f0 = memo(f)), ({
         first: val,
         rest: f0
     })));
 }));
 (zipWith = (function(f, l1, l2) {
     var val, f0, f1;
-    return (((null === l1) || (null === l2)) ? NIL : ((val = f(l1.first, l2.first)), (f0 = zipWith.bind(null, f,
-        l1.rest(), l2.rest())), (f1 = memo(f0)), ({
+    return (((null === l1) || (null === l2)) ? null : ((val = f(l1.first, l2.first)), (f0 = zipWith.bind(null,
+        f, l1.rest(), l2.rest())), (f1 = memo(f0)), ({
         first: val,
         rest: f1
     })));
@@ -98,30 +112,28 @@ var f = (function(x, y) {
 });
 (zip = (function(l1, l2) {
     var x, y, val, f0, f1;
-    return (((null === l1) || (null === l2)) ? NIL : ((x = l1.first), (y = l2.first), (val = [x, y]), (f0 =
+    return (((null === l1) || (null === l2)) ? null : ((x = l1.first), (y = l2.first), (val = [x, y]), (f0 =
         zipWith.bind(null, f, l1.rest(), l2.rest())), (f1 = memo(f0)), ({
         first: val,
         rest: f1
     })));
 }));
 var count = (function(n) {
-    var f0 = count.bind(null, (n + 1));
+    var f0 = (function() {
+        return count((n + 1));
+    });
     return ({
         first: n,
         rest: f0
     });
 }),
     f0;
-(indexed = zip.bind(null, ((f0 = count.bind(null, 1)), ({
+(indexed = zip.bind(null, ((f0 = (function() {
+    return count(1);
+})), ({
     first: 0,
     rest: f0
 }))));
-(forEach = (function(f1, s) {
-    var y, s0, x;
-    for (var head = s;
-        (!((y = head), (null === y)));
-        (head = ((s0 = head), s0.rest()))) f1(((x = head), x.first));
-}));
 (foldl = (function(f1, z, s) {
     var y, s0, r = z;
     for (var head = s;
@@ -150,16 +162,11 @@ var count = (function(n) {
 (reduceRight = (function(f1, s) {
     return reduce(f1, reverse(s));
 }));
-var builder = (function(p, c) {
-    p.push(c);
-    return p;
-});
-(toArray = (function(s) {
-    return foldl(builder, [], s);
-}));
 (map = (function(f1, s) {
     var val, f2, f3;
-    return ((null === s) ? s : ((val = f1(s.first)), (f2 = map.bind(null, f1, s.rest())), (f3 = memo(f2)), ({
+    return ((null === s) ? s : ((val = f1(s.first)), (f2 = (function() {
+        return map(f1, s.rest());
+    })), (f3 = memo(f2)), ({
         first: val,
         rest: f3
     })));
@@ -170,10 +177,12 @@ var builder = (function(p, c) {
         (!((y = head), (null === y)));
         (head = ((s0 = head), s0.rest()))) {
         var x = head,
-            x0 = x.first,
-            s1;
+            x0 = x.first;
         if (pred(x0)) {
-            var f1 = filter.bind(null, pred, ((s1 = head), s1.rest())),
+            var f1 = (function() {
+                var s1;
+                return filter(pred, ((s1 = head), s1.rest()));
+            }),
                 f2 = memo(f1);
             return ({
                 first: x0,
@@ -181,36 +190,50 @@ var builder = (function(p, c) {
             });
         }
     }
-    return NIL;
+    return null;
 }));
 var y = concat;
 (bind = (function() {
     var args = arguments;
     return y(map.apply(null, args));
 }));
+(forEach = (function(f1, s) {
+    var y0, s0, x;
+    for (var head = s;
+        (!((y0 = head), (null === y0)));
+        (head = ((s0 = head), s0.rest()))) f1(((x = head), x.first));
+}));
+var builder = (function(p, c) {
+    p.push(c);
+    return p;
+});
+(toArray = (function(s) {
+    return foldl(builder, [], s);
+}));
 (exports["end"] = end);
 (exports["NIL"] = NIL);
 (exports["stream"] = stream);
 (exports["memoStream"] = memoStream);
+(exports["rec"] = rec);
 (exports["cons"] = cons);
 (exports["append"] = append);
 (exports["appendz"] = appendz);
 (exports["concat"] = concat);
+(exports["bind"] = bind);
 (exports["from"] = from);
 (exports["first"] = first);
 (exports["rest"] = rest);
 (exports["isEmpty"] = isEmpty);
 (exports["isStream"] = isStream);
-(exports["forEach"] = forEach);
 (exports["reverse"] = reverse);
 (exports["foldl"] = foldl);
 (exports["foldr"] = foldr);
 (exports["reduce"] = reduce);
 (exports["reduceRight"] = reduceRight);
-(exports["toArray"] = toArray);
 (exports["zip"] = zip);
 (exports["zipWith"] = zipWith);
 (exports["indexed"] = indexed);
 (exports["map"] = map);
 (exports["filter"] = filter);
-(exports["bind"] = bind);
+(exports["forEach"] = forEach);
+(exports["toArray"] = toArray);

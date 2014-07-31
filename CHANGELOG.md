@@ -1,5 +1,11 @@
 # ChangeLog #
 
+## 3.3.0 - July 30, 2014
+* Added `rec` for creating self referential streams.
+* Switched to using function based thunks instead of `bind` based thunks.
+** Testing shows these perform much better: http://jsperf.com/bind-thunk-vs-call-thunk
+** Also defers computing parameters to stream producer in thunk.
+
 ## 3.2.3 - May 10, 2014
 * Updated for Khepri V1.0.
 

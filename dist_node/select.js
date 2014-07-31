@@ -17,7 +17,9 @@ var __o = require("./stream"),
     });
 (takeWhile = (function(pred, s) {
     var x;
-    return (isEmpty(s) ? s : ((x = first(s)), (pred(x) ? stream(x, takeWhile.bind(null, pred, rest(s))) : NIL)));
+    return (isEmpty(s) ? s : ((x = first(s)), (pred(x) ? stream(x, (function() {
+        return takeWhile(pred, rest(s));
+    })) : NIL)));
 }));
 (take = (function(count, s) {
     return ((isNaN(count) || (count < 0)) ? s : map(value, takeWhile((function(z) {

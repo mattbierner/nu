@@ -7,26 +7,25 @@ package (
     
     stream
     memoStream
+    rec
     
     cons
     append
     appendz
     concat
+    bind
     from
-
+    
     first
     rest
     isEmpty
     isStream
-    
-    forEach
     
     reverse
     foldl
     foldr
     reduce
     reduceRight
-    toArray
     
     zip
     zipWith
@@ -35,7 +34,8 @@ package (
     map
     filter
     
-    bind)
+    forEach
+    toArray)
 {
 
 var arrayReduce := Function.prototype.call.bind(Array.prototype.reduce);
@@ -46,9 +46,9 @@ var flip := \f -> \x y -> f(y, x);
 
 var memo := \f -> {
     var value;
-    return \x -> {
+    return \ -> {
         if (value === undefined)
-            value = f(x);
+            value = f();
         return value;
     };
 };
@@ -81,14 +81,23 @@ stream := \val f -> ({
 memoStream := \val f ->
     stream(val, memo f);
 
+/**
+ * Create a self referential stream.
+ * 
+ * @param def Function that produces the stream Passed a function that,
+ *    when invoked, returns the result of `def`. This must happen after `def` returns.
+ */
+rec = \def -> {
+    var value = def \ -> { return value; };
+    return value;
+};
+
 /* Primitive Operators
  ******************************************************************************/
 /**
  * Get the first element of a given stream.
  * 
  * @param s Stream.
- * 
- * @return First element of 's'.
  */
 first := (.first);
 
@@ -96,8 +105,6 @@ first := (.first);
  * Get the rest of a given stream, excluding the first element.
  * 
  * @param s Stream.
- * 
- * @return Stream for rest of 's'.
  */
 rest := \s -> s.rest();
 
@@ -126,8 +133,6 @@ isStream := \s ->
  * 
  * @param val First element of the stream.
  * @param s Rest of the stream.
- * 
- * @return A new stream.
  */
 cons := \val s -> 
     stream(val, constant s);
@@ -137,23 +142,19 @@ cons := \val s ->
  * 
  * @param s1 Stream.
  * @param f Function returning second stream.
- * 
- * @return Stream of two joined streams.
  */
 appendz = \s1 f ->
     ?isEmpty s1
         :f()
-        :memoStream(first s1, appendz@(rest s1, f));
+        :memoStream(first s1, \-> appendz(rest s1, f));
 
 /**
  * Joins multiple streams into a new stream.
- * 
- * @return Stream of joined streams.
  */
 append = let
     reducer = \s1 s2 -> appendz(s1, constant s2)
 in
-    \-streams(...) -> arrayReduce(streams, reducer, end);
+    \-streams(...)-> arrayReduce(streams, reducer, NIL);
 
 /**
  * Joins a stream of streams into a new stream
@@ -161,20 +162,18 @@ in
 concat = \s ->
     ?isEmpty s
         :s
-        :appendz(first s, concat@(rest s));
+        :appendz(first s, \-> concat(rest s));
 
 /**
  * Create a new stream from an array like object.
  * 
  * @param arr Array like object object.
- * 
- * @return Stream of enumerable values from enumerable object.
  */
 from = let
     fromImpl := \arr i len ->
         ?i >= len
             :end
-            :memoStream(arr.(i), fromImpl@(arr, i + 1, len))
+            :memoStream(arr.(i), \-> fromImpl(arr, i + 1, len))
 in
     \arr#{length} -> fromImpl(arr, 0, length);
 
@@ -185,7 +184,7 @@ in
  * 
  * Takes as many elements as the shorter of the two contains.
  * 
- * @param f Binary function to combine elements.
+ * @param f Binary function to combine elements
  * @param l1 Stream
  * @param l2 Stream
  */
@@ -204,36 +203,24 @@ zipWith = \f l1 l2 ->
  * @param l1 Stream
  * @param l2 Stream
  */
-zip := zipWith@\x y -> [x, y];
+zip := zipWith @ \x y -> [x, y];
 
 /**
  * Create a stream of pairs of index and value.
  */
 indexed := let
-    count := \n -> stream(n, count@(n + 1))
+    count := \n -> stream(n, \-> count(n + 1))
 in
     zip@(count 0);
 
 /**
- * Iterate over a stream in order.
- *
- * @param {function(value): *} f Function to call each element of 's'.
- * @param s Stream to iterate over.
- */
-forEach := \f s -> {
-    for (var head = s; !isEmpty head; head = rest head)
-       f(first head);
-};
-
-/**
- * Left fold on a stream.
+ * Fold a stream left-to-right.
  * 
- * @param {function(previous, current)} f Function that reduces 
- *     's'.
- * @param z Initial value used for fold.
- * @param s Stream.
+ * @param {function(accumulated, current)} f
+ * @param z Initial value
+ * @param s Stream
  * 
- * @return Result of reduction.
+ * @return Result value
  */
 foldl := \f z s -> {
     var r = z;
@@ -249,58 +236,41 @@ foldl := \f z s -> {
  * 
  * @param s Stream.
  */
-reverse = foldl@(flip cons, end);
+reverse = foldl@(flip cons, NIL);
 
 /**
- * Right fold on a stream.
+ * Fold a stream right-to-left.
  *
- * @param {function(previous, current)} f Function that reduces 's'.
- * @param z Initial value used for fold.
- * @param s Stream.
+ * @param {function(accumulated, current)} f 
+ * @param z Initial value
+ * @param s Stream
  * 
- * @return Result of reduction.
+ * @return Result value
  */
 foldr = \f z s ->
     foldl(f, z, reverse s);
 
 /**
- * Left fold on a non empty stream without an initial value.
+ * Fold a non-empty stream left-to-right without an initial value.
  * 
- * @param {function(previous, current)} f Function that reduces 
- *     's'.
- * @param s Stream.
+ * @param {function(accumulated, current)} f
+ * @param s Stream
  * 
- * @return Result of reduction.
+ * @return Result value.
  */
 reduce = \f s ->
     foldl(f, first s, rest s);
 
 /**
- * right fold on a non empty stream without an initial value.
+ * Fold a non-empty stream right-to-left without an initial value.
  * 
- * @param {function(previous, current)} f Function that reduces 
- *     's'.
- * @param s Stream.
+ * @param {function(accumulated, current)} f 
+ * @param s Stream
  * 
- * @return Result of reduction.
+ * @return Result value.
  */
 reduceRight := \f s ->
     reduce(f, reverse s);
-
-/**
- * Convert a finite stream to an array.
- *
- * @param s Stream.
- *
- * @return Array created from stream..
- */
-toArray := let
-    builder = \p c -> {
-        p.push c;
-        return p;
-    }
-in
-    \s -> foldl(builder, [], s);
 
 /* 
  ******************************************************************************/
@@ -310,13 +280,11 @@ in
  * @param {function(value)} f Function that transforms source values and
  *     returns the transformed value.
  * @param source Stream to map.
- * 
- * @return Stream of mapped values.
  */
 map := \f s ->
     ?isEmpty s
         :s
-        :memoStream(f(first s), map@(f, rest s));
+        :memoStream(f(first s), \-> map(f, rest s));
 
 /**
  * Create a new stream of filtered values from an existing stream.
@@ -324,14 +292,12 @@ map := \f s ->
  * @param {function(value): boolean} predicate Predicate function used to filter
  *     stream. 
  * * @param s Stream being filtered.
- * 
- * @return New stream from filtered 's'.
  */
 filter := \pred s -> {
     for (var head = s; !isEmpty head; head = rest head)
     with x = first head in {
         if (pred x)
-            return memoStream(x, filter@(pred, rest head));
+            return memoStream(x, \-> filter(pred, rest head));
     }
     return NIL;
 };
@@ -342,5 +308,32 @@ filter := \pred s -> {
  * Apply 'f' to stream 's' and join results into a new stream.
  */
 bind = map \>> concat;
+
+/* 
+ ******************************************************************************/
+/**
+ * Iterate over a stream in order.
+ *
+ * @param {function(value): *} f Function invoked on each element of 's'
+ * @param s Stream
+ */
+forEach := \f s -> {
+    for (var head = s; !isEmpty head; head = rest head)
+       f(first head);
+};
+
+/**
+ * Convert a finite stream to an array.
+ *
+ * @param s Stream.
+ */
+toArray := let
+    builder = \p c -> {
+        p.push c;
+        return p;
+    }
+in
+    \s -> foldl(builder, [], s);
+
 
 }

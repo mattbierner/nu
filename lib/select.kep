@@ -37,7 +37,7 @@ takeWhile = \pred s ->
         :s
         :let x = first s in
             ?pred x
-                :stream(x, takeWhile@(pred, rest s))
+                :stream(x, \-> takeWhile(pred, rest s))
                 :NIL;
 
 /**

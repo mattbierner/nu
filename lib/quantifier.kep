@@ -8,7 +8,7 @@ with
     import './stream' {isEmpty first rest}
 in {
 
-var not := (_ \>, (!));
+var not := (_ \> (!));
 
 /**
  * Tests a stream against a predicate and returns if the predicate is satisfied

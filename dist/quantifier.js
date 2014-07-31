@@ -4,10 +4,10 @@
 */
 define(["require", "exports", "./stream"], (function(require, exports, __o) {
     "use strict";
-    var isEmpty = __o["isEmpty"],
+    var any, every, isEmpty = __o["isEmpty"],
         first = __o["first"],
         rest = __o["rest"],
-        any, every, not = (function(y) {
+        not = (function(y) {
             return (function(z) {
                 var x = y(z);
                 return (!x);

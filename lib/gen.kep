@@ -19,7 +19,7 @@ in {
 repeat := \times x ->
     ?times <= 0
         :NIL
-        :memoStream(x, repeat@(times - 1, x));
+        :memoStream(x, \-> repeat(times - 1, x));
 
 /**
  * Generate a stream of numbers in a given range.
@@ -34,7 +34,7 @@ range := let
     rangeImpl := \lower upper step ->
         ?(?step > 0 :upper <= lower :upper >= lower)
             :NIL
-            :memoStream(lower, rangeImpl@(lower + step, upper, step))
+            :memoStream(lower, \-> rangeImpl(lower + step, upper, step))
 in
     \lower upper step -> let
         rangeLower = ?isNaN lower : Infinity : ++lower,
