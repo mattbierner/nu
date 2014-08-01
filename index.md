@@ -4,99 +4,139 @@ layout: base
 
 
 Nu is small (~1k gzipped) Javascript library for creating and operating on lazy,
-infinite streams. 
+potentially infinite streams.  Streams are a simple **ordered sequence abstraction**,
+that are both **lazy** and **persistent**.
 
-# You went to school to learn
 
-## This is the empty stream
+## You went to school to learn
 
-```
+### This is the empty stream
+
+``` javascript
 nu.NIL
 ```
 
-## This is a stream with 3 elements
+### `cons` builds up a stream
 
-```
-nu.cons(1, nu.cons(2, nu.cons(3, nu.NIL)))
-```
+Stream can be built by consing elements onto the front of an existing stream
 
-## Streams can contain any type of element
-
-```
-nu.cons({x: 3},
-    nu.cons(null,
-        nu.cons(function(x) {},
-            nu.cons(nu.cons(1, nu.NIL), nu.NIL))))
+``` javascript
+nu.cons(1, nu.NIL);
 ```
 
-## You can only read the head of a stream
+### This is a stream with 3 elements
 
-And split the stream into the head and the rest of the stream
+``` javascript
+var easy = nu.cons(1,
+    nu.cons(2,
+        nu.cons(3,
+            nu.NIL)))
+```
+
+### Streams may contain any element type
+Including objects, functions, falsy values, and other streams.
+
+``` javascript
+nu.cons(
+    {x: 3},
+    nu.cons(
+        null,
+        nu.cons(
+            function(x) {},
+            nu.cons(
+                nu.cons(1, nu.NIL),
+                nu.NIL))))
+```
+
+### `first` reads the head of a stream
+Streams do not provide random access.
+
+``` javascript
+nu.first(easy) // 1
+```
+
+### `rest` removes the head of a stream
+Returning a new stream.
+
 
 ```
-var easy = nu.cons(1, nu.cons(2, nu.cons(3, nu.NIL)))
-
-nu.first(easy; // 1
 nu.first(nu.rest(easy)) // 2
 nu.first(nu.rest(nu.rest(easy))) // 3
-
-nu.isEmpty(easy) // false
-nu.isEmpty(nu.rest(nu.rest(nu.rest(easy)))) // true
 ```
 
-## Nu streams are persistent
+### `isEmpty` tests if a stream is empty
+```
+nu.isEmpty(easy) // false
+nu.isEmpty(
+    nu.rest(
+        nu.rest(
+            nu.rest(easy)))) // true
+```
 
+
+### Nu streams are persistent
 Stream operations do not alter the original
 
-```
-var easy = nu.cons(1, nu.cons(2, nu.cons(3, nu.NIL)))
-var zeroIndexed = nu.cons(0, easy);
+``` javascript
+var zeroIndexed = nu.cons(0, easy)
 
 nu.first(easy) // 1
 nu.first(zeroIndexed) // 0
 ```
 
 
-# Things you never, never knew before 
+## Things you never, never knew before 
 
-## A stream can be created from any array-like object
+### `from` creates a stream from an array
 
-```
+``` javascript
 var abc = nu.from(['a', 'b', 'c']);
-// or this
+```
+
+### Or any array-like object
+Such as objects or strings.
+
+``` javascript
 var abc = nu.from('abc');
-
-nu.first(abc) // a
-nu.first(nu.rest(abc)) // b
 ```
 
-## And converted back to an array
+### `toArray` converts a stream an array
 
-```
-var abc = nu.from(['a', 'b', 'c']);
-
-
+``` javascript
 nu.toArray(abc) // ['a', 'b', 'c']
 ```
 
-## You can join streams together
+### `append` joins streams together
 
-```
+``` javascript
 var chorus = nu.append(
-    nu.from(['a', 'b', 'c']),
+    abc,
     nu.from(['do', 're', 'mi']),
-    nu.from([1, 2, 3]));
+    easy);
 
 nu.first(chorus) // a
 nu.first(nu.rest(nu.rest(nu.rest(chorus)))) // 'do'
 ```
 
-## Or define a lazy, potentially infinite, raw stream
+## Let me show you what it's all about
 
-Nu streams consist of a first element and a function that returns the rest of the stream.
+### `stream` defines a raw stream
+It takes a first element and a function that returns the rest of the stream.
 
+
+``` javascript
+var justOne = nu.stream(
+    1,
+    function() { return nu.NIL; })
 ```
-var allOnes = nu.stream(1, function() { return allOnes; });
+
+### Streams may be infinite
+The function passed to `stream` is only called when needed
+
+``` javascript
+var allOnes = nu.stream(
+    1,
+    function() { return allOnes; });
 
 nu.first(allOnes) // 1
 nu.first(nu.rest(allOnes)) // 1
@@ -108,11 +148,13 @@ for (var i = 0; i < 100000; ++i)
 nu.first(ht) // 1
 ```
 
+### Closures can capture state
 
-```
-// Use closure to capture state.
+``` javascript
 var count = function(x) {
-    return nu.stream(x, function() { return count(x + 1); });
+    return nu.stream(
+        x,
+        function() { return count(x + 1); });
 };
 
 var counter = count(0)
@@ -124,8 +166,9 @@ nu.first(nu.rest(nu.rest(nu.rest(counter)))) // 3
 nu.first(nu.rest(nu.rest(nu.rest(nu.rest(counter))))) // 4
 ```
 
-```
-// Use closure to capture state.
+### A Fibonacci number stream
+
+``` javascript
 var fib = function(n1, n2) {
     return function() { // returns the rest of the stream
         return nu.stream(n1, fib(n2, n1 + n2));
@@ -141,28 +184,30 @@ nu.first(nu.rest(nu.rest(nu.rest(fibStream)))) // 3
 nu.first(nu.rest(nu.rest(nu.rest(nu.rest(fibStream))))) // 5
 ```
 
-### But you can't convert an infinite stream to an array
+### But some operations don't support infinite streams
+You can't convert an infinite stream to an array.
 
-```
+``` javascript
 nu.toArray(fibStream) // STALL
 ```
 
 
-## Let me show you what itÕs all about
+## Branches on the learning tree
 
-### `map` rewrites each element of a stream with a function
+### `map` rewrites each element of a stream
 
-```
+``` javascript
 var squares = nu.map(
     function(x) { return x * x},
-    nu.from([1, 2, 3]))
+    stream.from([1, 2, 3]))
 
 nu.toArray(squares) // [1, 4, 9]
 ```
 
-### Operations are lazy and work on infinite streams
+### Transforms like `map` are lazy
+And work on infinite streams
 
-```
+``` javascript
 var fibSquares = nu.map(
     function(x) { return x * x},
     fibStream);
@@ -172,10 +217,11 @@ nu.first(nu.rest(fibSquares)) // 1
 nu.first(nu.rest(nu.rest(nu.rest(nu.rest(fibSquares))))) // 25
 ```
 
-### Nu operation argument orders allow encourage binding
+### Operation argument order encourages binding
 
-```
-var sqr = nu.map.bind(null, function(x) { return x * x});
+``` javascript
+var sqr = nu.map.bind(null,
+    function(x) { return x * x});
 
 var squares = sqr(nu.from([1, 2, 3])))
 nu.toArray(squares) // [1, 4, 9]
@@ -183,17 +229,18 @@ nu.toArray(squares) // [1, 4, 9]
 
 ### `filter` selects elements from a stream
 
-```
+``` javascript
 var odds = nu.filter(
-    function(x) { return x % 2 },
+    function(x) { return x % 2; },
     nu.from([1, 2, 3, 4, 5, 6]));
 
 nu.toArray(odds) // [1, 3, 5]
 ```
 
 ### `zip` combines two streams into a stream of pairs
+Taking as many elements as the shorter of the two streams contains.
 
-```
+``` javascript
 var z = nu.zip(
     nu.from('abc'),
     nu.from([1, 2, 3, 4, 5, 6]));
@@ -201,13 +248,12 @@ var z = nu.zip(
 nu.toArray(z) // [['a', 1], ['b', 2], ['c', 3]];
 ```
 
-### `zipWith` is like `zip` but it uses a custom combine function
+### `zipWith` is a generic `zip`
+It combines elements with a custom binary function.
 
-```
+``` javascript
 var z = nu.zipWith(
-    function(x, y) {
-        return x + y
-    },
+    function(x, y) { return x + y },
     nu.from('abc'),
     nu.from([1, 2, 3, 4, 5, 6]));
 
@@ -215,111 +261,183 @@ nu.toArray(z) // ['a1', 'b2', 'c3'];
 ```
 
 
-### IÕm gonna teach you how to sing it out
+## I'm gonna teach you how to sing it out
 
 ### `forEach` iterates over a stream
 
-```
-var s = nu.from([1, 2, 3]);
+``` javascript
 nu.forEach(
     function(x) {
         console.log(x);
     },
-    s);
+    nu.from([1, 2, 3]));
 ```
 
 ### But `forEach` stalls on infinite streams
 
-```
+``` javascript
 nu.forEach(console.log, fibStream) // STALL
 ```
 
 ### `foldl` maps and accumulates over a stream
 
-```
+``` javascript
 nu.foldl(
-    function(accumulated, current) { return accumulated + current; },
+    function(accumulated, current) {
+        return accumulated + current;
+       },
     0, // initial value
     stream.from([1, 2, 3]))
 // 6
 ```
 
-```
-nu.foldr(
-    function(accumulated, current) { return [accumulated, current]; },
-    0, // initial value
+### `foldl` folds left-to-right
+
+``` javascript
+nu.foldl(
+    function(a, c) { return [a, c]; },
+    0,
     stream.from([1, 2, 3]))
 // [[[0, 1] 2], 3]
 ```
 
-### `foldr` folds a stream from the right-to-left
+### `foldr` folds  right-to-left
 
-```
+``` javascript
 nu.foldr(
-    function(accumulated, current) { return [accumulated, current]; },
-    0, // initial value
+    function(a, c) { return [a, c]; },
+    0,
     stream.from([1, 2, 3]))
 // [0, [1, [2, 3]]]
 ```
 
 
-## The branches on the learning tree
+## ABC is easy itâ€™s like counting up to three
 Non-core functionality is included in small separate packages.
-
 
 ### `gen::repeat` repeats an element
 
-```
-nu.toArray(gen.repeat(4, 'a')); // ['a', 'a', 'a', 'a']
+``` javascript
+nu.toArray(
+    gen.repeat(4, 'a'));
+// ['a', 'a', 'a', 'a']
 ```
 
-### `gen::range` generates a stream like Python's `range` method
+The count may be infinite
 
+``` javascript
+gen.repeat(Infinity, 'a'));
 ```
+
+### `gen::range` generates a counted range
+It's a bit like Python's `range`.
+
+An empty range is the infinite stream counting from 0
+
+``` javascript
 var s1 = nu.toArray(gen.range());
 nu.first(s1) // 0
 nu.first(nu.rest(s1)) // 1
+```
 
-nu.toArray(gen.range(4)) // [0, 1, 2, 3]
+Use an (exclusive) upper bound
 
-nu.toArray(gen.range(2, 6)) // [2, 3, 4, 5]
+``` javascript
+nu.toArray(gen.range(4))
+// [0, 1, 2, 3]
+```
 
-nu.toArray(gen.range(2, -1)) // []
+Generate a range `[lower, upper)`
 
-nu.toArray(gen.range(2, 9, 3)) // [2, 5, 8]
+``` javascript
+nu.toArray(gen.range(2, 6))
+// [2, 3, 4, 5]
 
-nu.toArray(gen.range(2, -4, -2)) // [2, 0, -2]
+nu.toArray(gen.range(2, -1))
+// []
+```
+
+Use a custom step size.
+
+``` javascript
+nu.toArray(gen.range(2, 9, 3))
+// [2, 5, 8]
+```
+
+Including negative counting.
+
+``` javascript
+nu.toArray(gen.range(2, -4, -2))
+// [2, 0, -2]
 ```
 
 
-### Quantifiers test all stream elements
-They fail early, but may stall on infinite streams
+## Sing a simple melody
+
+Quantifiers test all stream elements. They fail early, but may stall on infinite streams
+
+### `every` tests if a predicate is satisfied for all elements in a stream
+
+``` javascript
+quantifier.every(
+    function(x) { return x < 10; },
+    gen.range(4));
+// true
+```
+
+`every` works on infinite streams.
 
 ```
 quantifier.every(
     function(x) { return x < 10; },
-    nu.from([0, 1, 2, 3]));
-// true
-
-quantifier.every(
-    function(x) { return x < 10; }, gen.range(Infinity));
+    gen.range());
 // false
 ```
+
+Unless the predicate is always satisfied
+
+``` javascript
+quantifier.every(
+    function(x) { return x >= 0; },
+    gen.range());
+// STALL
+```
+
+### `any` tests if a predicate is satisfied for any element in a stream
+
+``` javascript
+quantifier.any(
+    function(x) { return x > 10; },
+    gen.range(4));
+// true
+```
+
+`any` works on infinite streams too.
 
 ```
 quantifier.any(
     function(x) { return x > 10; },
-    gen.range(Infinity));
+    gen.range());
 // true
+```
 
+Unless the predicate is never satisfied.
+
+```
 quantifier.any(
-    function(x) { return x < 0; }, gen.range(Infinity));
-// false
+    function(x) { return x < 0; },
+    gen.range());
+// STALL
 ```
 
-### `select::take` trims a stream to include at most a set count number of elements
 
-```
+## Thatâ€™s how easy love can be
+The `select` package allows taking and removing sub sections of streams.
+
+### `select::take()` trims a stream
+The new stream includes at most a set count number of elements.
+
+``` javascript
 var s = select.take(
     6,
     nu.map(
@@ -329,9 +447,10 @@ var s = select.take(
 nu.toArray(s) // [0, 1, 4, 9, 16, 25]
 ```
 
-### Or with a predicate
+### `select::takeWhile` trims using a predicate
+Instead of a count, it takes elements while the predicate is satisfied
 
-```
+``` javascript
 var s = select.takeWhile(
     function(x) { return x < 20 },
     nu.map(
@@ -341,10 +460,10 @@ var s = select.takeWhile(
 nu.toArray(s) // [0, 1, 4, 9, 16]
 ```
 
+### `select::skip` removes elements from a stream
+It discards the first set count number of elements
 
-### `select::skip` trims a stream to exclude the first count number of elements
-
-```
+``` javascript
 var s = select.skip(
     6,
     nu.map(
@@ -354,9 +473,9 @@ var s = select.skip(
 nu.first(s) // 6
 ```
 
-### Or with a predicate
+### `select::skipWhile` does the same with a predicate
 
-```
+``` javascript
 var s = select.skipWhile(
     function(x) { return x < 20 },
     nu.map(
@@ -367,65 +486,7 @@ nu.first(s) // 20
 ```
 
 
-## Your education ainÕt complete
+## Your education ain't complete
 
 
-
-
-## Show me what you can do
-
-
-
-## Node
-Node files are in `dist_node/`.
-
-    $ npm install nu-stream
-
-    var stream = require('nu-stream').stream;
-    var gen = require('nu-stream').gen;
-    
-    var s = gen.range(0, 5);
-    var s1 = stream.toArray(
-        stream.map(
-            function(x) { return x * 2; },
-            s));
-            
-    s1; // [0, 1, 4, 6, 8];
-
-## AMD
-AMD files are in `dist/`. Include any AMD style module loader and load 'nu/stream':
-
-    <!DOCTYPE html>
-    <html>
-    <head></head>
-    <body>
-        <script type="application/javascript" src="require.js"></script>
-        <script type="application/javascript">
-            requirejs.config({
-                paths: {
-                    'nu-stream': './dist',
-                }
-            });
-            require(['nu-stream/stream'], function(stream) {
-                ...
-            });
-        </script>
-    </body>
-
-
-# Modules
-Nu consists of four modules. Only 'nu/stream', the main module, is required.
-Other modules can be loaded as needed.
-
-### nu/stream
-Core functionality. Stream creation and basic operations.
-
-### nu/quantifier
-Quantification operations on streams.
-
-### nu/gen
-Generating streams.
-
-### nu/select
-Selecting subsections of streams.
 

@@ -1,5 +1,14 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
 
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
 
 /* normalize.css 2012-02-07T12:37 UTC - http://github.com/necolas/normalize.css */
 /* =============================================================================
@@ -448,34 +457,25 @@ textarea {
   /* 2 */
 }
 
-/* =============================================================================
-   Tables
-   ========================================================================== */
-/*
- * Remove most spacing between table cells
- */
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
+html {
+    font: 15px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    color: #333;
 }
 
-
-
+* {
+    box-sizing: border-box;
+}
 
 body {
   padding: 0;
   margin: 0px;
-  font: 14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 300;
-  color: #777;
   backgroud: #fdfdfd
-  font-weight: normal;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #222;
+  color: #444;
   margin: 0 0 10px;
-  font-weight: normal;
 }
 
 p, ul, ol, table, pre, dl {
@@ -487,19 +487,17 @@ h1, h2, h3 {
 }
 
 h1 {
-  font-size: 28px;
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 1.4rem;
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 1.2rem;
 }
 
 h3 {
-  font-size: 18px;
+  font-size: 1rem;
   line-height: 24px;
   font-weight: normal;
-  color: #b6b6b6;
 }
 
 a {
@@ -523,18 +521,23 @@ strong {
 }
 
 
+.wrapper {
+  max-width: 650px;
+  margin: 0 auto;
+  position: relative;
+  padding: 0 20px;
+}
 
 header.wrapper {
     margin-top: 2em;
-    padding-bottom: 0.6em;
+    padding-bottom: 1.6rem;
 }
 
 header #title {
     display: table;
     float: left;
     color: #333;
-        padding-bottom: 1em;
-    
+    padding-bottom: 0.8em;
 }
 
 header #links {
@@ -549,7 +552,7 @@ header #logo {
     text-align: center;
     vertical-align: middle;
     border-radius: 1000px;
-    background: #50c5ff;
+    background: #33b6ff;
 }
 
 header #logo-text {
@@ -598,8 +601,8 @@ header ul {
 }
 
 header nav#pages {
-    padding: 0.4em 0;
     width: 100%;
+    font-size: 1rem;
 }
 
 header nav#pages ul {
@@ -624,12 +627,6 @@ header #pages a:hover {
 }
 
 
-.wrapper {
-  max-width: 650px;
-  margin: 0 auto;
-  position: relative;
-  padding: 0 20px;
-}
 
 section img {
   max-width: 100%;
@@ -642,10 +639,6 @@ code, pre {
 }
 
 pre {
-  padding:8px 15px;
-  background: #f8f8f8;
-  border-radius:5px;
-  border:1px solid #e5e5e5;
   overflow-x: auto;
 }
 
@@ -689,36 +682,47 @@ section {
   margin: 20px 0;
   margin-top: 70px;
 }
-section #title {
-  border: 0;
-  outline: none;
-  margin: 0 0 50px 0;
-  padding: 0 0 5px 0;
+
+article h1,
+article h2 {
+    width: 100%;
+    clear: both;
 }
-section #title h1 {
-  font-weight: light;
-  font-size: 40px;
-  text-align: center;
-  line-height: 36px;
+
+article > h3,
+article > p {
+    width: 50%;
+    float: left;
+    clear: both;
+    padding: 0 1.4rem;
 }
-section #title p {
-  color: #d7cfbe;
-  font-weight: light;
-  font-size: 18px;
-  text-align: center;
+
+article .highlight {
+    float: right;
+    width: 50%;
+    clear: right;
 }
-section #title .credits {
-  font-size: 11px;
-  font-weight: normal;
-  color: #696969;
-  margin-top: -10px;
+
+article p:first-child {
+    width: 100%;
+    font-style: normal;
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 1rem;
 }
-section #title .credits.left {
-  float: left;
+
+article > h3 {
+    margin: 0;
 }
-section #title .credits.right {
-  float: right;
+
+article p {
+    font-style: italic;
+    font-size: 0.85rem;
 }
+
+
+
+
 
 
 footer {
