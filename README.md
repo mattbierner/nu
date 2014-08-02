@@ -1,43 +1,14 @@
 # Nu - Small Lazy Stream Javascript Library #
 
-A small library for working with lazy streams in Javascript.
+Nu is small (~1k gzipped) Javascript library for creating and operating on lazy,
+potentially infinite streams. Streams are a simple **ordered sequence abstraction**,
+that are both **lazy** and **persistent**.
 
 ### Links
 
 * [Documentation][docs]
 * [Project site](http://mattbierner.github.io/nu/) - Introduction
 
-## Install
-
-### Node
-Node generated files live in `dist_node/`
-
-```
-$ npm install nu-stream
-```
-
-See http://mattbierner.github.io/nu/ for more info and API.
-
-### AMD
-AMD generated files live in `dist/`
-
-```
-requirejs.config({
-    paths: {
-        'nu-stream': 'dist'
-    }
-});
-
-require([
-    'nu-stream/stream'],
-function(stream) {
-    ...
-});
-```
-
-
-## Documentation
-[Complete documentation][docs]
 
 ### Modules
 Nu consists of four modules. Only 'stream', the main module, is required.
@@ -54,7 +25,6 @@ Generating streams.
 
 #### nu-stream::select
 Selecting subsections of streams.
-
 
 
 # Code
