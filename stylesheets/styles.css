@@ -530,14 +530,14 @@ strong {
 
 header.wrapper {
     margin-top: 2em;
-    padding-bottom: 1.6rem;
+    padding-bottom: 1.2rem;
 }
 
 header #title {
     display: table;
     float: left;
     color: #333;
-    padding-bottom: 0.8em;
+    padding-bottom: 1.2rem;
 }
 
 header #links {
@@ -701,6 +701,7 @@ article .highlight {
     float: right;
     width: 50%;
     clear: right;
+    padding-bottom: 1rem;
 }
 
 article p:first-child {
@@ -720,87 +721,45 @@ article p {
     font-size: 0.85rem;
 }
 
+article h2 + p {
+    width: 100%;
+    font-style: normal;
+}
 
 
 
 
-
-footer {
+footer.wrapper {
     text-align: center;
+    padding: 1rem 0;
+}
+
+
+footer p {
+    margin-bottom: 0.2rem;
+    font-size: 0.8rem;
 }
 
 @media print, screen and (max-width: 580px) {
-  #title .credits {
-    display: block;
+ 
+article > h3,
+article > p,
+article .highlight {
     width: 100%;
-    line-height: 30px;
-    text-align: center;
-  }
-  #title .credits .left {
     float: none;
-    display: block;
-  }
-  #title .credits .right {
-    float: none;
-    display: block;
-  }
-  
-  header > .group {
-    padding-bottom: 0.2em;
-  }
-  
-    header #title,
-    header #links {
-        width: 100%;
-    }
+    clear: none;
     
-    header #title {
-        padding-bottom: 0.6em;
-    }
-    
-    header #links {
-        text-align: center;
-    }
-    
-     header #links ul {
-        display: inline-block;
-        width: auto;
-        margin-bottom: 0;
-     }
-     
-     header #npm-code {
-        display: none;
-     }
-     
-     
-     
-     
-     header .download-title,
-     header .download-line {
-        margin-bottom: 0;
-     }
-     
-     
-    footer .credits {
-        padding: 0 2em 0.5em 2em;
-    }
-    
-    footer .credits.left {
-        padding-left: 1em;
-    }
-    
-    footer .credits.right {
-        padding-right: 1em;
-    }
-     
 }
 
+article > h3,
+article > p {
+    padding: 0;
+    margin-bottom: 0.2rem;
+}
 
-@media print, screen and (max-width: 420px) {
+article .highlight {
+    padding-bottom: 0.4rem;
+}
 
-
-    footer .credits {
-        padding: 0 1em 0.5em 1em;
-    }
 
 }

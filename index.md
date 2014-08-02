@@ -8,7 +8,7 @@ potentially infinite streams.  Streams are a simple **ordered sequence abstracti
 that are both **lazy** and **persistent**.
 
 
-## You went to school to learn
+## Knowledge, Pure Foundation
 
 ### This is the empty stream
 
@@ -24,7 +24,7 @@ Stream can be built by consing elements onto the front of an existing stream
 nu.cons(1, nu.NIL);
 ```
 
-### This is a stream with 3 elements
+This is a stream with 3 elements
 
 ``` javascript
 var easy = nu.cons(1,
@@ -33,8 +33,7 @@ var easy = nu.cons(1,
             nu.NIL)))
 ```
 
-### Streams may contain any element type
-Including objects, functions, falsy values, and other streams.
+Streams may contain any element type, including objects, functions, falsy values, and other streams.
 
 ``` javascript
 nu.cons(
@@ -65,6 +64,7 @@ nu.first(nu.rest(nu.rest(easy))) // 3
 ```
 
 ### `isEmpty` tests if a stream is empty
+
 ```
 nu.isEmpty(easy) // false
 nu.isEmpty(
@@ -85,7 +85,7 @@ nu.first(zeroIndexed) // 0
 ```
 
 
-## Things you never, never knew before 
+## Proving Through the Manifestation
 
 ### `from` creates a stream from an array
 
@@ -93,8 +93,7 @@ nu.first(zeroIndexed) // 0
 var abc = nu.from(['a', 'b', 'c']);
 ```
 
-### Or any array-like object
-Such as objects or strings.
+Or any array-like object, such as objects or strings.
 
 ``` javascript
 var abc = nu.from('abc');
@@ -109,19 +108,20 @@ nu.toArray(abc) // ['a', 'b', 'c']
 ### `append` joins streams together
 
 ``` javascript
-var chorus = nu.append(
+var easyThings = nu.append(
     abc,
     nu.from(['do', 're', 'mi']),
     easy);
 
-nu.first(chorus) // a
-nu.first(nu.rest(nu.rest(nu.rest(chorus)))) // 'do'
+nu.first(easyThings) // a
+nu.first(nu.rest(
+    nu.rest(nu.rest(easyThings)))) // 'do'
 ```
 
-## Let me show you what it's all about
+## Nu Function in Conjunction
 
 ### `stream` defines a raw stream
-It takes a first element and a function that returns the rest of the stream.
+It takes a first element, and a function (a thunk) that returns the rest of the stream.
 
 
 ``` javascript
@@ -192,7 +192,7 @@ nu.toArray(fibStream) // STALL
 ```
 
 
-## Branches on the learning tree
+## Making Use of the Knowledge That We Already Had
 
 ### `map` rewrites each element of a stream
 
@@ -204,8 +204,7 @@ var squares = nu.map(
 nu.toArray(squares) // [1, 4, 9]
 ```
 
-### Transforms like `map` are lazy
-And work on infinite streams
+Transforms like `map` are lazy, return in constant time, and work on infinite streams
 
 ``` javascript
 var fibSquares = nu.map(
@@ -261,7 +260,7 @@ nu.toArray(z) // ['a1', 'b2', 'c3'];
 ```
 
 
-## I'm gonna teach you how to sing it out
+## Just Be Real
 
 ### `forEach` iterates over a stream
 
@@ -273,7 +272,7 @@ nu.forEach(
     nu.from([1, 2, 3]));
 ```
 
-### But `forEach` stalls on infinite streams
+But `forEach` stalls on infinite streams
 
 ``` javascript
 nu.forEach(console.log, fibStream) // STALL
@@ -312,7 +311,7 @@ nu.foldr(
 ```
 
 
-## ABC is easy it’s like counting up to three
+## Collaboration in a Style That's like Funk
 Non-core functionality is included in small separate packages.
 
 ### `gen::repeat` repeats an element
@@ -364,7 +363,7 @@ nu.toArray(gen.range(2, 9, 3))
 // [2, 5, 8]
 ```
 
-Including negative counting.
+Negative counting.
 
 ``` javascript
 nu.toArray(gen.range(2, -4, -2))
@@ -372,7 +371,7 @@ nu.toArray(gen.range(2, -4, -2))
 ```
 
 
-## Sing a simple melody
+## We're Here to Teach So You'd Might As Well Learn
 
 Quantifiers test all stream elements. They fail early, but may stall on infinite streams
 
@@ -387,7 +386,7 @@ quantifier.every(
 
 `every` works on infinite streams.
 
-```
+```javascript
 quantifier.every(
     function(x) { return x < 10; },
     gen.range());
@@ -414,7 +413,7 @@ quantifier.any(
 
 `any` works on infinite streams too.
 
-```
+```javascript
 quantifier.any(
     function(x) { return x > 10; },
     gen.range());
@@ -423,7 +422,7 @@ quantifier.any(
 
 Unless the predicate is never satisfied.
 
-```
+```javascript
 quantifier.any(
     function(x) { return x < 0; },
     gen.range());
@@ -431,7 +430,7 @@ quantifier.any(
 ```
 
 
-## That’s how easy love can be
+## Stand Tall, or Don't Stand At All
 The `select` package allows taking and removing sub sections of streams.
 
 ### `select::take()` trims a stream
@@ -442,7 +441,7 @@ var s = select.take(
     6,
     nu.map(
         function(x) { return x * x; },
-        gen.range(Infinity)));
+        gen.range()));
 
 nu.toArray(s) // [0, 1, 4, 9, 16, 25]
 ```
@@ -455,7 +454,7 @@ var s = select.takeWhile(
     function(x) { return x < 20 },
     nu.map(
         function(x) { return x * x; },
-        gen.range(Infinity)));
+        gen.range()));
 
 nu.toArray(s) // [0, 1, 4, 9, 16]
 ```
@@ -468,7 +467,7 @@ var s = select.skip(
     6,
     nu.map(
         function(x) { return x * x; },
-        gen.range(Infinity)));
+        gen.range()));
 
 nu.first(s) // 6
 ```
@@ -480,13 +479,18 @@ var s = select.skipWhile(
     function(x) { return x < 20 },
     nu.map(
         function(x) { return x * x; },
-        gen.range(Infinity)));
+        gen.range()));
 
 nu.first(s) // 20
 ```
 
 
-## Your education ain't complete
+## Knowledge For What You Yearn
+This site only provides a brief introduction to Nu. Examples of additional
+functionality such as  `concat`, memoizing streams, and `reduce` can be found in
+the [documentation][documentation].
 
+
+[documentation]: https://github.com/mattbierner/nu/wiki
 
 
