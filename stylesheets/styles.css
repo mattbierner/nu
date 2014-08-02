@@ -716,6 +716,7 @@ article p:first-child {
 
 article > h3 {
     margin: 0;
+    line-height: 1.2rem;
 }
 
 article p {
