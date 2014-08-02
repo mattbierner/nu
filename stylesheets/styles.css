@@ -701,7 +701,7 @@ article .highlight {
     float: right;
     width: 50%;
     clear: right;
-    padding-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 article p:first-child {
@@ -709,6 +709,7 @@ article p:first-child {
     font-style: normal;
     padding-left: 0;
     padding-right: 0;
+    margin-bottom: 1rem;
     font-size: 1rem;
 }
 
@@ -728,7 +729,6 @@ article h2 + p {
 
 
 
-
 footer.wrapper {
     text-align: center;
     padding: 1rem 0;
@@ -739,6 +739,7 @@ footer p {
     margin-bottom: 0.2rem;
     font-size: 0.8rem;
 }
+
 
 @media print, screen and (max-width: 580px) {
  
@@ -758,8 +759,15 @@ article > p {
 }
 
 article .highlight {
-    padding-bottom: 0.4rem;
+    margin-bottom: 0.8rem;
+    background: #f7f7f7;
+    padding: 0.2rem;
 }
+
+article .highlight pre {
+    margin-bottom: 0;
+}
+
 
 
 }
