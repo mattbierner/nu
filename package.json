@@ -1,16 +1,21 @@
 {
     "name": "nu-stream",
     "version": "3.3.0",
-    "description": "Small lazy stream Javascript library",
+    "description": "Infinitely lazy Javascript streams",
+    "homepage": "http://mattbierner.github.io/nu/",
     "keywords": [
-        "stream", 
-        "lazy"
+        "stream",
+        "infinite",
+        "lazy",
+        "persistent",
+        "ordered",
+        "list"
     ],
     "author": "Matt Bierner",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git@github.com:mattbierner/nu.git"
+        "url": "https://github.com:mattbierner/nu.git"
     },
     
     "main": "index.js",

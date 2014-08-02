@@ -2,6 +2,11 @@
 
 A small library for working with lazy streams in Javascript.
 
+### Links
+
+* [Documentation][docs]
+* [Project site](http://mattbierner.github.io/nu/) - Introduction
+
 ## Install
 
 ### Node
