@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 3.3.1 - July 30, 2014
+* Better `isStream` test.
+
 ## 3.3.0 - July 30, 2014
 * Added `rec` for creating self referential streams.
 * Switched to using function based thunks instead of `bind` based thunks.

@@ -57,7 +57,7 @@ take = \count s ->
         :map(
             value,
             takeWhile(
-                index \> (>, count), 
+                index \> (> count), 
                 indexed s));
 
 /**
@@ -93,7 +93,7 @@ skip = \count s ->
         :map(
             value,
             skipWhile(
-                index \> (>, count),
+                index \> (> count),
                 indexed s));
 
 }

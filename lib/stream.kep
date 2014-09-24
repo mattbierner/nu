@@ -87,8 +87,8 @@ memoStream := \val f ->
  * @param def Function that produces the stream Passed a function that,
  *    when invoked, returns the result of `def`. This must happen after `def` returns.
  */
-rec = \def -> {
-    var value = def \ -> { return value; };
+rec := \def -> {
+    var value := def \ -> { return value; };
     return value;
 };
 
@@ -106,14 +106,14 @@ first := (.first);
  * 
  * @param s Stream.
  */
-rest := \s -> s.rest();
+rest := (.rest());
 
 /**
  * Is a given stream empty?
  * 
  * @param s Stream.
  */
-isEmpty := (===, NIL);
+isEmpty := (=== NIL);
 
 /**
  * Is a given object a stream?
@@ -123,7 +123,7 @@ isEmpty := (===, NIL);
  * @param s Object to test.
  */
 isStream := \s ->
-    (  (s && s.hasOwnProperty('first') && s.hasOwnProperty('rest'))
+    (  (s && s.rest && s.hasOwnProperty('first'))
     || isEmpty s);
 
 /* Stream Construction
@@ -143,7 +143,7 @@ cons := \val s ->
  * @param s1 Stream.
  * @param f Function returning second stream.
  */
-appendz = \s1 f ->
+appendz := \s1 f ->
     ?isEmpty s1
         :f()
         :memoStream(first s1, \-> appendz(rest s1, f));
@@ -151,15 +151,15 @@ appendz = \s1 f ->
 /**
  * Joins multiple streams into a new stream.
  */
-append = let
-    reducer = \s1 s2 -> appendz(s1, constant s2)
+append := let
+    reducer := \s1 s2 -> appendz(s1, constant s2)
 in
     \-streams(...)-> arrayReduce(streams, reducer, NIL);
 
 /**
  * Joins a stream of streams into a new stream
  */
-concat = \s ->
+concat := \s ->
     ?isEmpty s
         :s
         :appendz(first s, \-> concat(rest s));
@@ -169,7 +169,7 @@ concat = \s ->
  * 
  * @param arr Array like object object.
  */
-from = let
+from := let
     fromImpl := \arr i len ->
         ?i >= len
             :end
@@ -188,7 +188,7 @@ in
  * @param l1 Stream
  * @param l2 Stream
  */
-zipWith = \f l1 l2 ->
+zipWith := \f l1 l2 ->
     ?isEmpty l1 || isEmpty l2
         :NIL
         :memoStream(
@@ -236,7 +236,7 @@ foldl := \f z s -> {
  * 
  * @param s Stream.
  */
-reverse = foldl@(flip cons, NIL);
+reverse := foldl@(flip cons, NIL);
 
 /**
  * Fold a stream right-to-left.
@@ -247,7 +247,7 @@ reverse = foldl@(flip cons, NIL);
  * 
  * @return Result value
  */
-foldr = \f z s ->
+foldr := \f z s ->
     foldl(f, z, reverse s);
 
 /**
@@ -258,7 +258,7 @@ foldr = \f z s ->
  * 
  * @return Result value.
  */
-reduce = \f s ->
+reduce := \f s ->
     foldl(f, first s, rest s);
 
 /**
@@ -295,19 +295,17 @@ map := \f s ->
  */
 filter := \pred s -> {
     for (var head = s; !isEmpty head; head = rest head)
-    with x = first head in {
+    with x := first head in {
         if (pred x)
             return memoStream(x, \-> filter(pred, rest head));
     }
     return NIL;
 };
 
-/* 
- ******************************************************************************/
 /**
  * Apply 'f' to stream 's' and join results into a new stream.
  */
-bind = map \>> concat;
+bind := map \>> concat;
 
 /* 
  ******************************************************************************/

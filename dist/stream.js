@@ -40,14 +40,14 @@ define(["require", "exports"], (function(require, exports) {
     (first = (function(x) {
         return x.first;
     }));
-    (rest = (function(s) {
-        return s.rest();
+    (rest = (function(x) {
+        return x.rest();
     }));
     (isEmpty = (function(y) {
         return (null === y);
     }));
     (isStream = (function(s) {
-        return (((s && s.hasOwnProperty("first")) && s.hasOwnProperty("rest")) || (null === s));
+        return (((s && s.rest) && s.hasOwnProperty("first")) || (null === s));
     }));
     (cons = (function(val, s) {
         var f = (function() {
@@ -68,18 +68,31 @@ define(["require", "exports"], (function(require, exports) {
         })));
     }));
     var reducer = (function(s1, s2) {
-        return appendz(s1, (function() {
+        var f = (function() {
             return s2;
-        }));
+        }),
+            val, f0, f1;
+        return ((null === s1) ? s2 : ((val = s1.first), (f0 = (function() {
+            return appendz(s1.rest(), f);
+        })), (f1 = memo(f0)), ({
+            first: val,
+            rest: f1
+        })));
     });
     (append = (function() {
         var streams = arguments;
         return arrayReduce(streams, reducer, null);
     }));
     (concat = (function(s) {
-        return ((null === s) ? s : appendz(s.first, (function() {
+        var s1, f, val, f0, f1;
+        return ((null === s) ? s : ((s1 = s.first), (f = (function() {
             return concat(s.rest());
-        })));
+        })), ((null === s1) ? concat(s.rest()) : ((val = s1.first), (f0 = (function() {
+            return appendz(s1.rest(), f);
+        })), (f1 = memo(f0)), ({
+            first: val,
+            rest: f1
+        })))));
     }));
     var fromImpl = (function(arr, i, len) {
         var val, f, f0;
@@ -136,12 +149,12 @@ define(["require", "exports"], (function(require, exports) {
         rest: f0
     }))));
     (foldl = (function(f1, z, s) {
-        var y, s0, r = z;
+        var y, x, r = z;
         for (var head = s;
             (!((y = head), (null === y)));
-            (head = ((s0 = head), s0.rest()))) {
-            var x;
-            (r = f1(r, ((x = head), x.first)));
+            (head = ((x = head), x.rest()))) {
+            var x0;
+            (r = f1(r, ((x0 = head), x0.first)));
         }
         return r;
     }));
@@ -161,7 +174,8 @@ define(["require", "exports"], (function(require, exports) {
         return foldl(f1, s.first, s.rest());
     }));
     (reduceRight = (function(f1, s) {
-        return reduce(f1, reverse(s));
+        var s0 = reverse(s);
+        return foldl(f1, s0.first, s0.rest());
     }));
     (map = (function(f1, s) {
         var val, f2, f3;
@@ -173,36 +187,47 @@ define(["require", "exports"], (function(require, exports) {
         })));
     }));
     (filter = (function(pred, s) {
-        var y, s0;
+        var y, x;
         for (var head = s;
             (!((y = head), (null === y)));
-            (head = ((s0 = head), s0.rest()))) {
-            var x = head,
-                x0 = x.first;
-            if (pred(x0)) {
-                var f1 = (function() {
-                    var s1;
-                    return filter(pred, ((s1 = head), s1.rest()));
-                }),
+            (head = ((x = head), x.rest()))) {
+            var x0 = head,
+                x1 = x0.first;
+            if (pred(x1)) {
+                var f1 = (function(filter, rest, pred, head) {
+                    return (function() {
+                        var x2;
+                        return filter(pred, ((x2 = head), x2.rest()));
+                    });
+                })(filter, rest, pred, head),
                     f2 = memo(f1);
                 return ({
-                    first: x0,
+                    first: x1,
                     rest: f2
                 });
             }
         }
         return null;
     }));
-    var y = concat;
+    var x = map;
     (bind = (function() {
-        var args = arguments;
-        return y(map.apply(null, args));
+        var args = arguments,
+            s = x.apply(null, args),
+            s1, f1, val, f2, f3;
+        return ((null === s) ? s : ((s1 = s.first), (f1 = (function() {
+            return concat(s.rest());
+        })), ((null === s1) ? concat(s.rest()) : ((val = s1.first), (f2 = (function() {
+            return appendz(s1.rest(), f1);
+        })), (f3 = memo(f2)), ({
+            first: val,
+            rest: f3
+        })))));
     }));
     (forEach = (function(f1, s) {
-        var y0, s0, x;
+        var y, x0, x1;
         for (var head = s;
-            (!((y0 = head), (null === y0)));
-            (head = ((s0 = head), s0.rest()))) f1(((x = head), x.first));
+            (!((y = head), (null === y)));
+            (head = ((x0 = head), x0.rest()))) f1(((x1 = head), x1.first));
     }));
     var builder = (function(p, c) {
         p.push(c);
