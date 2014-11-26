@@ -209,10 +209,9 @@ define(["require", "exports"], (function(require, exports) {
         }
         return null;
     }));
-    var x = map;
     (bind = (function() {
         var args = arguments,
-            s = x.apply(null, args),
+            s = map.apply(null, args),
             s1, f1, val, f2, f3;
         return ((null === s) ? s : ((s1 = s.first), (f1 = (function() {
             return concat(s.rest());
@@ -224,10 +223,10 @@ define(["require", "exports"], (function(require, exports) {
         })))));
     }));
     (forEach = (function(f1, s) {
-        var y, x0, x1;
+        var y, x, x0;
         for (var head = s;
             (!((y = head), (null === y)));
-            (head = ((x0 = head), x0.rest()))) f1(((x1 = head), x1.first));
+            (head = ((x = head), x.rest()))) f1(((x0 = head), x0.first));
     }));
     var builder = (function(p, c) {
         p.push(c);

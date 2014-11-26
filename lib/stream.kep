@@ -291,7 +291,7 @@ map := \f s ->
  * 
  * @param {function(value): boolean} predicate Predicate function used to filter
  *     stream. 
- * * @param s Stream being filtered.
+ * @param s Stream being filtered.
  */
 filter := \pred s -> {
     for (var head = s; !isEmpty head; head = rest head)
