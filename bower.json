@@ -1,0 +1,40 @@
+{
+  "name": "nu-stream",
+  "version": "3.3.2",
+  "description": "Infinitely lazy Javascript streams",
+  "homepage": "http://mattbierner.github.io/nu/",
+  "keywords": [
+    "stream",
+    "infinite",
+    "lazy",
+    "persistent",
+    "ordered",
+    "list"
+  ],
+  "author": "Matt Bierner",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:mattbierner/nu.git"
+  },
+  "main": [
+  	  "dist/gen.js",
+	  "dist/quantifier.js",
+	  "dist/select.js",
+	  "dist/stream.js"
+  ],
+  "authors": [
+    "Matt Bierner <mattbierner@gmail.com>"
+  ],
+  "moduleType": [
+    "amd",
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 3.3.4 - Nov 25, 2014
+* Bower package.
+
 ## 3.3.1 - July 30, 2014
 * Better `isStream` test.
 
